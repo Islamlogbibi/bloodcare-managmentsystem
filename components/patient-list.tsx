@@ -1,0 +1,239 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Edit, Calendar } from "lucide-react"
+import Link from "next/link"
+import { format, differenceInDays, addDays } from "date-fns"
+import { DeletePatientButton } from "@/components/delete-patient-button"
+import { QuickScheduleDialog } from "@/components/quick-schedule-dialog"
+import { useState, useEffect } from "react"
+
+interface PatientListProps {
+  searchParams?: {
+    search?: string
+    category?: string
+    bloodType?: string
+    gender?: string
+  }
+}
+
+export function PatientList({ searchParams = {} }: PatientListProps) {
+  const [patients, setPatients] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchPatients() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        // Build query string from search params
+        const queryParams = new URLSearchParams()
+
+        if (searchParams.search) {
+          queryParams.append("search", searchParams.search)
+        }
+
+        if (searchParams.category && searchParams.category !== "All Patients") {
+          queryParams.append("category", searchParams.category)
+        }
+
+        if (searchParams.bloodType && searchParams.bloodType !== "all") {
+          queryParams.append("bloodType", searchParams.bloodType)
+        }
+
+        if (searchParams.gender && searchParams.gender !== "all") {
+          queryParams.append("gender", searchParams.gender)
+        }
+
+        // Fetch patients from API
+        const response = await fetch(`/api/patients?${queryParams.toString()}`)
+
+        if (!response.ok) {
+          throw new Error(`API returned status ${response.status}`)
+        }
+
+        const data = await response.json()
+        setPatients(data)
+      } catch (err) {
+        console.error("Error fetching patients:", err)
+        setError(err instanceof Error ? err.message : "Failed to load patients")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPatients()
+  }, [searchParams])
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="animate-pulse">
+            <div className="h-16 bg-gray-200 rounded-lg"></div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-red-400 mb-4">
+          <svg className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+            />
+          </svg>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Error loading patients</h3>
+        <p className="text-gray-600 mb-4">There was an error loading the patient data. Please try again.</p>
+        <Button onClick={() => window.location.reload()} className="bg-red-600 hover:bg-red-700">
+          Retry
+        </Button>
+      </div>
+    )
+  }
+
+  if (!patients || patients.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-gray-400 mb-4">
+          <svg className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
+            />
+          </svg>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No patients found</h3>
+        <p className="text-gray-600 mb-4">Try adjusting your search criteria or filters.</p>
+        <Link href="/patients/new">
+          <Button className="bg-red-600 hover:bg-red-700">Add New Patient</Button>
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-lg border border-gray-200 overflow-hidden">
+        <Table>
+          <TableHeader className="bg-gray-50">
+            <TableRow>
+              <TableHead className="font-semibold text-gray-900">NOM ET PRÉNOM</TableHead>
+              <TableHead className="font-semibold text-gray-900 text-center">GP</TableHead>
+              <TableHead className="font-semibold text-gray-900 text-center">PH</TableHead>
+              <TableHead className="font-semibold text-gray-900 text-center">F</TableHead>
+              <TableHead className="font-semibold text-gray-900 text-center">C</TableHead>
+              <TableHead className="font-semibold text-gray-900 text-center">L</TableHead>
+              <TableHead className="font-semibold text-gray-900">DERNIÈRE T</TableHead>
+              <TableHead className="font-semibold text-gray-900">PROCHAINE T</TableHead>
+              <TableHead className="font-semibold text-gray-900">J/ÉCOULÉS</TableHead>
+              <TableHead className="font-semibold text-gray-900">RENSEIGNEMENTS</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {patients.map((patient) => {
+              // Calculate next transfusion date (90 days after last donation)
+              const lastDonationDate = patient.lastDonationDate ? new Date(patient.lastDonationDate) : null
+              const nextTransfusionDate = lastDonationDate ? addDays(lastDonationDate, 90) : null
+
+              // Calculate days elapsed
+              const daysElapsed = lastDonationDate ? differenceInDays(new Date(), lastDonationDate) : null
+
+              // Extract blood group and type
+              const bloodGroup = patient.bloodType ? patient.bloodType.charAt(0) : ""
+              const bloodPhFactor = patient.bloodType ? (patient.bloodType.includes("+") ? "+" : "-") : ""
+
+              return (
+                <TableRow key={patient._id} className="hover:bg-gray-50">
+                  <TableCell className="font-medium text-gray-900">
+                    {patient.firstName} {patient.lastName}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span className="text-gray-700 font-medium">{bloodGroup}</span>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span className="text-gray-700 font-medium">{bloodPhFactor}</span>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {patient.hasF ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {patient.hasC ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {patient.hasL ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell>{lastDonationDate ? format(lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
+                  <TableCell>{nextTransfusionDate ? format(nextTransfusionDate, "MMM dd, yyyy") : "N/A"}</TableCell>
+                  <TableCell>{daysElapsed !== null ? `-${daysElapsed}j` : "N/A"}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Link href={`/patients/${patient._id}/view`}>
+                        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                          View
+                        </Button>
+                      </Link>
+                      <Link href={`/patients/${patient._id}/edit`}>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-blue-50">
+                          <Edit className="h-4 w-4 text-blue-600" />
+                        </Button>
+                      </Link>
+                      <QuickScheduleDialog patient={patient}>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-green-50">
+                          <Calendar className="h-4 w-4 text-green-600" />
+                        </Button>
+                      </QuickScheduleDialog>
+                      <DeletePatientButton patientId={patient._id} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex items-center justify-between text-sm text-gray-600">
+        <p>Showing {patients.length} patients</p>
+        <div className="flex items-center space-x-2">
+          <Button variant="outline" size="sm" disabled>
+            Previous
+          </Button>
+          <Button variant="outline" size="sm">
+            Next
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
