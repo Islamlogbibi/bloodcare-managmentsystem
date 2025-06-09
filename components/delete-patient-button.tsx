@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -14,31 +12,48 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { deletePatient } from "@/app/lib/actions"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 
 interface DeletePatientButtonProps {
-  id: string
-  children?: React.ReactNode
+  patientId: string
+  onDelete?: () => void
 }
 
-export function DeletePatientButton({ id, children }: DeletePatientButtonProps) {
-  const [open, setOpen] = useState(false)
+export function DeletePatientButton({ patientId, onDelete }: DeletePatientButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false)
-  const { toast } = useToast()
+  const [open, setOpen] = useState(false)
   const router = useRouter()
 
   const handleDelete = async () => {
     try {
       setIsDeleting(true)
-      await deletePatient(id)
-      toast({
-        title: "Patient deleted",
-        description: "The patient has been successfully deleted.",
-      })
-      router.refresh()
+      console.log("Attempting to delete patient with ID:", patientId)
+
+      const result = await deletePatient(patientId)
+
+      if (result.success) {
+        toast({
+          title: "Patient Deleted",
+          description: "The patient has been successfully deleted.",
+        })
+
+        // Call the onDelete callback if provided
+        if (onDelete) {
+          onDelete()
+        }
+
+        // Refresh the page to update the patient list
+        router.refresh()
+
+        // Close the dialog
+        setOpen(false)
+      } else {
+        throw new Error("Deletion failed")
+      }
     } catch (error) {
       console.error("Error deleting patient:", error)
       toast({
@@ -48,37 +63,27 @@ export function DeletePatientButton({ id, children }: DeletePatientButtonProps) 
       })
     } finally {
       setIsDeleting(false)
-      setOpen(false)
     }
   }
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      {children ? (
-        <div onClick={() => setOpen(true)}>{children}</div>
-      ) : (
-        <Button size="icon" variant="ghost" className="h-8 w-8 text-red-600" onClick={() => setOpen(true)}>
+      <AlertDialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50">
           <Trash2 className="h-4 w-4" />
-          <span className="sr-only">Delete</span>
+          <span className="sr-only">Delete patient</span>
         </Button>
-      )}
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to delete this patient?</AlertDialogTitle>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete the patient record and all associated data.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={(e) => {
-              e.preventDefault()
-              handleDelete()
-            }}
-            className="bg-red-600 hover:bg-red-700"
-            disabled={isDeleting}
-          >
+          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete} disabled={isDeleting} className="bg-red-600 hover:bg-red-700">
             {isDeleting ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>

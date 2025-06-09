@@ -23,50 +23,55 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    async function fetchPatients() {
-      try {
-        setLoading(true)
-        setError(null)
+  const fetchPatients = async () => {
+    try {
+      setLoading(true)
+      setError(null)
 
-        // Build query string from search params
-        const queryParams = new URLSearchParams()
+      // Build query string from search params
+      const queryParams = new URLSearchParams()
 
-        if (searchParams.search) {
-          queryParams.append("search", searchParams.search)
-        }
-
-        if (searchParams.category && searchParams.category !== "All Patients") {
-          queryParams.append("category", searchParams.category)
-        }
-
-        if (searchParams.bloodType && searchParams.bloodType !== "all") {
-          queryParams.append("bloodType", searchParams.bloodType)
-        }
-
-        if (searchParams.gender && searchParams.gender !== "all") {
-          queryParams.append("gender", searchParams.gender)
-        }
-
-        // Fetch patients from API
-        const response = await fetch(`/api/patients?${queryParams.toString()}`)
-
-        if (!response.ok) {
-          throw new Error(`API returned status ${response.status}`)
-        }
-
-        const data = await response.json()
-        setPatients(data)
-      } catch (err) {
-        console.error("Error fetching patients:", err)
-        setError(err instanceof Error ? err.message : "Failed to load patients")
-      } finally {
-        setLoading(false)
+      if (searchParams.search) {
+        queryParams.append("search", searchParams.search)
       }
-    }
 
+      if (searchParams.category && searchParams.category !== "All Patients") {
+        queryParams.append("category", searchParams.category)
+      }
+
+      if (searchParams.bloodType && searchParams.bloodType !== "all") {
+        queryParams.append("bloodType", searchParams.bloodType)
+      }
+
+      if (searchParams.gender && searchParams.gender !== "all") {
+        queryParams.append("gender", searchParams.gender)
+      }
+
+      // Fetch patients from API
+      const response = await fetch(`/api/patients?${queryParams.toString()}`)
+
+      if (!response.ok) {
+        throw new Error(`API returned status ${response.status}`)
+      }
+
+      const data = await response.json()
+      setPatients(data)
+    } catch (err) {
+      console.error("Error fetching patients:", err)
+      setError(err instanceof Error ? err.message : "Failed to load patients")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchPatients()
   }, [searchParams])
+
+  const handlePatientDeleted = (deletedPatientId: string) => {
+    // Remove the deleted patient from the local state immediately
+    setPatients((prevPatients) => prevPatients.filter((patient) => patient._id !== deletedPatientId))
+  }
 
   if (loading) {
     return (
@@ -95,7 +100,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Error loading patients</h3>
         <p className="text-gray-600 mb-4">There was an error loading the patient data. Please try again.</p>
-        <Button onClick={() => window.location.reload()} className="bg-red-600 hover:bg-red-700">
+        <Button onClick={fetchPatients} className="bg-red-600 hover:bg-red-700">
           Retry
         </Button>
       </div>
@@ -213,7 +218,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                           <Calendar className="h-4 w-4 text-green-600" />
                         </Button>
                       </QuickScheduleDialog>
-                      <DeletePatientButton patientId={patient._id} />
+                      <DeletePatientButton patientId={patient._id} onDelete={() => handlePatientDeleted(patient._id)} />
                     </div>
                   </TableCell>
                 </TableRow>

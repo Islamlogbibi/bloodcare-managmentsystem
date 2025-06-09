@@ -42,13 +42,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    console.log("DELETE request received for patient ID:", params.id)
+
     const result = await patientService.deletePatient(params.id)
+    console.log("Delete result:", result)
 
     if (result.matchedCount === 0) {
       return NextResponse.json({ error: "Patient not found" }, { status: 404 })
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, message: "Patient deleted successfully" })
   } catch (error) {
     console.error("Error deleting patient:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

@@ -138,6 +138,8 @@ export async function updatePatient(id: string, patientData: any) {
 
 export async function deletePatient(id: string) {
   try {
+    console.log("Server action deletePatient called with ID:", id)
+
     if (!ObjectId.isValid(id)) {
       throw new Error("Invalid patient ID")
     }
@@ -145,6 +147,7 @@ export async function deletePatient(id: string) {
     const db = await connectToDatabase()
     const collection = db.collection("patients")
 
+    // Use soft delete - mark as deleted instead of removing
     const result = await collection.updateOne(
       { _id: new ObjectId(id) },
       {
@@ -155,6 +158,12 @@ export async function deletePatient(id: string) {
         },
       },
     )
+
+    console.log("Delete operation result:", result)
+
+    if (result.matchedCount === 0) {
+      throw new Error("Patient not found")
+    }
 
     revalidatePath("/patients")
     return { success: true, result }
