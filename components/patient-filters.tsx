@@ -194,18 +194,11 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
               <SelectItem value="all">All genders</SelectItem>
               <SelectItem value="male">Male</SelectItem>
               <SelectItem value="female">Female</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700">Age Range</Label>
-          <div className="flex space-x-2">
-            <Input placeholder="Min age" className="border-gray-300 focus:border-red-500 focus:ring-red-500" />
-            <Input placeholder="Max age" className="border-gray-300 focus:border-red-500 focus:ring-red-500" />
-          </div>
-        </div>
+        
       </div>
 
       {/* Active Filters */}
