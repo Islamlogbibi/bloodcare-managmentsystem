@@ -27,18 +27,7 @@ export default async function TomorrowTransfusionsPage() {
               })}
             </p>
           </div>
-          <div className="flex items-center space-x-3">
-            <Button variant="outline" className="border-gray-300">
-              <Printer className="mr-2 h-4 w-4" />
-              Print Schedule
-            </Button>
-            <Link href="/transfusions/schedule">
-              <Button className="bg-red-600 hover:bg-red-700">
-                <Plus className="mr-2 h-4 w-4" />
-                Schedule New
-              </Button>
-            </Link>
-          </div>
+          
         </div>
 
         <Card className="border-0 shadow-md">

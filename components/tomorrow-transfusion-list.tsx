@@ -41,7 +41,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
               <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
               <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
               <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
-              <TableHead className="font-semibold text-gray-900">{t("units")}</TableHead>
+              
               <TableHead className="font-semibold text-gray-900">{t("contact")}</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">{t("attendance")}</TableHead>
             </TableRow>
@@ -89,9 +89,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                       {transfusion.priority}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <span className="font-medium text-gray-900">{transfusion.bloodUnits} units</span>
-                  </TableCell>
+                  
                   <TableCell>
                     <div className="flex items-center text-xs text-gray-500">
                       <Phone className="h-3 w-3 mr-1" />
@@ -125,7 +123,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                   <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
                   <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
                   <TableHead className="font-semibold text-gray-900">{t("priority")}</TableHead>
-                  <TableHead className="font-semibold text-gray-900">{t("units")}</TableHead>
+                  
                   <TableHead className="font-semibold text-gray-900">{t("contact")}</TableHead>
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">
                     {t("attendance")}
@@ -177,9 +175,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                           {transfusion.priority}
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        <span className="font-medium text-gray-900">{transfusion.bloodUnits} units</span>
-                      </TableCell>
+                      
                       <TableCell>
                         <div className="flex items-center text-xs text-gray-500">
                           <Phone className="h-3 w-3 mr-1" />

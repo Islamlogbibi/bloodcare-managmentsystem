@@ -93,7 +93,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">Patient</TableHead>
               <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-              <TableHead className="font-semibold text-gray-900">Units</TableHead>
+              
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
@@ -147,9 +147,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       {transfusion.priority}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <span className="font-medium text-gray-900">{transfusion.bloodUnits} units</span>
-                  </TableCell>
+                  
                   <TableCell>
                     <Badge
                       className={
@@ -177,13 +175,20 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           {isCompleting ? "Loading..." : "Mark as Done"}
                         </Button>
                       )}
-                      <Button variant="outline" size="sm" className="border-gray-300">
-                        View
-                      </Button>
+                      
                     </div>
                   </TableCell>
                   <TableCell className="hidden print:table-cell">
-                    <Badge className="bg-red-100 text-red-800">Absent</Badge>
+                  <Badge
+                    className={
+                      transfusion.attended
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
+                    }
+                  >
+                    {transfusion.attended ? "Present" : "Absent"}
+                  </Badge>
+
                   </TableCell>
                 </TableRow>
               )
@@ -209,9 +214,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">Patient</TableHead>
                   <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Units</TableHead>
+                  
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
-                  <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
+                  
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
                 </TableRow>
               </TableHeader>
@@ -262,20 +267,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           {transfusion.priority}
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        <span className="font-medium text-gray-900">{transfusion.bloodUnits} units</span>
-                      </TableCell>
+                      
                       <TableCell>
                         <Badge className="bg-green-100 text-green-800">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           {transfusion.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="print:hidden">
-                        <Button variant="outline" size="sm" className="border-gray-300">
-                          View
-                        </Button>
-                      </TableCell>
+                      
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">Present</Badge>
                       </TableCell>

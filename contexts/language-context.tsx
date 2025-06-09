@@ -170,7 +170,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    // Listen for language changes
+
     const handleLanguageChange = (event: CustomEvent) => {
       setLanguage(event.detail.language)
       document.documentElement.lang = event.detail.language
