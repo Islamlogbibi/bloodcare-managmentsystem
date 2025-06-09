@@ -1,8 +1,10 @@
 "use client"
 
+import React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Edit, Calendar } from "lucide-react"
+import { Edit, Calendar, ArrowUpDown } from "lucide-react"
 import Link from "next/link"
 import { format, differenceInDays, addDays } from "date-fns"
 import { DeletePatientButton } from "@/components/delete-patient-button"
@@ -22,6 +24,10 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
   const [patients, setPatients] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [sortConfig, setSortConfig] = useState<{
+    key: string
+    direction: "asc" | "desc"
+  } | null>(null)
 
   const fetchPatients = async () => {
     try {
@@ -71,6 +77,62 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
   const handlePatientDeleted = (deletedPatientId: string) => {
     // Remove the deleted patient from the local state immediately
     setPatients((prevPatients) => prevPatients.filter((patient) => patient._id !== deletedPatientId))
+  }
+
+  const requestSort = (key: string) => {
+    let direction: "asc" | "desc" = "asc"
+
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc"
+    }
+
+    setSortConfig({ key, direction })
+  }
+
+  const sortedPatients = React.useMemo(() => {
+    const sortablePatients = [...patients]
+
+    if (sortConfig !== null) {
+      sortablePatients.sort((a, b) => {
+        if (sortConfig.key === "daysElapsed") {
+          const aLastDonationDate = a.lastDonationDate ? new Date(a.lastDonationDate) : null
+          const bLastDonationDate = b.lastDonationDate ? new Date(b.lastDonationDate) : null
+
+          const aDaysElapsed = aLastDonationDate ? differenceInDays(new Date(), aLastDonationDate) : -1
+          const bDaysElapsed = bLastDonationDate ? differenceInDays(new Date(), bLastDonationDate) : -1
+
+          if (aDaysElapsed < bDaysElapsed) {
+            return sortConfig.direction === "asc" ? -1 : 1
+          }
+          if (aDaysElapsed > bDaysElapsed) {
+            return sortConfig.direction === "asc" ? 1 : -1
+          }
+          return 0
+        }
+
+        // For other fields
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "asc" ? -1 : 1
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "asc" ? 1 : -1
+        }
+        return 0
+      })
+    }
+
+    return sortablePatients
+  }, [patients, sortConfig])
+
+  // Function to determine the color based on days elapsed
+  const getDaysElapsedColor = (daysElapsed: number | null) => {
+    if (daysElapsed === null) return "bg-gray-100 text-gray-500"
+
+    const absDays = Math.abs(daysElapsed)
+
+    if (absDays > 15) return "bg-red-500 text-white font-medium"
+    if (absDays > 7) return "bg-orange-400 text-white font-medium"
+    return "bg-green-500 text-white font-medium"
   }
 
   if (loading) {
@@ -143,12 +205,20 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
               <TableHead className="font-semibold text-gray-900 text-center">L</TableHead>
               <TableHead className="font-semibold text-gray-900">DERNIÈRE T</TableHead>
               <TableHead className="font-semibold text-gray-900">PROCHAINE T</TableHead>
-              <TableHead className="font-semibold text-gray-900">J/ÉCOULÉS</TableHead>
+              <TableHead
+                className="font-semibold text-gray-900 cursor-pointer"
+                onClick={() => requestSort("daysElapsed")}
+              >
+                <div className="flex items-center">
+                  J/ÉCOULÉS
+                  <ArrowUpDown className="ml-1 h-4 w-4" />
+                </div>
+              </TableHead>
               <TableHead className="font-semibold text-gray-900">RENSEIGNEMENTS</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {patients.map((patient) => {
+            {sortedPatients.map((patient) => {
               // Calculate next transfusion date (90 days after last donation)
               const lastDonationDate = patient.lastDonationDate ? new Date(patient.lastDonationDate) : null
               const nextTransfusionDate = lastDonationDate ? addDays(lastDonationDate, 90) : null
@@ -159,6 +229,9 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
               // Extract blood group and type
               const bloodGroup = patient.bloodType ? patient.bloodType.charAt(0) : ""
               const bloodPhFactor = patient.bloodType ? (patient.bloodType.includes("+") ? "+" : "-") : ""
+
+              // Get color class for days elapsed
+              const daysElapsedColorClass = getDaysElapsedColor(daysElapsed)
 
               return (
                 <TableRow key={patient._id} className="hover:bg-gray-50">
@@ -200,7 +273,11 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                   </TableCell>
                   <TableCell>{lastDonationDate ? format(lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
                   <TableCell>{nextTransfusionDate ? format(nextTransfusionDate, "MMM dd, yyyy") : "N/A"}</TableCell>
-                  <TableCell>{daysElapsed !== null ? `-${daysElapsed}j` : "N/A"}</TableCell>
+                  <TableCell>
+                    <div className={`px-2 py-1 rounded text-center ${daysElapsedColorClass}`}>
+                      {daysElapsed !== null ? `${Math.abs(daysElapsed)}j` : "N/A"}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <Link href={`/patients/${patient._id}/view`}>
