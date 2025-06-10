@@ -29,7 +29,8 @@ async function DashboardStats() {
         value={stats.todayTransfusions}
         icon={Clock}
         description="Scheduled for today"
-        trend="3 urgent cases"
+        trend={stats.urgentCases + " urgent cases"}
+        
         variant="warning"
       />
       <StatsCard

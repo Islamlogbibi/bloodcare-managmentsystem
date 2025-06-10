@@ -101,14 +101,13 @@ const languages = {
 export function SettingsForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [profileData, setProfileData] = useState({
-    fullName: "Dr. Sarah Wilson",
-    email: "sarah.wilson@hospital.com",
-    phone: "+1 (555) 123-4567",
+    fullName: "Dr. brouk hassen",
+    email: "brouk.hassen@hospital.com",
+    phone: "0792299343",
     department: "hematology",
   })
 
   const [notifications, setNotifications] = useState({
-    emailNotifications: true,
     urgentCaseAlerts: true,
     dailyReports: false,
     systemMaintenance: true,
@@ -290,16 +289,7 @@ export function SettingsForm() {
           <CardDescription>{currentLang.configureNotifications}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>{currentLang.emailNotifications}</Label>
-              <p className="text-sm text-gray-500">{currentLang.receiveEmailAlerts}</p>
-            </div>
-            <Switch
-              checked={notifications.emailNotifications}
-              onCheckedChange={(checked) => handleNotificationChange("emailNotifications", checked)}
-            />
-          </div>
+          <br></br>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>{currentLang.urgentCaseAlerts}</Label>

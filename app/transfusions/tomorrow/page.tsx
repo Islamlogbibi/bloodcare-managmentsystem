@@ -9,6 +9,16 @@ import { getTomorrowTransfusions } from "@/app/lib/actions"
 export default async function TomorrowTransfusionsPage() {
   const transfusions = await getTomorrowTransfusions()
 
+  const now = new Date()
+
+  const algeriaTime = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Africa/Algiers",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(now)
+
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
 
@@ -18,16 +28,8 @@ export default async function TomorrowTransfusionsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">Tomorrow's Transfusions</h1>
-            <p className="text-gray-600 mt-1">
-              {tomorrow.toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
+            <p className="text-gray-600 mt-1">{algeriaTime}</p>
           </div>
-          
         </div>
 
         <Card className="border-0 shadow-md">
