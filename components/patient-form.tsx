@@ -170,14 +170,13 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
-                Phone Number *
+                Phone Number 
               </Label>
               <Input
                 id="phone"
                 name="phone"
                 type="tel"
                 defaultValue={patient?.phone}
-                required
                 className="border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
             </div>
@@ -264,6 +263,36 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                   <SelectItem value="AB-">AB- Negative</SelectItem>
                   <SelectItem value="O+">O+ Positive</SelectItem>
                   <SelectItem value="O-">O- Negative</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ph" className="text-sm font-medium text-gray-700">
+                Phénotypes *
+              </Label>
+              <Select name="ph" defaultValue={patient?.ph}>
+                <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                  <SelectValue placeholder="Select Phénotype" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cc ee KEL (+)">cc ee KEL (+)</SelectItem>
+                  <SelectItem value="cc ee KEL (-)">cc ee KEL (-)</SelectItem>
+                  <SelectItem value="Cc EE KEL (+)">Cc EE KEL (+)</SelectItem>
+                  <SelectItem value="Cc EE KEL (-)">Cc EE KEL (-)</SelectItem>
+                  <SelectItem value="Cc ee KEL (+)">Cc ee KEL (+)</SelectItem>
+                  <SelectItem value="Cc ee KEL (-)">Cc ee KEL (-)</SelectItem>
+                  <SelectItem value="Cc Ee KEL (+)">Cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="Cc Ee KEL (-)">Cc Ee KEL (-)</SelectItem>
+                  <SelectItem value="CC EE KEL (+)">CC EE KEL (+)</SelectItem>
+                  <SelectItem value="CC EE KEL (-)">CC EE KEL (-)</SelectItem>
+                  <SelectItem value="CC ee KEL (+)">CC ee KEL (+)</SelectItem>
+                  <SelectItem value="CC ee KEL (-)">CC ee KEL (-)</SelectItem>
+                  <SelectItem value="cc EE KEL (+)">cc EE KEL (+)</SelectItem>
+                  <SelectItem value="cc EE KEL (-)">cc EE KEL (-)</SelectItem>
+                  <SelectItem value="CC Ee KEL (+)">CC Ee KEL (+)</SelectItem>
+                  <SelectItem value="CC Ee KEL (-)">CC Ee KEL (-)</SelectItem>
+                  <SelectItem value="cc Ee KEL (+)">cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="cc Ee KEL (-)">cc Ee KEL (-)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -387,7 +416,6 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All Patients">All Patients</SelectItem>
                 <SelectItem value="HyperRegime">HyperRegime</SelectItem>
                 <SelectItem value="PolyTransfuses">PolyTransfuses</SelectItem>
                 <SelectItem value="Echanges">Echanges</SelectItem>

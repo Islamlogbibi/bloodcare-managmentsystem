@@ -204,7 +204,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
               <TableHead className="font-semibold text-gray-900 text-center">C</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">L</TableHead>
               <TableHead className="font-semibold text-gray-900">DERNIÈRE T</TableHead>
-              <TableHead className="font-semibold text-gray-900">PROCHAINE T</TableHead>
+              
               <TableHead
                 className="font-semibold text-gray-900 cursor-pointer"
                 onClick={() => requestSort("daysElapsed")}
@@ -239,10 +239,10 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                     {patient.firstName} {patient.lastName}
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className="text-gray-700 font-medium">{bloodGroup}</span>
+                    <span className="text-gray-700 font-medium">{patient.bloodType}</span>
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className="text-gray-700 font-medium">{bloodPhFactor}</span>
+                    <span className="text-gray-700 font-medium">{patient.ph}</span>
                   </TableCell>
                   <TableCell className="text-center">
                     {patient.hasF ? (
@@ -272,7 +272,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                     )}
                   </TableCell>
                   <TableCell>{lastDonationDate ? format(lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
-                  <TableCell>{nextTransfusionDate ? format(nextTransfusionDate, "MMM dd, yyyy") : "N/A"}</TableCell>
+                  
                   <TableCell>
                     <div className={`px-2 py-1 rounded text-center ${daysElapsedColorClass}`}>
                       {daysElapsed !== null ? `${Math.abs(daysElapsed)}j` : "N/A"}
