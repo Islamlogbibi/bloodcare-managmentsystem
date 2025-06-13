@@ -142,10 +142,17 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                 <p className="text-sm font-medium text-gray-500">Blood Type</p>
                 <Badge className="bg-red-100 text-red-800 font-semibold">{patient.bloodType}</Badge>
+                </div>
+                <div>
+                <p className="text-sm font-medium text-gray-500">ph</p>
+                <Badge className="bg-red-100 text-red-800 font-semibold">{patient.ph}</Badge>
+                </div>
               </div>
+              
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <p className="text-sm font-medium text-gray-500">Weight</p>

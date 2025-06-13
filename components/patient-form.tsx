@@ -42,6 +42,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         dateOfBirth: formData.get("dateOfBirth") as string,
         gender: formData.get("gender") as string,
         bloodType: formData.get("bloodType") as string,
+        ph: formData.get("ph") as string,
         phone: formData.get("phone") as string,
         email: formData.get("email") as string,
         address: formData.get("address") as string,
@@ -127,14 +128,13 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="dateOfBirth" className="text-sm font-medium text-gray-700">
-                Date of Birth *
+                Date of Birth 
               </Label>
               <Input
                 id="dateOfBirth"
                 name="dateOfBirth"
                 type="date"
                 defaultValue={patient?.dateOfBirth}
-                required
                 className="border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
             </div>
