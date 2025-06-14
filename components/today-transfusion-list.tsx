@@ -123,6 +123,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">Time</TableHead>
               <TableHead className="font-semibold text-gray-900">Patient</TableHead>
               <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
+              <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
               
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
@@ -166,6 +167,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableCell>
                     <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
                       {transfusion.patient.bloodType}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
+                      {transfusion.patient.ph}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -244,6 +250,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">Time</TableHead>
                   <TableHead className="font-semibold text-gray-900">Patient</TableHead>
                   <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
                   
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
@@ -288,6 +295,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       <TableCell>
                         <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
                           {transfusion.patient.bloodType}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
+                          {transfusion.patient.ph}
                         </Badge>
                       </TableCell>
                       <TableCell>
