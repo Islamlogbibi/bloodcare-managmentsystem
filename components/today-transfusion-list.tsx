@@ -128,7 +128,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">C</TableHead>
               <TableHead className="font-semibold text-gray-900">L</TableHead>
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-              
+              <TableHead className="font-semibold text-gray-900">poches</TableHead>
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
@@ -214,7 +214,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       {transfusion.priority}
                     </Badge>
                   </TableCell>
-                  
+                  <TableCell className="font-semibold">
+                        
+                          {transfusion.poches}
+                    
+                      </TableCell>
                   <TableCell>
                     <Badge
                       className={
@@ -285,7 +289,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">C</TableHead>
                   <TableHead className="font-semibold text-gray-900">L</TableHead>
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead className="font-semibold text-gray-900">poches</TableHead>
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
                   
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
@@ -372,7 +376,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           {transfusion.priority}
                         </Badge>
                       </TableCell>
-                      
+                      <TableCell className="font-semibold">
+                        
+                          {transfusion.poches}
+                    
+                      </TableCell>
                       <TableCell>
                         <Badge className="bg-green-100 text-green-800">
                           <CheckCircle className="h-3 w-3 mr-1" />
