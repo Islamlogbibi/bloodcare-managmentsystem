@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -25,6 +25,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
   const [Hrecu, setHrecu] = useState<string | undefined>(patient?.Hrecu ?? undefined)
   const [poches, setPoches] = useState<string | undefined>(patient?.poches?.toString())
+  const [hb, sethb] = useState<string | undefined>(patient?.hb?.toString())
 
 
   async function onSubmit(formData: FormData) {
@@ -36,6 +37,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         Hdist: Hdist,
         Hrecu: Hrecu,
         poches: poches ? parseInt(poches) : undefined,
+        hb: hb ? parseFloat(hb) : undefined,
       }
 
       if (isEditing && patient) {
@@ -111,7 +113,22 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                   <SelectItem value="2">2</SelectItem>
                 </SelectContent>
               </Select>
+              <div>
+                <Label htmlFor="hb" className="text-sm font-medium text-gray-700">
+                  Hb
+                </Label>
+                <Input
+                  id="hb"
+                  name="hb"
+                  type="number"
+                  step="0.1"
+                  value={hb ?? ""}
+                  onChange={(e) => sethb(e.target.value)}
+                  required
+                  className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                />
 
+              </div>
             </div>
 
         </CardContent>

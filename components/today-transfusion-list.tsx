@@ -132,6 +132,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">L</TableHead>
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
               <TableHead className="font-semibold text-gray-900">poches</TableHead>
+              <TableHead className="font-semibold text-gray-900">Hb</TableHead>
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
@@ -228,9 +229,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   </TableCell>
                   <TableCell className="font-semibold">
                         
-                          {transfusion.patient.poches}
-                    
-                      </TableCell>
+                      {transfusion.patient.poches}
+                
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                        
+                      {transfusion.patient.hb}
+                
+                  </TableCell>
                   <TableCell>
                     <Badge
                       className={
@@ -309,8 +315,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">L</TableHead>
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
                   <TableHead className="font-semibold text-gray-900">poches</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Hb</TableHead>
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
-                  
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
                   <TableHead className="font-semibold text-gray-900">Actions</TableHead>
 
@@ -407,7 +413,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       </TableCell>
                       <TableCell className="font-semibold">
                         
-                          {transfusion.poches}
+                          {transfusion.patient.poches}
+                    
+                      </TableCell>
+                      <TableCell className="font-semibold">
+                        
+                          {transfusion.patient.hb}
                     
                       </TableCell>
                       <TableCell>
