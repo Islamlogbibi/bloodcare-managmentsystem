@@ -4,7 +4,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Clock, Phone, CheckCircle, AlertTriangle, Plus, Printer } from "lucide-react"
+import { Edit, Calendar, ArrowUpDown } from "lucide-react"
 import { format } from "date-fns"
+import Link from "next/link"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useLanguage } from "@/contexts/language-context"
 import { useState } from "react"
@@ -233,7 +235,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       {transfusion.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="print:hidden">
+                  <TableCell className="print:hidden flex items-center space-x-2">
                     <div className="flex items-center space-x-2">
                       {transfusion.status !== "completed" && (
                         <Button
@@ -248,6 +250,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       )}
                       
                     </div>
+                    <div></div>
+                    <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
+                      <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
+                        <Edit className="h-4 w-4 text-blue-600" /> Edit
+                      </Button>
+                    </Link>
                   </TableCell>
                   <TableCell className="hidden print:table-cell">
                   <Badge
