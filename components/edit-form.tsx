@@ -109,6 +109,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                   <SelectValue placeholder="poches" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="0">0</SelectItem>
                   <SelectItem value="1">1</SelectItem>
                   <SelectItem value="2">2</SelectItem>
                 </SelectContent>

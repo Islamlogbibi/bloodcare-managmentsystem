@@ -102,6 +102,7 @@ export async function getPatientById(id: string) {
     return {
       ...patient,
       _id: patient._id.toString(),
+      schedules: patient.schedules ?? [],
     }
   } catch (error) {
     console.error("Error fetching patient by ID:", error)
@@ -173,6 +174,7 @@ export async function deletePatient(id: string) {
   }
 }
 
+
 export async function scheduleTransfusion(transfusionData: any) {
   try {
     const db = await connectToDatabase()
@@ -208,15 +210,33 @@ export async function scheduleTransfusion(transfusionData: any) {
     const result = await transfusionsCollection.insertOne(transfusion)
 
     // Update the patient's last donation date
-    await patientsCollection.updateOne(
-      { _id: patientId },
+    const patient = await db.collection("patients").findOne({ _id: new ObjectId(patientId) })
+
+    if (!patient) {
+      throw new Error("Patient not found")
+    }
+    await db.collection("patients").updateOne(
+      { _id: new ObjectId(patientId) },
       {
-        $set: {
-          lastDonationDate: scheduledDate,
-          updatedAt: new Date(),
+        $push: {
+          schedules: {
+            date: new Date(),
+            priority: patient.priority || "regular",
+            bloodType: patient.bloodType,
+            ph: patient.ph,
+            hb: patient.hb,
+            poches: patient.poches,
+            hasF: patient.hasF,
+            hasC: patient.hasC,
+            hasL: patient.hasL,
+            Hdist: patient.Hdist,
+            Hrecu: patient.Hrecu,
+          },
         },
-      },
+      }
     )
+    
+
 
     revalidatePath("/transfusions/today")
     revalidatePath("/transfusions/tomorrow")

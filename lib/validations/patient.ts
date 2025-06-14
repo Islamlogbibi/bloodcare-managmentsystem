@@ -4,7 +4,7 @@ export const createPatientSchema = z.object({
   firstName: z.string().min(2).max(50),
   lastName: z.string().min(2).max(50),
   dateOfBirth: z.string().min(1),
-  gender: z.enum(["male", "female", "other"]),
+  gender: z.enum(["male", "female"]),
   bloodType: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
   phone: z
     .string()

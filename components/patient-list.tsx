@@ -4,7 +4,7 @@ import React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Edit, Calendar, ArrowUpDown } from "lucide-react"
+import { Clock, Edit, Calendar, ArrowUpDown } from "lucide-react"
 import Link from "next/link"
 import { format, differenceInDays, addDays } from "date-fns"
 import { DeletePatientButton } from "@/components/delete-patient-button"
@@ -214,7 +214,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                   <ArrowUpDown className="ml-1 h-4 w-4" />
                 </div>
               </TableHead>
-              <TableHead className="font-semibold text-gray-900">RENSEIGNEMENTS</TableHead>
+              <TableHead className="font-semibold text-gray-900 print:hidden">ACTIONS</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -278,7 +278,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                       {daysElapsed !== null ? `${Math.abs(daysElapsed)}j` : "N/A"}
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="print:hidden">
                     <div className="flex items-center space-x-2">
                       <Link href={`/patients/${patient._id}/view`}>
                         <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
@@ -296,6 +296,11 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                         </Button>
                       </QuickScheduleDialog>
                       <DeletePatientButton patientId={patient._id} onDelete={() => handlePatientDeleted(patient._id)} />
+                      <Link href={`/patients/${patient._id}/history`}>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-blue-50">
+                          <Clock className="h-4 w-4 text-blue-600" />
+                        </Button>
+                      </Link>
                     </div>
                   </TableCell>
                 </TableRow>

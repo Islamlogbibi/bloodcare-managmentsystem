@@ -479,62 +479,152 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       </div>
 
       {/* Print-specific styles */}
+      // Replace the existing style block at the end of your component with this:
+
       <style jsx global>{`
         @media print {
-          .print-table {
+          @page {
+            size: A4 landscape;
+            margin: 0.5cm;
+          }
+
+          html, body {
+            width: 100%;
+            height: auto;
             overflow: visible !important;
-            height: auto !important;
+            font-size: 10pt;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
 
-          .hide-on-print {
-            display: none !important;
-          }
-
-          .show-on-print {
-            display: block !important;
-          }
-        }
-
-        @media print {
-          body {
-            font-size: 12pt;
-          }
-          
           .print\\:hidden {
             display: none !important;
           }
-          
+
           .print\\:table-cell {
             display: table-cell !important;
           }
-          
-          @page {
-            size: portrait;
-            margin: 1cm;
+
+          .hidden {
+            display: none !important;
           }
-          
-          h1 {
-            font-size: 18pt;
-            margin-bottom: 10pt;
+
+          .print\\:table-cell {
+            display: table-cell !important;
           }
-          
+
           table {
-            width: 100%;
-            border-collapse: collapse;
-            page-break-inside: auto;
+            width: 100% !important;
+            table-layout: auto !important;
+            border-collapse: collapse !important;
+            font-size: 9pt !important;
           }
-          
-          tr {
-            page-break-inside: avoid;
-            page-break-after: auto;
+
+          th {
+            border: 1px solid #333 !important;
+            padding: 3px 4px !important;
+            font-size: 8pt !important;
+            font-weight: bold !important;
+            background-color: #f5f5f5 !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            white-space: nowrap !important;
           }
-          
+
+          td {
+            border: 1px solid #ddd !important;
+            padding: 2px 3px !important;
+            font-size: 8pt !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            vertical-align: top !important;
+          }
+
+          /* Specific column widths for better fit */
+          th:nth-child(1), td:nth-child(1) { width: 6% !important; } /* H.dist */
+          th:nth-child(2), td:nth-child(2) { width: 6% !important; } /* H.recu */
+          th:nth-child(3), td:nth-child(3) { width: 15% !important; } /* Patient */
+          th:nth-child(4), td:nth-child(4) { width: 8% !important; } /* Blood Type */
+          th:nth-child(5), td:nth-child(5) { width: 10% !important; } /* Phénotype */
+          th:nth-child(6), td:nth-child(6) { width: 4% !important; } /* F */
+          th:nth-child(7), td:nth-child(7) { width: 4% !important; } /* C */
+          th:nth-child(8), td:nth-child(8) { width: 4% !important; } /* L */
+          th:nth-child(9), td:nth-child(9) { width: 8% !important; } /* Priority */
+          th:nth-child(10), td:nth-child(10) { width: 6% !important; } /* poches */
+          th:nth-child(11), td:nth-child(11) { width: 6% !important; } /* Hb */
+          th:nth-child(12), td:nth-child(12) { width: 8% !important; } /* Status */
+          th:nth-child(13), td:nth-child(13) { width: 8% !important; } /* Attendance */
+          th:nth-child(14), td:nth-child(14) { width: 7% !important; } /* Actions - will be hidden */
+
           thead {
-            display: table-header-group;
+            display: table-header-group !important;
           }
-          
-          tfoot {
-            display: table-footer-group;
+
+          tr {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+
+          /* Patient name styling */
+          .font-medium {
+            font-weight: 600 !important;
+          }
+
+          /* Avatar styling for print */
+          .h-8.w-8 {
+            width: 20px !important;
+            height: 20px !important;
+            font-size: 8pt !important;
+          }
+
+          /* Badge styling */
+          .badge, [class*="bg-"] {
+            background-color: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 1px solid #d1d5db !important;
+            padding: 1px 4px !important;
+            border-radius: 3px !important;
+            font-size: 7pt !important;
+          }
+
+          /* Phone number styling */
+          .text-xs {
+            font-size: 7pt !important;
+          }
+
+          /* Icon styling */
+          .h-4.w-4, .h-3.w-3 {
+            width: 10px !important;
+            height: 10px !important;
+          }
+
+          /* Purple checkmarks for F, C, L columns */
+          .bg-purple-500 {
+            background-color: #8b5cf6 !important;
+          }
+
+          /* Prevent unnecessary cutoffs */
+          .space-y-4, .overflow-hidden {
+            overflow: visible !important;
+          }
+
+          .rounded-lg {
+            border-radius: 0 !important;
+          }
+
+          /* Ensure completed section prints properly */
+          .my-6 {
+            margin: 10px 0 !important;
+          }
+
+          /* Print specific adjustments */
+          body * {
+            visibility: visible !important;
+          }
+
+          .print\\:table-cell {
+            visibility: visible !important;
+            display: table-cell !important;
           }
         }
       `}</style>

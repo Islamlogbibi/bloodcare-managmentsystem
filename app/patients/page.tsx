@@ -18,9 +18,10 @@ interface PatientsPageProps {
 
 export default function PatientsPage({ searchParams }: PatientsPageProps) {
   return (
-    <div className="min-h-screen bg-gray-50/50">
-      <div className="flex-1 space-y-6 p-6">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50/50 print:min-h-0 print:h-auto print:overflow-visible print:bg-white">
+      <div className="flex-1 space-y-6 p-6 print:p-0 print:space-y-0">
+        {/* Header and Add button - HIDDEN IN PRINT */}
+        <div className="flex items-center justify-between print:hidden">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">Patient Records</h1>
             <p className="text-gray-600 mt-1">Manage all patient blood donation records</p>
@@ -36,7 +37,8 @@ export default function PatientsPage({ searchParams }: PatientsPageProps) {
           </div>
         </div>
 
-        <Card className="border-0 shadow-md">
+        {/* Filters (HIDDEN IN PRINT) */}
+        <Card className="border-0 shadow-md print:hidden">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div>
@@ -54,59 +56,72 @@ export default function PatientsPage({ searchParams }: PatientsPageProps) {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-md print:shadow-none print:border-0">
-          <CardHeader className="print:hidden">
-            <CardTitle className="text-gray-900">Patient Directory</CardTitle>
-            <CardDescription>Complete list of registered patients</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PatientList searchParams={searchParams} />
-          </CardContent>
-        </Card>
+        {/* Patient Table Only (Print this) */}
+        <div className="print-area">
+          <Card className="border-0 shadow-md print:shadow-none print:border-0">
+            <CardHeader className="print:hidden">
+              <CardTitle className="text-gray-900">Patient Directory</CardTitle>
+              <CardDescription>Complete list of registered patients</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PatientList searchParams={searchParams} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Print-specific styles */}
       <style jsx global>{`
         @media print {
           body {
-            font-size: 12pt;
+            font-size: 11pt;
+            background: white !important;
           }
-          
+
           .print\\:hidden {
             display: none !important;
           }
-          
-          .print\\:table-cell {
-            display: table-cell !important;
+
+          .print\:hidden {
+            display: none !important;
           }
-          
+
+          .print-area {
+            display: block !important;
+            width: 100%;
+          }
+
+          .print-area * {
+            visibility: visible !important;
+          }
+
           @page {
-            size: portrait;
+            size: landscape;
             margin: 1cm;
           }
-          
-          h1 {
-            font-size: 18pt;
-            margin-bottom: 10pt;
-          }
-          
+
           table {
-            width: 100%;
+            width: 100% !important;
             border-collapse: collapse;
             page-break-inside: auto;
           }
-          
+
+          thead {
+            display: table-header-group;
+          }
+
           tr {
             page-break-inside: avoid;
             page-break-after: auto;
           }
-          
-          thead {
-            display: table-header-group;
-          }
-          
+
           tfoot {
             display: table-footer-group;
+          }
+
+          h1 {
+            font-size: 18pt;
+            margin-bottom: 10pt;
           }
         }
       `}</style>
