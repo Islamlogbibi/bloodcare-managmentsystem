@@ -122,7 +122,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>
-              <TableHead className="font-semibold text-gray-900">Time</TableHead>
+              <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
+              <TableHead className="font-semibold text-gray-900">H.recu</TableHead>
               <TableHead className="font-semibold text-gray-900">Patient</TableHead>
               <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
               <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
@@ -147,7 +148,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     <div className="flex items-center space-x-2">
                       <Clock className="h-4 w-4 text-gray-400" />
                       <span className="font-medium text-gray-900">
-                        {format(new Date(transfusion.scheduledTime), "HH:mm")}
+                        {transfusion.patient.Hdist}
+                      </span>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Clock className="h-4 w-4 text-gray-400" />
+                      <span className="font-medium text-gray-900">
+                        {transfusion.patient.Hrecu}
                       </span>
                     </div>
                   </TableCell>
@@ -289,7 +299,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             <Table>
               <TableHeader className="bg-gray-50">
                 <TableRow>
-                  <TableHead className="font-semibold text-gray-900">Time</TableHead>
+                  <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
+                  <TableHead className="font-semibold text-gray-900">H.recu</TableHead>
                   <TableHead className="font-semibold text-gray-900">Patient</TableHead>
                   <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
                   <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
@@ -315,10 +326,20 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         <div className="flex items-center space-x-2">
                           <Clock className="h-4 w-4 text-gray-400" />
                           <span className="font-medium text-gray-900">
-                            {format(new Date(transfusion.scheduledTime), "HH:mm")}
+                            {transfusion.patient.Hdist}
                           </span>
                         </div>
                       </TableCell>
+
+                      <TableCell>
+                        <div className="flex items-center space-x-2">
+                          <Clock className="h-4 w-4 text-gray-400" />
+                          <span className="font-medium text-gray-900">
+                            {transfusion.patient.Hrecu}
+                          </span>
+                        </div>
+                      </TableCell>
+
                       <TableCell>
                         <div className="flex items-center space-x-3">
                           <Avatar className="h-8 w-8">
