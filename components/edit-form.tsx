@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { Save, Heart } from "lucide-react"
 
@@ -23,6 +24,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
   const [Hdist, setHdist] = useState<string | undefined>(patient?.Hdist ?? undefined)
 
   const [Hrecu, setHrecu] = useState<string | undefined>(patient?.Hrecu ?? undefined)
+  const [poches, setPoches] = useState<string | undefined>(patient?.poches?.toString())
 
 
   async function onSubmit(formData: FormData) {
@@ -33,7 +35,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         
         Hdist: Hdist,
         Hrecu: Hrecu,
-        
+        poches: poches ? parseInt(poches) : undefined,
       }
 
       if (isEditing && patient) {
@@ -96,6 +98,21 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                 />
             </div>
           </div>
+          <div className="space-y-2">
+              <Label htmlFor="poches" className="text-sm font-medium text-gray-700">
+                poches
+              </Label>
+              <Select value={poches} onValueChange={setPoches}>
+                <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                  <SelectValue placeholder="poches" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1</SelectItem>
+                  <SelectItem value="2">2</SelectItem>
+                </SelectContent>
+              </Select>
+
+            </div>
 
         </CardContent>
       </Card>

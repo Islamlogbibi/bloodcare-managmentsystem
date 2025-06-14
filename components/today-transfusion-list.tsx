@@ -228,7 +228,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   </TableCell>
                   <TableCell className="font-semibold">
                         
-                          {transfusion.poches}
+                          {transfusion.patient.poches}
                     
                       </TableCell>
                   <TableCell>
