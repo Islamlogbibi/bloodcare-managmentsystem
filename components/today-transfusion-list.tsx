@@ -124,6 +124,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">Patient</TableHead>
               <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
               <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
+              <TableHead className="font-semibold text-gray-900">F</TableHead>
+              <TableHead className="font-semibold text-gray-900">C</TableHead>
+              <TableHead className="font-semibold text-gray-900">L</TableHead>
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
               
               <TableHead className="font-semibold text-gray-900">Status</TableHead>
@@ -173,6 +176,33 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
                       {transfusion.patient.ph}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {transfusion.patient.hasF ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {transfusion.patient.hasC ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {transfusion.patient.hasL ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -251,8 +281,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">Patient</TableHead>
                   <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
                   <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
+                  <TableHead className="font-semibold text-gray-900">F</TableHead>
+                  <TableHead className="font-semibold text-gray-900">C</TableHead>
+                  <TableHead className="font-semibold text-gray-900">L</TableHead>
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-                  
+                  <TableHead></TableHead>
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
                   
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
@@ -301,6 +334,33 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
                           {transfusion.patient.ph}
                         </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {transfusion.patient.hasF ? (
+                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {transfusion.patient.hasC ? (
+                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {transfusion.patient.hasL ? (
+                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        ) : (
+                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                        )}
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -372,6 +432,21 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
       {/* Print-specific styles */}
       <style jsx global>{`
+        @media print {
+          .print-table {
+            overflow: visible !important;
+            height: auto !important;
+          }
+
+          .hide-on-print {
+            display: none !important;
+          }
+
+          .show-on-print {
+            display: block !important;
+          }
+        }
+
         @media print {
           body {
             font-size: 12pt;
