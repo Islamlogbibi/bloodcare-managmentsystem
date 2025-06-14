@@ -57,6 +57,37 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
     }
   }
 
+  const handleUnmarkAsCompleted = async (transfusionId: string) => {
+    setCompletingIds((prev) => new Set(prev).add(transfusionId))
+
+    try {
+      await updateTransfusionStatus(transfusionId, "notcompleted")
+
+      // Update local state
+      setTransfusions((prev) => prev.map((t) => (t._id === transfusionId ? { ...t, status: "notcompleted" } : t)))
+
+      toast({
+        title: t("completed"),
+        description: "Undone completed successfully.",
+      })
+
+      router.refresh()
+    } catch (error) {
+      console.error("Error updating transfusion status:", error)
+      toast({
+        title: t("error"),
+        description: "Failed to undone.",
+        variant: "destructive",
+      })
+    } finally {
+      setCompletingIds((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(transfusionId)
+        return newSet
+      })
+    }
+  }
+
   const handlePrint = () => {
     window.print()
   }
@@ -218,12 +249,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
                   
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Actions</TableHead>
+
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {completedTransfusions.map((transfusion) => {
                   const initials = `${transfusion.patient.firstName[0]}${transfusion.patient.lastName[0]}`
-
+                  const isCompleting = completingIds.has(transfusion._id)
                   return (
                     <TableRow key={transfusion._id} className="hover:bg-gray-50 bg-gray-50/50">
                       <TableCell>
@@ -277,6 +310,22 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">Present</Badge>
+                      </TableCell>
+                      <TableCell className="print:hidden">
+                        <div className="flex items-center space-x-2">
+                          {transfusion.status === "completed" && (
+                            <Button
+                              size="sm"
+                              className="bg-red-600 hover:bg-red-700"
+                              onClick={() => handleUnmarkAsCompleted(transfusion._id)}
+                              disabled={isCompleting}
+                            >
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              {isCompleting ? "Loading..." : "Undone"}
+                            </Button>
+                          )}
+                          
+                        </div>
                       </TableCell>
                     </TableRow>
                   )
