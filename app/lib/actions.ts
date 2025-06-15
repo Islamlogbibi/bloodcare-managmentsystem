@@ -312,26 +312,27 @@ export async function scheduleTransfusion(transfusionData: any) {
     dayDate.setHours(0, 0, 0, 0)
     const isoDay = dayDate.toISOString().split("T")[0]
 
-    const patientDailyData = {
-      fullname: patient.firstName + " " + patient.lastName,
-      priority: patient.priority || "regular",
-      bloodType: patient.bloodType,
-      ph: patient.ph,
-      hb: patient.hb,
-      poches: patient.poches,
-      hasF: patient.hasF,
-      hasC: patient.hasC,
-      hasL: patient.hasL,
-      don: patient.don,
-      Hdist: patient.Hdist,
-      Hrecu: patient.Hrecu,
-      time: transfusion.scheduledTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    }
-
     await dailyHistoryCollection.updateOne(
       { date: isoDay },
       {
-        $push: { patients: patientDailyData },
+        $push: { 
+          patients : {
+            fullname: patient.firstName + " " + patient.lastName,
+            priority: patient.priority || "regular",
+            bloodType: patient.bloodType,
+            ph: patient.ph,
+            hb: patient.hb,
+            poches: patient.poches,
+            hasF: patient.hasF,
+            hasC: patient.hasC,
+            hasL: patient.hasL,
+            don: patient.don,
+            Hdist: patient.Hdist,
+            Hrecu: patient.Hrecu,
+            time: transfusion.scheduledTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          }
+          
+         },
         $setOnInsert: { createdAt: new Date() },
       },
       { upsert: true }
