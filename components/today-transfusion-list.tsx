@@ -117,8 +117,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </Button>
       </div>
       <div className="hidden print:block print-header alg">
-        <h1>CHU ANNABA servise d'hemobiologie et transfustion sanguine</h1>
-        <h1>chef service brouk hacene</h1>
+        <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
+        <h1>CHEF SERVICE PROOF BROUK HACENE</h1>
       </div>
       <div className="hidden print:block print-header">
         <h1>Daily Transfusion Report</h1>

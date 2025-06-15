@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import {
   Dialog,
   DialogContent,
@@ -19,27 +19,26 @@ import { useLanguage } from "@/contexts/language-context"
 import { toast } from "@/hooks/use-toast"
 import { scheduleTransfusion } from "@/app/lib/actions"
 import { useRouter } from "next/navigation"
-import { Schedule } from "./schedule-today"
 
 interface QuickScheduleDialogProps {
   patient: any
   children: React.ReactNode
 }
 
-export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogProps) {
+export function Schedule({ patient, children }: QuickScheduleDialogProps) {
   const { t } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
   const [isScheduling, setIsScheduling] = useState(false)
   const router = useRouter()
 
-  const handleSchedule = async (priority: "regular" | "urgent") => {
+  const handleSchedule = async (priority: "regular" | "today") => {
     setIsScheduling(true)
 
     try {
       const today = new Date()
-      const scheduledDate = priority === "urgent" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)
-      const scheduledTime = priority === "urgent" ? "14:00" : "09:00"
-
+      const scheduledDate = priority === "today" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)
+      const scheduledTime = priority === "today" ? "14:00" : "09:00"
+        priority = "regular"
       await scheduleTransfusion({
         patientId: patient._id,
         scheduledDate: scheduledDate.toISOString(),
@@ -49,7 +48,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
         notes: `Quick scheduled as ${priority} case for ${patient.firstName} ${patient.lastName}`,
       })
 
-      const scheduledTimeText = priority === "urgent" ? "today at 2:00 PM" : "tomorrow at 9:00 AM"
+      const scheduledTimeText = "tomorrow at 9:00 AM"
 
       toast({
         title: t("scheduleTransfusion"),
@@ -102,32 +101,32 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
 
           <div className="space-y-3">
             <h4 className="font-medium text-gray-900">Select Priority:</h4>
-            <Schedule patient={patient} >
-              <Button
-                variant="outline"
-                className="w-full justify-start h-auto p-4 border-blue-200 hover:bg-blue-50"
-                
-                disabled={isScheduling}
-              >
-                <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-blue-600" />
-                  <div className="text-left">
-                    <div className="font-medium">{t("regular")}</div>
-                    <div className="text-sm text-gray-500">Tomorrow</div>
-                  </div>
-                </div>
-              </Button>
-            </Schedule>
+
             <Button
               variant="outline"
-              className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50"
-              onClick={() => handleSchedule("urgent")}
+              className="w-full justify-start h-auto p-4 border-blue-200 hover:bg-blue-50"
+              onClick={() => handleSchedule("regular")}
               disabled={isScheduling}
             >
               <div className="flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
+                
                 <div className="text-left">
-                  <div className="font-medium">{t("urgent")}</div>
+                  <div className="font-medium">{t("tomorrow")}</div>
+                  <div className="text-sm text-gray-500">Tomorrow</div>
+                </div>
+              </div>
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50"
+              onClick={() => handleSchedule("today")}
+              disabled={isScheduling}
+            >
+              <div className="flex items-center gap-3">
+                
+                <div className="text-left">
+                  <div className="font-medium">{t("today")}</div>
                   <div className="text-sm text-gray-500">Today</div>
                 </div>
               </div>
