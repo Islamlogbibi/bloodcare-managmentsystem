@@ -34,7 +34,8 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
 
   const handleSchedule = async (priority: "regular" | "urgent") => {
     setIsScheduling(true)
-
+    patient.lastDonationDate = new Date()
+    console.log("Scheduling transfusion for:", patient.lastDonationDate)
     try {
       const today = new Date()
       const scheduledDate = priority === "urgent" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)
@@ -50,7 +51,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
       })
 
       const scheduledTimeText = priority === "urgent" ? "today at 2:00 PM" : "tomorrow at 9:00 AM"
-
+      
       toast({
         title: t("scheduleTransfusion"),
         description: `${patient.firstName} ${patient.lastName} scheduled for ${scheduledTimeText}`,
@@ -69,6 +70,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
       setIsScheduling(false)
     }
   }
+  
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

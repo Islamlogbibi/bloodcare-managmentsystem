@@ -281,7 +281,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                       <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
                     )}
                   </TableCell>
-                  <TableCell>{lastDonationDate ? format(lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
+                  <TableCell>{patient.lastDonationDate ? format(patient.lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
                   
                   <TableCell>
                     <div className={`px-2 py-1 rounded text-center ${daysElapsedColorClass}`}>

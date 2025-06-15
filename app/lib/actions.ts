@@ -16,6 +16,34 @@ async function connectToDatabase() {
   }
 }
 
+
+export async function getPatientsByDate(date: string) {
+  try {
+    await client.connect()
+    const db = client.db(dbName)
+    const collection = db.collection("dailyHistory")
+
+    const day = await collection.findOne({ date })
+
+    return day?.patients || []
+  } catch (error) {
+    console.error("Failed to fetch patients for date:", error)
+    return []
+  }
+}
+
+export async function getDailyHistory() {
+  const db = await connectToDatabase()
+  const data = await db.collection("daily_history").find().toArray()
+
+  return data.map(entry => ({
+    ...entry,
+    date: new Date(entry.date).toISOString().split("T")[0] 
+  }))
+}
+
+
+
 export async function createPatient(patientData: any) {
   try {
     const db = await connectToDatabase()
@@ -174,6 +202,44 @@ export async function deletePatient(id: string) {
   }
 }
 
+export async function addToDailyHistory(transfusion: any, patient: any) {
+  try {
+    const db = await connectToDatabase()
+    const collection = db.collection("dailyHistory")
+
+    const date = new Date()
+    date.setHours(0, 0, 0, 0)
+    const isoDate = date.toISOString().split("T")[0]
+
+    const patientEntry = {
+      date: new Date(),
+      priority: patient.priority || "regular",
+      bloodType: patient.bloodType,
+      ph: patient.ph,
+      hb: patient.hb,
+      poches: patient.poches,
+      hasF: patient.hasF,
+      hasC: patient.hasC,
+      hasL: patient.hasL,
+      don: patient.don,
+      Hdist: patient.Hdist,
+      Hrecu: patient.Hrecu,
+      time: new Date(transfusion.scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    }
+
+    await collection.updateOne(
+      { date: isoDate },
+      { $push: { patients: patientEntry }, $setOnInsert: { createdAt: new Date() } },
+      { upsert: true }
+    )
+
+    revalidatePath("/history/days")
+    return { success: true }
+  } catch (error) {
+    console.error("Error adding to daily history:", error)
+    throw new Error("Failed to add to daily history")
+  }
+}
 
 export async function scheduleTransfusion(transfusionData: any) {
   try {
@@ -218,6 +284,9 @@ export async function scheduleTransfusion(transfusionData: any) {
     await db.collection("patients").updateOne(
       { _id: new ObjectId(patientId) },
       {
+        $set: {
+          lastDonationDate: scheduledTime, // or: new Date(), if you prefer now
+        },
         $push: {
           schedules: {
             date: new Date(),
@@ -229,13 +298,45 @@ export async function scheduleTransfusion(transfusionData: any) {
             hasF: patient.hasF,
             hasC: patient.hasC,
             hasL: patient.hasL,
+            don: patient.don,
             Hdist: patient.Hdist,
             Hrecu: patient.Hrecu,
           },
         },
       }
     )
-    
+    // Store in dailyHistory collection
+    const dailyHistoryCollection = db.collection("daily_history")
+
+    const dayDate = new Date()
+    dayDate.setHours(0, 0, 0, 0)
+    const isoDay = dayDate.toISOString().split("T")[0]
+
+    const patientDailyData = {
+      fullname: patient.firstName + " " + patient.lastName,
+      priority: patient.priority || "regular",
+      bloodType: patient.bloodType,
+      ph: patient.ph,
+      hb: patient.hb,
+      poches: patient.poches,
+      hasF: patient.hasF,
+      hasC: patient.hasC,
+      hasL: patient.hasL,
+      don: patient.don,
+      Hdist: patient.Hdist,
+      Hrecu: patient.Hrecu,
+      time: transfusion.scheduledTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    }
+
+    await dailyHistoryCollection.updateOne(
+      { date: isoDay },
+      {
+        $push: { patients: patientDailyData },
+        $setOnInsert: { createdAt: new Date() },
+      },
+      { upsert: true }
+    )
+
 
 
     revalidatePath("/transfusions/today")
