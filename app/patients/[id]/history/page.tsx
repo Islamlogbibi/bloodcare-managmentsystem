@@ -1,7 +1,11 @@
 import { format } from "date-fns"
 import { getPatientById } from "@/app/lib/actions"
+import { Printer } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import PrintStyles from "./style"
+import PrintButton from "./Button"
 
 export default async function HistoryPage({ params }: { params: { id: string } }) {
   const patient = await getPatientById(params.id)
@@ -13,9 +17,12 @@ export default async function HistoryPage({ params }: { params: { id: string } }
   const pastSchedules = patient.schedules?.filter((schedule: any) => {
     return new Date(schedule.date) <= today
   }) ?? []
-
+  
   return (
     <div className="space-y-4 p-4">
+        <div className="flex justify-end mb-4 print:hidden">
+            <PrintButton />
+        </div>
       <h1 className="text-2xl font-bold">Schedule History</h1>
 
       {pastSchedules.length === 0 ? (
@@ -76,6 +83,8 @@ export default async function HistoryPage({ params }: { params: { id: string } }
           </Table>
         </div>
       )}
+      {/* Print-specific styles */}
+      <PrintStyles />
     </div>
   )
 }

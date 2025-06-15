@@ -116,6 +116,15 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           Print
         </Button>
       </div>
+      <div className="hidden print:block print-header">
+        <h1>Daily Transfusion Report</h1>
+        <p>Blood Transfusion Schedule - {new Date().toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}</p>
+      </div>
 
       {/* Pending Transfusions */}
       <div className="rounded-lg border border-gray-200 overflow-hidden">
@@ -318,7 +327,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">Hb</TableHead>
                   <TableHead className="font-semibold text-gray-900">Status</TableHead>
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Actions</TableHead>
+                  <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
 
                 </TableRow>
               </TableHeader>
@@ -477,154 +486,277 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           </div>
         </div>
       </div>
+      <div className="hidden print:block print-summary">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <strong>Summary:</strong> {transfusions.length} total transfusions 
+            {completedTransfusions.length > 0 && 
+              ` (${completedTransfusions.length} completed, ${pendingTransfusions.length} pending)`
+            }
+          </div>
+          <div style={{ display: 'flex', gap: '15pt' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3pt' }}>
+              <div style={{ width: '8pt', height: '8pt', backgroundColor: '#fecaca', borderRadius: '50%' }}></div>
+              <span>Urgent</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3pt' }}>
+              <div style={{ width: '8pt', height: '8pt', backgroundColor: '#dbeafe', borderRadius: '50%' }}></div>
+              <span>Regular</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3pt' }}>
+              <div style={{ width: '8pt', height: '8pt', backgroundColor: '#dcfce7', borderRadius: '50%' }}></div>
+              <span>Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       {/* Print-specific styles */}
-      // Replace the existing style block at the end of your component with this:
-
       <style jsx global>{`
         @media print {
-          @page {
-            size: A4 landscape;
-            margin: 0.5cm;
-          }
-
-          html, body {
-            width: 100%;
-            height: auto;
-            overflow: visible !important;
-            font-size: 10pt;
+          * {
             -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
 
+          html, body {
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            background: white !important;
+            font-size: 10pt !important;
+            line-height: 1.2 !important;
+          }
+
+          /* Force full width usage */
+          body * {
+            visibility: hidden;
+          }
+          
+          .space-y-4, .space-y-4 * {
+            visibility: visible;
+          }
+
+          .space-y-4 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 15pt !important;
+          }
+
+          @page {
+            size: A4 landscape;
+            margin: 1cm !important;
+            padding: 0 !important;
+          }
+
+          /* Hide non-essential elements */
           .print\\:hidden {
             display: none !important;
+            visibility: hidden !important;
           }
-
-          .print\\:table-cell {
+          
+          /* Show print-specific elements */
+          .hidden.print\\:block {
+            display: block !important;
+            visibility: visible !important;
+          }
+          
+          .hidden.print\\:table-cell {
             display: table-cell !important;
+            visibility: visible !important;
           }
 
-          .hidden {
-            display: none !important;
+          /* Print header styling */
+          .print-header {
+            display: block !important;
+            visibility: visible !important;
+            text-align: center;
+            margin-bottom: 15pt;
+            padding-bottom: 8pt;
+            border-bottom: 2pt solid #dc2626;
+            width: 100%;
           }
 
-          .print\\:table-cell {
-            display: table-cell !important;
+          .print-header h1 {
+            font-size: 16pt;
+            font-weight: bold;
+            margin: 0 0 4pt 0;
+            color: #dc2626 !important;
+          }
+
+          .print-header p {
+            font-size: 11pt;
+            margin: 0;
+            color: #374151 !important;
+          }
+
+          /* Table styling */
+          .rounded-lg {
+            border-radius: 0 !important;
+            width: 100% !important;
+            margin: 0 0 10pt 0 !important;
           }
 
           table {
             width: 100% !important;
-            table-layout: auto !important;
             border-collapse: collapse !important;
-            font-size: 9pt !important;
-          }
-
-          th {
-            border: 1px solid #333 !important;
-            padding: 3px 4px !important;
+            table-layout: fixed !important;
             font-size: 8pt !important;
-            font-weight: bold !important;
-            background-color: #f5f5f5 !important;
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
-            white-space: nowrap !important;
+            margin: 0 !important;
           }
 
-          td {
-            border: 1px solid #ddd !important;
-            padding: 2px 3px !important;
-            font-size: 8pt !important;
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
-            vertical-align: top !important;
-          }
-
-          /* Specific column widths for better fit */
-          th:nth-child(1), td:nth-child(1) { width: 6% !important; } /* H.dist */
-          th:nth-child(2), td:nth-child(2) { width: 6% !important; } /* H.recu */
-          th:nth-child(3), td:nth-child(3) { width: 15% !important; } /* Patient */
-          th:nth-child(4), td:nth-child(4) { width: 8% !important; } /* Blood Type */
-          th:nth-child(5), td:nth-child(5) { width: 10% !important; } /* Phénotype */
-          th:nth-child(6), td:nth-child(6) { width: 4% !important; } /* F */
-          th:nth-child(7), td:nth-child(7) { width: 4% !important; } /* C */
-          th:nth-child(8), td:nth-child(8) { width: 4% !important; } /* L */
-          th:nth-child(9), td:nth-child(9) { width: 8% !important; } /* Priority */
-          th:nth-child(10), td:nth-child(10) { width: 6% !important; } /* poches */
-          th:nth-child(11), td:nth-child(11) { width: 6% !important; } /* Hb */
-          th:nth-child(12), td:nth-child(12) { width: 8% !important; } /* Status */
-          th:nth-child(13), td:nth-child(13) { width: 8% !important; } /* Attendance */
-          th:nth-child(14), td:nth-child(14) { width: 7% !important; } /* Actions - will be hidden */
+          /* Column widths - adjust these based on your content */
+          table th:nth-child(1), table td:nth-child(1) { width: 6% !important; } /* H.dist */
+          table th:nth-child(2), table td:nth-child(2) { width: 6% !important; } /* H.recu */
+          table th:nth-child(3), table td:nth-child(3) { width: 18% !important; } /* Patient */
+          table th:nth-child(4), table td:nth-child(4) { width: 8% !important; } /* Blood Type */
+          table th:nth-child(5), table td:nth-child(5) { width: 10% !important; } /* Phénotype */
+          table th:nth-child(6), table td:nth-child(6) { width: 3% !important; } /* F */
+          table th:nth-child(7), table td:nth-child(7) { width: 3% !important; } /* C */
+          table th:nth-child(8), table td:nth-child(8) { width: 4% !important; } /* L */
+          table th:nth-child(9), table td:nth-child(9) { width: 8% !important; } /* Priority */
+          table th:nth-child(10), table td:nth-child(10) { width: 6% !important; } /* poches */
+          table th:nth-child(11), table td:nth-child(11) { width: 6% !important; } /* Hb */
+          table th:nth-child(12), table td:nth-child(12) { width: 8% !important; } /* Status */
+          table th:nth-child(13), table td:nth-child(13) { width: 8% !important; } /* Actions/Attendance */
+          table th:nth-child(14), table td:nth-child(14) { width: 6% !important; } /* Actions */
 
           thead {
             display: table-header-group !important;
           }
 
-          tr {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
+          thead th {
+            background-color: #f3f4f6 !important;
+            border: 1pt solid #d1d5db !important;
+            padding: 4pt 2pt !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            font-size: 7pt !important;
+            color: #374151 !important;
+            vertical-align: middle !important;
+            word-wrap: break-word !important;
           }
 
-          /* Patient name styling */
-          .font-medium {
-            font-weight: 600 !important;
+          tbody td {
+            border: 0.5pt solid #e5e7eb !important;
+            padding: 3pt 2pt !important;
+            vertical-align: middle !important;
+            font-size: 7pt !important;
+            line-height: 1.1 !important;
+            word-wrap: break-word !important;
+            overflow: hidden !important;
           }
 
-          /* Avatar styling for print */
-          .h-8.w-8 {
-            width: 20px !important;
-            height: 20px !important;
-            font-size: 8pt !important;
+          tbody tr:nth-child(even) {
+            background-color: #f9fafb !important;
+          }
+
+          /* Center specific columns */
+          td:nth-child(6), td:nth-child(7), td:nth-child(8), 
+          td:nth-child(10), td:nth-child(11) {
+            text-align: center !important;
+          }
+
+          /* Section divider */
+          .flex.items-center.my-6 {
+            margin: 12pt 0 8pt 0 !important;
+            width: 100% !important;
+          }
+
+          .flex.items-center.my-6 span {
+            font-size: 10pt !important;
+            font-weight: bold !important;
+            color: #374151 !important;
+          }
+
+          /* Hide icons */
+          .lucide, svg {
+            display: none !important;
           }
 
           /* Badge styling */
-          .badge, [class*="bg-"] {
-            background-color: #f3f4f6 !important;
-            color: #374151 !important;
-            border: 1px solid #d1d5db !important;
-            padding: 1px 4px !important;
-            border-radius: 3px !important;
-            font-size: 7pt !important;
+          .bg-red-100, .border-red-200, .text-red-700, .text-red-800 {
+            background-color: #fef2f2 !important;
+            color: #dc2626 !important;
+            border: 1pt solid #fecaca !important;
           }
 
-          /* Phone number styling */
-          .text-xs {
-            font-size: 7pt !important;
+          .bg-green-100, .text-green-800 {
+            background-color: #dcfce7 !important;
+            color: #166534 !important;
           }
 
-          /* Icon styling */
-          .h-4.w-4, .h-3.w-3 {
-            width: 10px !important;
-            height: 10px !important;
+          .bg-yellow-100, .text-yellow-800 {
+            background-color: #fef3c7 !important;
+            color: #92400e !important;
           }
 
-          /* Purple checkmarks for F, C, L columns */
+          .bg-blue-100, .text-blue-800 {
+            background-color: #dbeafe !important;
+            color: #1d4ed8 !important;
+          }
+
           .bg-purple-500 {
             background-color: #8b5cf6 !important;
           }
 
-          /* Prevent unnecessary cutoffs */
-          .space-y-4, .overflow-hidden {
-            overflow: visible !important;
+          /* Badges */
+          [class*="badge"], [class*="Badge"] {
+            font-size: 6pt !important;
+            padding: 1pt 3pt !important;
+            border-radius: 2pt !important;
+            font-weight: normal !important;
           }
 
-          .rounded-lg {
-            border-radius: 0 !important;
+          /* Avatar styling */
+          .h-8.w-8 {
+            width: 16pt !important;
+            height: 16pt !important;
+            font-size: 6pt !important;
           }
 
-          /* Ensure completed section prints properly */
-          .my-6 {
-            margin: 10px 0 !important;
+          /* Summary section */
+          .flex.items-center.justify-between.text-sm {
+            margin-top: 10pt !important;
+            font-size: 7pt !important;
+            color: #6b7280 !important;
           }
 
-          /* Print specific adjustments */
-          body * {
+          /* Print summary */
+          .print-summary {
+            display: block !important;
             visibility: visible !important;
+            margin-top: 10pt !important;
+            padding-top: 8pt !important;
+            border-top: 1pt solid #d1d5db !important;
+            font-size: 7pt !important;
+            color: #6b7280 !important;
+            width: 100% !important;
           }
 
-          .print\\:table-cell {
-            visibility: visible !important;
-            display: table-cell !important;
+          /* Force break pages appropriately */
+          .rounded-lg.border.border-gray-200:first-of-type {
+            page-break-after: avoid;
+          }
+
+          /* Ensure proper page breaks */
+          tr {
+            page-break-inside: avoid;
+          }
+
+          /* Remove any containers that might constrain width */
+          .container, .max-w-7xl, .mx-auto {
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
           }
         }
       `}</style>
