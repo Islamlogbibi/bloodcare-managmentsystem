@@ -245,9 +245,11 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
 
               return (
                 <TableRow key={patient._id} className="hover:bg-gray-50">
+                  
                   <TableCell className="font-medium text-gray-900">
-                    {patient.firstName} {patient.lastName}
+                    {patient.fullName || `${patient.firstName} ${patient.lastName}`}
                   </TableCell>
+
                   <TableCell className="text-center">
                     <span className="text-gray-700 font-medium">{patient.bloodType}</span>
                   </TableCell>

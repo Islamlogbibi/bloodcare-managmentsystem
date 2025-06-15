@@ -1,0 +1,372 @@
+[
+  {
+    "fullName": "DOGHMANE AZZEDDINE",
+    "bloodType": "B+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "DRICI DOHA",
+    "bloodType": "A+",
+    "phenotype": "ccEek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "FARDJALLAH IMAD",
+    "bloodType": "AB+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "KHALFALLAH ROUKIA",
+    "bloodType": "AB-",
+    "phenotype": "cceek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "MERAH MAY DORSAF",
+    "bloodType": "O-",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "MIHOUBI WAIL",
+    "bloodType": "O+",
+    "phenotype": "CcEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "SEBTI MAROUA",
+    "bloodType": "A+",
+    "phenotype": "CcEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "MERAH RAOUIA",
+    "bloodType": "A-",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "CHAOUCHE OUSSAMA",
+    "bloodType": "A+",
+    "phenotype": "CcEek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "KHALFALLAH KHIRREDDINE",
+    "bloodType": "A+",
+    "phenotype": "CcEek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "KOUADRI CHAIMA",
+    "bloodType": "B+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "TOUAREF ALI BEY",
+    "bloodType": "A-",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BERDJAM HAROUNE",
+    "bloodType": "A+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "GUIDOUM SOULEF",
+    "bloodType": "O+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "DJALI ABDELKADER",
+    "bloodType": "O-",
+    "phenotype": "Cceek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "TABIA NOUR ELISLAM",
+    "bloodType": "O+",
+    "phenotype": "ccEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "MERDACI ISHAK",
+    "bloodType": "O+",
+    "phenotype": "ccEek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BERIMA AMINE",
+    "bloodType": "B+",
+    "phenotype": "CcEek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BERIMA BILLEL",
+    "bloodType": "B+",
+    "phenotype": "CCeek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "TOUAREF NADA MALAK",
+    "bloodType": "A+",
+    "phenotype": "CCeek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "FRADJ ILIES",
+    "bloodType": "A+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BENMAKHLOUF MED AMINE",
+    "bloodType": "O+",
+    "phenotype": "CCeek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "AISSAOUI SOUMYA",
+    "bloodType": "O+",
+    "phenotype": "CcEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "REFES FATMA ZOHRA",
+    "bloodType": "O+",
+    "phenotype": "CcEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BELLI ADEM",
+    "bloodType": "B-",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BOUTABA DJABER",
+    "bloodType": "A+",
+    "phenotype": "Cceek-",
+    "hasF": false,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "KHALFA KAOUTHER",
+    "bloodType": "A+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": true,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BOUCHELAGHEM ISLEM",
+    "bloodType": "A+",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "AMRI BOUCHRA",
+    "bloodType": "O-",
+    "phenotype": "cceek-",
+    "hasF": false,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BOUCHOUCHA MOHAMED",
+    "bloodType": "B+",
+    "phenotype": "Cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BRIKI ABD EL MALEK",
+    "bloodType": "A+",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "MERDACI YAAKOUB",
+    "bloodType": "O+",
+    "phenotype": "ccEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "KSOURI MOHAMMED",
+    "bloodType": "B+",
+    "phenotype": "CCeek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "METLAQUI NESRINE",
+    "bloodType": "O+",
+    "phenotype": "ccEek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "BEDOUD HAMZA",
+    "bloodType": "O+",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": false,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "MANSOURI HABIBA",
+    "bloodType": "B+",
+    "phenotype": "CcEek+",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  },
+  {
+    "fullName": "GASMI FERIEL",
+    "bloodType": "A+",
+    "phenotype": "cceek-",
+    "hasF": true,
+    "hasC": true,
+    "hasL": false,
+    "notes": null,
+    "wilaya": null
+  }
+]

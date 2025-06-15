@@ -6,25 +6,31 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Home, Users, Calendar, Clock, Settings, Activity, Heart, BarChart3, Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
+import { useLanguage } from "@/contexts/language-context"
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: Home, description: "Overview and statistics" },
-  { name: "Patients", href: "/patients", icon: Users, description: "Manage patient records" },
-  { name: "Today's Schedule", href: "/transfusions/today", icon: Clock, description: "Today's appointments" },
-  {
-    name: "Tomorrow's Schedule",
-    href: "/transfusions/tomorrow",
-    icon: Calendar,
-    description: "Tomorrow's appointments",
-  },
-  { name: "Analytics", href: "/analytics", icon: BarChart3, description: "View analytics" },
-  { name: "Settings", href: "/settings", icon: Settings, description: "Application settings" },
-]
+
+
+
 
 export function Sidebar() {
+  const { t } = useLanguage()
   const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+
+  const navigation = [
+    { name: t("Dashboard"), href: "/", icon: Home, description: "Overview and statistics" },
+    { name: t("Patients"), href: "/patients", icon: Users, description: "Manage patient records" },
+    { name: t("Today's Schedule"), href: "/transfusions/today", icon: Clock, description: "Today's appointments" },
+    {
+      name: t("Tomorrow's Schedule"),
+      href: "/transfusions/tomorrow",
+      icon: Calendar,
+      description: "Tomorrow's appointments",
+    },
+    { name: t("History"), href: "/history", icon: BarChart3, description: "View history" },
+    { name: t("Settings"), href: "/settings", icon: Settings, description: "Application settings" },
+  ]
 
   // Close mobile menu on route change
   useEffect(() => {

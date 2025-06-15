@@ -92,7 +92,7 @@ export class PatientService {
         .find(query)
         .sort({ [sortBy]: sortDirection })
         .skip(skip)
-        .limit(limit)
+        
         .toArray(),
       collection.countDocuments(query),
     ])
