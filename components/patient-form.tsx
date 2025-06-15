@@ -57,7 +57,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         hasF: formData.get("hasF") === "on",
         hasC: formData.get("hasC") === "on",
         hasL: formData.get("hasL") === "on",
-        patientCategory: (formData.get("patientCategory") as string) || "All Patients",
+        patientCategory: (formData.get("patientCategory") as string),
       }
 
       if (isEditing && patient) {
@@ -72,6 +72,46 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           title: "Patient Registered",
           description: "New patient has been successfully registered.",
         })
+      }
+      const gender = formData.get("gender") as string
+      const patientCategory = formData.get("patientCategory") as string
+      const bloodType = formData.get("bloodType") as string
+      const ph = formData.get("ph") as string
+      if (!gender) {
+        toast({
+          title: "Validation Error",
+          description: "Please select a gender.",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+      if (!patientCategory) {
+        toast({
+          title: "Validation Error",
+          description: "Please select a category.",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+      if (!bloodType) {
+        toast({
+          title: "Validation Error",
+          description: "Please select a bloodtype.",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+      if (!ph) {
+        toast({
+          title: "Validation Error",
+          description: "Please select a phénotype.",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
       }
 
       router.push("/patients")
@@ -409,13 +449,30 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           {/* Patient Category */}
           <div className="space-y-2">
             <Label htmlFor="patientCategory" className="text-sm font-medium text-gray-700">
-              Patient Category
+              Patient Category *
             </Label>
-            <Select name="patientCategory" defaultValue={patient?.patientCategory || "All Patients"}>
+            {/* Hidden input for native form validation */}
+            <input
+              type="text"
+              name="patientCategory"
+              value={patient?.patientCategory || ""}
+              required
+              readOnly
+              hidden
+            />
+            <Select 
+            name="patientCategory" 
+            defaultValue={patient?.patientCategory || "All Patients"}
+            onValueChange={(value) => {
+              // Update the hidden input when select changes
+              const hiddenInput = document.querySelector<HTMLInputElement>('input[name="patientCategory"]')
+              if (hiddenInput) hiddenInput.value = value
+            }}
+            >
               <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent >
                 <SelectItem value="HyperRegime">HyperRegime</SelectItem>
                 <SelectItem value="PolyTransfuses">PolyTransfuses</SelectItem>
                 <SelectItem value="Echanges">Echanges</SelectItem>

@@ -125,14 +125,28 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
   }, [patients, sortConfig])
 
   // Function to determine the color based on days elapsed
-  const getDaysElapsedColor = (daysElapsed: number | null) => {
+  const getDaysElapsedColor = (daysElapsed: number | null, type: string) => {
     if (daysElapsed === null) return "bg-gray-100 text-gray-500"
 
     const absDays = Math.abs(daysElapsed)
+    if (type === "HyperRegime"){
 
-    if (absDays > 15) return "bg-red-500 text-white font-medium"
-    if (absDays > 7) return "bg-orange-400 text-white font-medium"
-    return "bg-green-500 text-white font-medium"
+      if (absDays >= 15) return "bg-red-500 text-white font-medium"
+      if (absDays > 11) return "bg-orange-400 text-white font-medium"
+      return "bg-green-500 text-white font-medium"
+    }
+    if (type === "PolyTransfuses") {
+      if (absDays >= 21) return "bg-red-500 text-white font-medium"
+      if (absDays > 17) return "bg-orange-400 text-white font-medium"
+      return "bg-green-500 text-white font-medium"
+    }
+    if (type === "Echanges"){
+      if (absDays >= 30) return "bg-red-500 text-white font-medium"
+      if (absDays > 26) return "bg-orange-400 text-white font-medium"
+      return "bg-green-500 text-white font-medium"
+    }
+    console.log(type)
+    return "bg-gray-100 text-gray-500"
   }
 
   if (loading) {
@@ -226,12 +240,8 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
               // Calculate days elapsed
               const daysElapsed = lastDonationDate ? differenceInDays(new Date(), lastDonationDate) : null
 
-              // Extract blood group and type
-              const bloodGroup = patient.bloodType ? patient.bloodType.charAt(0) : ""
-              const bloodPhFactor = patient.bloodType ? (patient.bloodType.includes("+") ? "+" : "-") : ""
-
               // Get color class for days elapsed
-              const daysElapsedColorClass = getDaysElapsedColor(daysElapsed)
+              const daysElapsedColorClass = getDaysElapsedColor(daysElapsed, patient.patientCategory)
 
               return (
                 <TableRow key={patient._id} className="hover:bg-gray-50">
