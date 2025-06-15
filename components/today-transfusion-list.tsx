@@ -27,7 +27,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
   // Group transfusions by status
   const pendingTransfusions = transfusions.filter((t) => t.status !== "completed")
   const completedTransfusions = transfusions.filter((t) => t.status === "completed")
-
+  const urgentorders = transfusions.filter((t) => t.priority === "urgent")
+  const regularorders = transfusions.filter((t) => t.priority === "regular")
   const handleMarkAsCompleted = async (transfusionId: string) => {
     setCompletingIds((prev) => new Set(prev).add(transfusionId))
 
@@ -129,6 +130,13 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           day: 'numeric' 
         })}</h3>
       </div>
+      <div className="hidden print:block print-header">
+        <strong>Summary:</strong> {transfusions.length} total transfusions
+        {completedTransfusions.length > 0 && (
+          <span> ({completedTransfusions.length} completed)</span>
+        )}
+      </div>
+
 
       {/* Pending Transfusions */}
       <div className="rounded-lg border border-gray-200 overflow-hidden">
@@ -152,7 +160,10 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             </TableRow>
           </TableHeader>
           <TableBody>
-            {pendingTransfusions.map((transfusion) => {
+            
+
+            
+          {regularorders.map((transfusion) => {
               const initials = `${transfusion.patient.firstName[0]}${transfusion.patient.lastName[0]}`
               const isCompleting = completingIds.has(transfusion._id)
 
@@ -270,6 +281,22 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       )}
                       
                     </div>
+                    <div className="flex items-center space-x-2">
+                      {transfusion.status === "completed" && (
+                        <Button
+                          size="sm"
+                          className="bg-red-600 hover:bg-red-700"
+                          onClick={() => handleUnmarkAsCompleted(transfusion._id)}
+                          disabled={isCompleting}
+                        >
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          {isCompleting ? "Loading..." : "Undone"}
+                        </Button>
+                        
+                      )}
+
+                      
+                    </div>
                     <div></div>
                     <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
                       <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
@@ -280,12 +307,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableCell className="hidden print:table-cell">
                   <Badge
                     className={
-                      transfusion.attended
+                      transfusion.status === "completed"
                         ? "bg-green-100 text-green-800"
                         : "bg-red-100 text-red-800"
                     }
                   >
-                    {transfusion.attended ? "Present" : "Absent"}
+                    {transfusion.status === "completed" ? "Present" : "Absent"}
                   </Badge>
 
                   </TableCell>
@@ -297,11 +324,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       </div>
 
       {/* Completed Transfusions */}
-      {completedTransfusions.length > 0 && (
+      {completedTransfusions.length >= 0 && (
         <>
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-4 text-gray-500 font-medium">Completed Transfusions</span>
+            <span className="px-4 text-gray-500 font-medium">Urgent Transfusions</span>
             <div className="flex-grow h-px bg-gray-300"></div>
           </div>
 
@@ -327,7 +354,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {completedTransfusions.map((transfusion) => {
+              {urgentorders.map((transfusion) => {
                   const initials = `${transfusion.patient.firstName[0]}${transfusion.patient.lastName[0]}`
                   const isCompleting = completingIds.has(transfusion._id)
                   return (
@@ -432,7 +459,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">Present</Badge>
                       </TableCell>
-                      <TableCell className="print:hidden">
+                      <TableCell className="print:hidden flex items-center space-x-2">
                         <div className="flex items-center space-x-2">
                           {transfusion.status === "completed" && (
                             <Button
@@ -444,9 +471,32 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               <CheckCircle className="h-3 w-3 mr-1" />
                               {isCompleting ? "Loading..." : "Undone"}
                             </Button>
+                            
+                          )}
+
+                          
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          {transfusion.status !== "completed" && (
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700"
+                              onClick={() => handleMarkAsCompleted(transfusion._id)}
+                              disabled={isCompleting}
+                            >
+                              <CheckCircle className="h-3 w-3 mr-1" />
+                              {isCompleting ? "Loading..." : "Mark as Done"}
+                            </Button>
                           )}
                           
                         </div>
+                        <div></div>
+                        <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
+                          <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
+                            <Edit className="h-4 w-4 text-blue-600" /> Edit
+                          </Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   )
