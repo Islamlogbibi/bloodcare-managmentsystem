@@ -34,7 +34,46 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
   async function onSubmit(formData: FormData) {
     setIsLoading(true)
-
+    const gender = formData.get("gender") as string
+    const patientCategory = formData.get("patientCategory") as string
+    const bloodType = formData.get("bloodType") as string
+    const ph = formData.get("ph") as string
+    if (!gender) {
+      toast({
+        title: "Validation Error",
+        description: "Please select a gender.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+    if (!patientCategory) {
+      toast({
+        title: "Validation Error",
+        description: "Please select a category.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+    if (!bloodType) {
+      toast({
+        title: "Validation Error",
+        description: "Please select a bloodtype.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+    if (!ph) {
+      toast({
+        title: "Validation Error",
+        description: "Please select a phénotype.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
     try {
       const patientData = {
         firstName: formData.get("firstName") as string,

@@ -26,6 +26,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
   const [Hrecu, setHrecu] = useState<string | undefined>(patient?.Hrecu ?? undefined)
   const [poches, setPoches] = useState<string | undefined>(patient?.poches?.toString())
   const [hb, sethb] = useState<string | undefined>(patient?.hb?.toString())
+  const [don, setdon] = useState<string | undefined>(patient?.don?.toString())
 
 
   async function onSubmit(formData: FormData) {
@@ -38,6 +39,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         Hrecu: Hrecu,
         poches: poches ? parseInt(poches) : undefined,
         hb: hb ? parseFloat(hb) : undefined,
+        don: don ,
       }
 
       if (isEditing && patient) {
@@ -130,6 +132,18 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                 />
 
               </div>
+              <Label htmlFor="don" className="text-sm font-medium text-gray-700">
+                Donner
+              </Label>
+              <Select value={don} onValueChange={setdon}>
+                <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                  <SelectValue placeholder="donner" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="yes">Yes</SelectItem>
+                  <SelectItem value="no">No</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
         </CardContent>

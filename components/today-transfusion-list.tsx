@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Clock, Phone, CheckCircle, AlertTriangle, Plus, Printer } from "lucide-react"
-import { Edit, Calendar, ArrowUpDown } from "lucide-react"
-import { format } from "date-fns"
+import { Edit } from "lucide-react"
+
 import Link from "next/link"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useLanguage } from "@/contexts/language-context"
@@ -116,14 +116,18 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           Print
         </Button>
       </div>
+      <div className="hidden print:block print-header alg">
+        <h1>CHU ANNABA servise d'hemobiologie et transfustion sanguine</h1>
+        <h1>chef service brouk hacene</h1>
+      </div>
       <div className="hidden print:block print-header">
         <h1>Daily Transfusion Report</h1>
-        <p>Blood Transfusion Schedule - {new Date().toLocaleDateString('en-US', { 
+        <p>Blood Transfusion Schedule - </p><h3> {new Date().toLocaleDateString('en-US', { 
           weekday: 'long', 
           year: 'numeric', 
           month: 'long', 
           day: 'numeric' 
-        })}</p>
+        })}</h3>
       </div>
 
       {/* Pending Transfusions */}
@@ -142,7 +146,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
               <TableHead className="font-semibold text-gray-900">poches</TableHead>
               <TableHead className="font-semibold text-gray-900">Hb</TableHead>
-              <TableHead className="font-semibold text-gray-900">Status</TableHead>
+              <TableHead className="font-semibold text-gray-900">Don</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
             </TableRow>
@@ -247,18 +251,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                 
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      className={
-                        transfusion.status === "completed"
-                          ? "bg-green-100 text-green-800"
-                          : transfusion.status === "in-progress"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-800"
-                      }
-                    >
-                      {transfusion.status === "completed" && <CheckCircle className="h-3 w-3 mr-1" />}
-                      {transfusion.status}
-                    </Badge>
+                    
+                      {transfusion.patient.don}
+                    
                   </TableCell>
                   <TableCell className="print:hidden flex items-center space-x-2">
                     <div className="flex items-center space-x-2">
@@ -325,7 +320,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
                   <TableHead className="font-semibold text-gray-900">poches</TableHead>
                   <TableHead className="font-semibold text-gray-900">Hb</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Status</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Don</TableHead>
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
                   <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
 
@@ -431,10 +426,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     
                       </TableCell>
                       <TableCell>
-                        <Badge className="bg-green-100 text-green-800">
-                          <CheckCircle className="h-3 w-3 mr-1" />
-                          {transfusion.status}
-                        </Badge>
+                        {transfusion.patient.don}
                       </TableCell>
                       
                       <TableCell className="hidden print:table-cell">
@@ -588,7 +580,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             font-size: 16pt;
             font-weight: bold;
             margin: 0 0 4pt 0;
-            color: #dc2626 !important;
+            color: #dc2626 ;
           }
 
           .print-header p {
@@ -596,7 +588,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             margin: 0;
             color: #374151 !important;
           }
-
+          .alg h1{
+            color: black;
+          }
           /* Table styling */
           .rounded-lg {
             border-radius: 0 !important;
