@@ -83,7 +83,7 @@ export default function CalendarHistoryPage() {
               })}</h3>
             </div>
             <div className="hidden print:block print-header">
-              <strong>Summary:</strong> {patients.length} total transfusions
+              <strong>Summary:</strong> {patients.length} total commandes
             </div>
 
             <Table>

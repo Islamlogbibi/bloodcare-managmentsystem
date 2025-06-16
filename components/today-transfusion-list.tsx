@@ -131,9 +131,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         })}</h3>
       </div>
       <div className="hidden print:block print-header">
-        <strong>Summary:</strong> {transfusions.length} total transfusions
+        <strong>Summary:</strong> {transfusions.length} total commandes
         {completedTransfusions.length > 0 && (
-          <span> ({completedTransfusions.length} completed)</span>
+          <span> ({completedTransfusions.length} commandes distribués)</span>
         )}
       </div>
 
