@@ -119,12 +119,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       </div>
       <div className="hidden print:block print-header alg">
         <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-        <h1>CHEF SERVICE PROOF BROUK HACENE</h1>
+        <h1>CHEF SERVICE PR. BROUK HACENE</h1>
       </div>
       <div className="hidden print:block print-header">
         <h1>Daily Transfusion Report</h1>
         <p>Blood Transfusion Schedule - </p><h3> {new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
+          weekday: 'long',
           year: 'numeric', 
           month: 'long', 
           day: 'numeric' 

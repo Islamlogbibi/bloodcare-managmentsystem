@@ -71,7 +71,7 @@ export default function CalendarHistoryPage() {
           <div ref={tableRef} className="overflow-x-auto border rounded-lg print:overflow-visible print:rounded-none print:border-none print:p-4">
             <div className="hidden print:block print-header alg">
               <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-              <h1>CHEF SERVICE PROOF BROUK HACENE</h1>
+              <h1>CHEF SERVICE PR. BROUK HACENE</h1>
             </div>
             <div className="hidden print:block print-header">
               <h1>Daily Transfusion Report</h1>
