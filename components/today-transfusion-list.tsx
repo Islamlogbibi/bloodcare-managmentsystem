@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Clock, Phone, CheckCircle, AlertTriangle, Plus, Printer } from "lucide-react"
 import { Edit } from "lucide-react"
-
+import { deleteTransfusionById } from "@/app/lib/actions"
 import Link from "next/link"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useLanguage } from "@/contexts/language-context"
@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation"
 interface TodayTransfusionListProps {
   transfusions: any[]
 }
+
 
 export function TodayTransfusionList({ transfusions: initialTransfusions }: TodayTransfusionListProps) {
   const { t } = useLanguage()
@@ -90,7 +91,33 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       })
     }
   }
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
+  const handleDelete = async (transfusionId: string) => {
+    const confirm = window.confirm("Are you sure you want to remove this transfusion?")
+    if (!confirm) return
+  
+    setDeletingId(transfusionId)
+    try {
+      await deleteTransfusionById(transfusionId)
+      setTransfusions(prev => prev.filter(t => t._id !== transfusionId))
+      toast({
+        title: t("deleted"),
+        description: "Transfusion removed successfully.",
+      })
+      router.refresh()
+    } catch (err) {
+      console.error("Failed to delete transfusion:", err)
+      toast({
+        title: t("error"),
+        description: "Failed to remove the transfusion.",
+        variant: "destructive",
+      })
+    } finally {
+      setDeletingId(null)
+    }
+  }
+  
   const handlePrint = () => {
     window.print()
   }
@@ -303,6 +330,17 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         <Edit className="h-4 w-4 text-blue-600" /> Edit
                       </Button>
                     </Link>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(transfusion._id)}
+                      className="h-8 w-20"
+                      disabled={deletingId === transfusion._id}
+                    >
+                      {deletingId === transfusion._id ? "..." : "Delete"}
+                    </Button>
+
+
                   </TableCell>
                   <TableCell className="hidden print:table-cell">
                   <Badge
@@ -497,6 +535,17 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                             <Edit className="h-4 w-4 text-blue-600" /> Edit
                           </Button>
                         </Link>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDelete(transfusion._id)}
+                          className="h-8 w-20"
+                          disabled={deletingId === transfusion._id}
+                        >
+                          {deletingId === transfusion._id ? "..." : "Delete"}
+                        </Button>
+
+
                       </TableCell>
                     </TableRow>
                   )

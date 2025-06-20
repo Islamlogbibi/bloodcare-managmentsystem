@@ -16,6 +16,11 @@ async function connectToDatabase() {
   }
 }
 
+export async function deleteTransfusionById(id: string) {
+  const db = await connectToDatabase()
+  const result = await db.collection("transfusions").deleteOne({ _id: new ObjectId(id) })
+  return result.deletedCount
+}
 
 export async function getPatientsByDate(date: string) {
   try {
