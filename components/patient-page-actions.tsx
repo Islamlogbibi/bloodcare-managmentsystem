@@ -10,7 +10,7 @@ interface PatientPageActionsProps {
     search?: string
     category?: string
     bloodType?: string
-    gender?: string
+    ph?: string
   }
 }
 
@@ -38,8 +38,8 @@ export function PatientPageActions({ searchParams }: PatientPageActionsProps) {
         filters.bloodType = searchParams.bloodType
       }
 
-      if (searchParams.gender && searchParams.gender !== "all") {
-        filters.gender = searchParams.gender
+      if (searchParams.ph && searchParams.ph !== "all") {
+        filters.ph = searchParams.ph
       }
 
       // Fetch patients with filters

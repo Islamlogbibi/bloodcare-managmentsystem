@@ -34,7 +34,7 @@ export class PatientService {
       search?: string
       bloodType?: string
       status?: string
-      gender?: string
+      ph?: string
       patientCategory?: string
       sortBy?: string
       sortOrder?: "asc" | "desc"
@@ -47,7 +47,7 @@ export class PatientService {
       search,
       bloodType,
       status = "active",
-      gender,
+      ph,
       patientCategory,
       sortBy = "createdAt",
       sortOrder = "desc",
@@ -64,8 +64,8 @@ export class PatientService {
       query.bloodType = bloodType
     }
 
-    if (gender && gender !== "all") {
-      query.gender = gender
+    if (ph && ph !== "all") {
+      query.ph = ph
     }
 
     if (patientCategory && patientCategory !== "All Patients") {

@@ -97,8 +97,8 @@ export async function getPatients(filters?: any) {
       query.bloodType = filters.bloodType
     }
 
-    if (filters?.gender && filters.gender !== "all") {
-      query.gender = filters.gender
+    if (filters?.ph && filters.ph !== "all") {
+      query.ph = filters.ph
     }
 
     if (filters?.patientCategory && filters.patientCategory !== "All Patients") {

@@ -21,7 +21,7 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
   const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "")
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "All Patients")
   const [selectedBloodType, setSelectedBloodType] = useState(searchParams.get("bloodType") || "")
-  const [selectedGender, setSelectedGender] = useState(searchParams.get("gender") || "")
+  const [selectedPh, setSelectedPh] = useState(searchParams.get("ph") || "")
   const [activeFilters, setActiveFilters] = useState<string[]>([])
 
   const categories = [
@@ -66,9 +66,9 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
   useEffect(() => {
     const filters = []
     if (selectedBloodType && selectedBloodType !== "all") filters.push(`Blood Type: ${selectedBloodType}`)
-    if (selectedGender && selectedGender !== "all") filters.push(`Gender: ${selectedGender}`)
+    if (selectedPh && selectedPh !== "all") filters.push(`Ph: ${selectedPh}`)
     setActiveFilters(filters)
-  }, [selectedBloodType, selectedGender])
+  }, [selectedBloodType, selectedPh])
 
   const handleSearch = (value: string) => {
     setSearchTerm(value)
@@ -85,9 +85,9 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
     updateURL({ bloodType })
   }
 
-  const handleGenderChange = (gender: string) => {
-    setSelectedGender(gender)
-    updateURL({ gender })
+  const handlePhChange = (ph: string) => {
+    setSelectedPh(ph)
+    updateURL({ ph })
   }
 
   const updateURL = (newParams: Record<string, string>) => {
@@ -108,7 +108,7 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
     setSearchTerm("")
     setSelectedCategory("All Patients")
     setSelectedBloodType("")
-    setSelectedGender("")
+    setSelectedPh("")
     setActiveFilters([])
     router.push("/patients")
   }
@@ -117,9 +117,9 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
     if (filter.startsWith("Blood Type:")) {
       setSelectedBloodType("")
       updateURL({ bloodType: "" })
-    } else if (filter.startsWith("Gender:")) {
-      setSelectedGender("")
-      updateURL({ gender: "" })
+    } else if (filter.startsWith("Ph:")) {
+      setSelectedPh("")
+      updateURL({ ph: "" })
     }
   }
 
@@ -183,19 +183,35 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="gender" className="text-sm font-medium text-gray-700">
-            Gender
+          <Label htmlFor="ph" className="text-sm font-medium text-gray-700">
+            phénotype
           </Label>
-          <Select value={selectedGender} onValueChange={handleGenderChange}>
-            <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-              <SelectValue placeholder="All genders" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All genders</SelectItem>
-              <SelectItem value="male">Male</SelectItem>
-              <SelectItem value="female">Female</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select value={selectedPh} onValueChange={handlePhChange} name="ph">
+                <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+                  <SelectValue placeholder="Select Phénotype" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">all</SelectItem>
+                  <SelectItem value="cceek+">cc ee KEL (+)</SelectItem>
+                  <SelectItem value="cceek-">cc ee KEL (-)</SelectItem>
+                  <SelectItem value="CcEEk+">Cc EE KEL (+)</SelectItem>
+                  <SelectItem value="CcEEk-">Cc EE KEL (-)</SelectItem>
+                  <SelectItem value="Cceek+">Cc ee KEL (+)</SelectItem>
+                  <SelectItem value="Cceek-">Cc ee KEL (-)</SelectItem>
+                  <SelectItem value="CcEek+">Cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="CcEek-">Cc Ee KEL (-)</SelectItem>
+                  <SelectItem value="CCEEk+">CC EE KEL (+)</SelectItem>
+                  <SelectItem value="CCEEk-">CC EE KEL (-)</SelectItem>
+                  <SelectItem value="CCeek+">CC ee KEL (+)</SelectItem>
+                  <SelectItem value="CCeek-">CC ee KEL (-)</SelectItem>
+                  <SelectItem value="ccEEk+">cc EE KEL (+)</SelectItem>
+                  <SelectItem value="ccEEk-">cc EE KEL (-)</SelectItem>
+                  <SelectItem value="CCEek+">CC Ee KEL (+)</SelectItem>
+                  <SelectItem value="CCEek-">CC Ee KEL (-)</SelectItem>
+                  <SelectItem value="ccEek+">cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="ccEek-">cc Ee KEL (-)</SelectItem>
+                </SelectContent>
+              </Select>
         </div>
 
         

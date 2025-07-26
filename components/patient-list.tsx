@@ -16,7 +16,7 @@ interface PatientListProps {
     search?: string
     category?: string
     bloodType?: string
-    gender?: string
+    ph?: string
   }
 }
 
@@ -49,8 +49,8 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
         queryParams.append("bloodType", searchParams.bloodType)
       }
 
-      if (searchParams.gender && searchParams.gender !== "all") {
-        queryParams.append("gender", searchParams.gender)
+      if (searchParams.ph && searchParams.ph !== "all") {
+        queryParams.append("ph", searchParams.ph)
       }
 
       // Fetch patients from API

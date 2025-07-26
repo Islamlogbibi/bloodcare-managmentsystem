@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || undefined
     const category = searchParams.get("category") || undefined
     const bloodType = searchParams.get("bloodType") || undefined
-    const gender = searchParams.get("gender") || undefined
+    const ph = searchParams.get("ph") || undefined
 
     // Build filters
     const filters: any = {}
@@ -27,8 +27,8 @@ export async function GET(request: NextRequest) {
       filters.bloodType = bloodType
     }
 
-    if (gender && gender !== "all") {
-      filters.gender = gender
+    if (ph && ph !== "all") {
+      filters.ph = ph
     }
 
     // Get patients
