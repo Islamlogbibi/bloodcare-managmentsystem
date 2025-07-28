@@ -56,7 +56,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         })
       }
 
-      router.push("/patients")
+      router.push("/transfusions/today")
     } catch (error) {
       toast({
         title: "Error",
