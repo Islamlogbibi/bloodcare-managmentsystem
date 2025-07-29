@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+
 import {
   Dialog,
   DialogContent,
@@ -34,8 +34,10 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
 
   const handleSchedule = async (priority: "regular" | "urgent") => {
     setIsScheduling(true)
-    patient.lastDonationDate = new Date()
+    
+    
     console.log("Scheduling transfusion for:", patient.lastDonationDate)
+
     try {
       const today = new Date()
       const scheduledDate = priority === "urgent" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)

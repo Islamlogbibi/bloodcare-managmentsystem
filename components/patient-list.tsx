@@ -233,9 +233,9 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
           </TableHeader>
           <TableBody>
             {sortedPatients.map((patient) => {
-              // Calculate next transfusion date (90 days after last donation)
+              
               const lastDonationDate = patient.lastDonationDate ? new Date(patient.lastDonationDate) : null
-              const nextTransfusionDate = lastDonationDate ? addDays(lastDonationDate, 90) : null
+              
 
               // Calculate days elapsed
               const daysElapsed = lastDonationDate ? differenceInDays(new Date(), lastDonationDate) : null

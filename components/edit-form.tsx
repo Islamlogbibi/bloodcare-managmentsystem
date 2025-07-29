@@ -33,14 +33,26 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     setIsLoading(true)
 
     try {
-      const patientData = {
-        
-        Hdist: Hdist,
-        Hrecu: Hrecu,
-        poches: poches ? parseInt(poches) : undefined,
+      const parsedPoches = poches ? parseInt(poches) : undefined;
+
+      const patientData: any = {
+        Hdist,
+        Hrecu,
+        poches: parsedPoches,
         hb: hb ? parseFloat(hb) : undefined,
-        don: don ,
+        don,
+      };
+
+      
+      if (
+        isEditing &&
+        patient &&
+        (patient.poches === null || patient.poches === 0 || patient.poches === undefined) &&
+        parsedPoches && parsedPoches > 0
+      ) {
+        patientData.lastDonationDate = new Date();
       }
+
 
       if (isEditing && patient) {
         await updatePatient(patient._id, patientData)
@@ -48,6 +60,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           title: "Patient Updated",
           description: "Patient information has been successfully updated.",
         })
+        
+        
       } else {
         await createPatient(patientData)
         toast({

@@ -289,9 +289,7 @@ export async function scheduleTransfusion(transfusionData: any) {
     await db.collection("patients").updateOne(
       { _id: new ObjectId(patientId) },
       {
-        $set: {
-          lastDonationDate: scheduledTime, // or: new Date(), if you prefer now
-        },
+        
         $push: {
           schedules: {
             date: new Date(),
