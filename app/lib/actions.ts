@@ -245,6 +245,11 @@ export async function addToDailyHistory(transfusion: any, patient: any) {
     throw new Error("Failed to add to daily history")
   }
 }
+export async function getTransfusionHistoryForPatient(id: string) {
+  const db = await connectToDatabase()
+  const transfusions = db.collection("transfusions")
+  return await transfusions.find({ patientId: new ObjectId(id) }).sort({ scheduledTime: -1 }).toArray()
+}
 
 export async function scheduleTransfusion(transfusionData: any) {
   try {

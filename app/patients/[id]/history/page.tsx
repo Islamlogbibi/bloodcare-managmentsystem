@@ -8,16 +8,15 @@ import PrintStyles from "./style"
 import PrintButton from "./Button"
 
 export default async function HistoryPage({ params }: { params: { id: string } }) {
-  const patient = await getPatientById(params.id)
-  if (!patient) return <div>Patient not found</div>
+  const res = await fetch(`http://localhost:3000/api/patient-history?id=${params.id}`, {
+    cache: "no-store",
+  });
+  const history = await res.json();
 
-  const today = new Date()
+  const patient = await getPatientById(params.id);
+  if (!patient) return <div>Patient not found</div>;
 
-  // Only include past schedules
-  const pastSchedules = patient.schedules?.filter((schedule: any) => {
-    return new Date(schedule.date) <= today
-  }) ?? []
-  
+
   return (
     <div className="space-y-4 p-4">
         <div className="flex justify-end mb-4 print:hidden">
@@ -25,7 +24,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
         </div>
       <h1 className="text-2xl font-bold">Schedule History</h1>
 
-      {pastSchedules.length === 0 ? (
+      {history.length === 0 ? (
         <p>No past schedules.</p>
       ) : (
         <div className="rounded-lg border border-gray-200 overflow-hidden">
@@ -47,9 +46,10 @@ export default async function HistoryPage({ params }: { params: { id: string } }
               </TableRow>
             </TableHeader>
             <TableBody>
-              {pastSchedules.map((schedule: any, index: number) => (
+              {history.map((schedule: any, index: number) => (
+                
                 <TableRow key={index}>
-                  <TableCell>{format(new Date(schedule.date), 'yyyy-MM-dd HH:mm')}</TableCell>
+                  <TableCell>{format(new Date(schedule.scheduledTime), 'yyyy-MM-dd HH:mm')}</TableCell>
                   <TableCell>
                     <Badge
                       className={
@@ -61,22 +61,22 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                       {schedule.priority}
                     </Badge>
                   </TableCell>
-                  <TableCell>{schedule.bloodType}</TableCell>
-                  <TableCell>{schedule.ph}</TableCell>
+                  <TableCell>{schedule.patient.bloodType}</TableCell>
+                  <TableCell>{schedule.patient.ph}</TableCell>
                   <TableCell className="text-center">
-                    {schedule.hasF ? "✓" : ""}
+                    {schedule.patient.hasF ? "✓" : ""}
                   </TableCell>
                   <TableCell className="text-center">
-                    {schedule.hasC ? "✓" : ""}
+                    {schedule.patient.hasC ? "✓" : ""}
                   </TableCell>
                   <TableCell className="text-center">
-                    {schedule.hasL ? "✓" : ""}
+                    {schedule.patient.hasL ? "✓" : ""}
                   </TableCell>
-                  <TableCell>{schedule.hb}</TableCell>
-                  <TableCell>{schedule.poches}</TableCell>
-                  <TableCell>{schedule.Hdist}</TableCell>
-                  <TableCell>{schedule.Hrecu}</TableCell>
-                  <TableCell>{schedule.description || "-"}</TableCell>
+                  <TableCell>{schedule.patient.hb}</TableCell>
+                  <TableCell>{schedule.patient.poches}</TableCell>
+                  <TableCell>{schedule.patient.Hdist}</TableCell>
+                  <TableCell>{schedule.patient.Hrecu}</TableCell>
+                  <TableCell>{schedule.patient.description || "-"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
