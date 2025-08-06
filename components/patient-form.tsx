@@ -354,24 +354,24 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                   <SelectValue placeholder="Select Phénotype" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cc ee KEL (+)">cc ee KEL (+)</SelectItem>
-                  <SelectItem value="cc ee KEL (-)">cc ee KEL (-)</SelectItem>
-                  <SelectItem value="Cc EE KEL (+)">Cc EE KEL (+)</SelectItem>
-                  <SelectItem value="Cc EE KEL (-)">Cc EE KEL (-)</SelectItem>
-                  <SelectItem value="Cc ee KEL (+)">Cc ee KEL (+)</SelectItem>
-                  <SelectItem value="Cc ee KEL (-)">Cc ee KEL (-)</SelectItem>
-                  <SelectItem value="Cc Ee KEL (+)">Cc Ee KEL (+)</SelectItem>
-                  <SelectItem value="Cc Ee KEL (-)">Cc Ee KEL (-)</SelectItem>
-                  <SelectItem value="CC EE KEL (+)">CC EE KEL (+)</SelectItem>
-                  <SelectItem value="CC EE KEL (-)">CC EE KEL (-)</SelectItem>
-                  <SelectItem value="CC ee KEL (+)">CC ee KEL (+)</SelectItem>
-                  <SelectItem value="CC ee KEL (-)">CC ee KEL (-)</SelectItem>
-                  <SelectItem value="cc EE KEL (+)">cc EE KEL (+)</SelectItem>
-                  <SelectItem value="cc EE KEL (-)">cc EE KEL (-)</SelectItem>
-                  <SelectItem value="CC Ee KEL (+)">CC Ee KEL (+)</SelectItem>
-                  <SelectItem value="CC Ee KEL (-)">CC Ee KEL (-)</SelectItem>
-                  <SelectItem value="cc Ee KEL (+)">cc Ee KEL (+)</SelectItem>
-                  <SelectItem value="cc Ee KEL (-)">cc Ee KEL (-)</SelectItem>
+                  <SelectItem value="cceek+">cc ee KEL (+)</SelectItem>
+                  <SelectItem value="cceek-">cc ee KEL (-)</SelectItem>
+                  <SelectItem value="CcEEk+">Cc EE KEL (+)</SelectItem>
+                  <SelectItem value="CcEEk-">Cc EE KEL (-)</SelectItem>
+                  <SelectItem value="Cceek+">Cc ee KEL (+)</SelectItem>
+                  <SelectItem value="Cceek-">Cc ee KEL (-)</SelectItem>
+                  <SelectItem value="CcEek+">Cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="CcEek-">Cc Ee KEL (-)</SelectItem>
+                  <SelectItem value="CCEEk+">CC EE KEL (+)</SelectItem>
+                  <SelectItem value="CCEEk-">CC EE KEL (-)</SelectItem>
+                  <SelectItem value="CCeek+">CC ee KEL (+)</SelectItem>
+                  <SelectItem value="CCeek-">CC ee KEL (-)</SelectItem>
+                  <SelectItem value="ccEEk+">cc EE KEL (+)</SelectItem>
+                  <SelectItem value="ccEEk-">cc EE KEL (-)</SelectItem>
+                  <SelectItem value="CCEek+">CC Ee KEL (+)</SelectItem>
+                  <SelectItem value="CCEek-">CC Ee KEL (-)</SelectItem>
+                  <SelectItem value="ccEek+">cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="ccEek-">cc Ee KEL (-)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
