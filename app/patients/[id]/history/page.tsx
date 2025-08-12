@@ -22,7 +22,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
         <div className="flex justify-end mb-4 print:hidden">
             <PrintButton />
         </div>
-      <h1 className="text-2xl font-bold">Schedule History</h1>
+      <h1 className="text-2xl font-bold">transfusion History</h1>
 
       {history.length === 0 ? (
         <p>No past schedules.</p>

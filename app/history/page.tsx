@@ -75,12 +75,7 @@ export default function CalendarHistoryPage() {
             </div>
             <div className="hidden print:block print-header">
               <h1>Daily Transfusion Report</h1>
-              <p>Blood Transfusion Schedule - </p><h3> {new Date().toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}</h3>
+              <p>Blood Transfusion Schedule - </p><h3> {format(selectedDate, "yyyy-MM-dd")}</h3>
             </div>
             <div className="hidden print:block print-header">
               <strong>Summary:</strong> {patients.length} total commandes
