@@ -40,7 +40,7 @@ export default function CalendarHistoryPage() {
 
   const handlePrint = useReactToPrint({
     content: () => tableRef.current,
-    documentTitle: `Patients on ${format(selectedDate, "yyyy-MM-dd")}`,
+    documentTitle: `Patients du ${format(selectedDate, "yyyy-MM-dd")}`,
     removeAfterPrint: true,
   })
 
@@ -58,35 +58,35 @@ export default function CalendarHistoryPage() {
       <div className="flex-1 space-y-4">
         <div className="no-print flex justify-between items-center">
           <h2 className="text-xl font-semibold">
-            Patients on {format(selectedDate, "yyyy-MM-dd")}
+            Patients du {format(selectedDate, "yyyy-MM-dd")}
           </h2>
           <div className="flex justify-end mb-4 print:hidden">
             <PrintButton />
           </div>
         </div>
 
-        {loading && <p>Loading...</p>}
-        {!loading && patients.length === 0 && <p>No transfusions found.</p>}
+        {loading && <p>Chargement...</p>}
+        {!loading && patients.length === 0 && <p>Aucune transfusion trouvée.</p>}
         {!loading && patients.length > 0 && (
           <div ref={tableRef} className="overflow-x-auto border rounded-lg print:overflow-visible print:rounded-none print:border-none print:p-4">
             <div className="hidden print:block print-header alg">
-              <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
+              <h1>CHU ANNABA SERVICE D'HÉMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
               <h1>CHEF SERVICE PR. BROUK HACENE</h1>
             </div>
             <div className="hidden print:block print-header">
-              <h1>Daily Transfusion Report</h1>
-              <p>Blood Transfusion Schedule - </p><h3> {format(selectedDate, "yyyy-MM-dd")}</h3>
+              <h1>Rapport Quotidien de Transfusion</h1>
+              <p>Programme de Transfusion Sanguine - </p><h3> {format(selectedDate, "yyyy-MM-dd")}</h3>
             </div>
             <div className="hidden print:block print-header">
-              <strong>Summary:</strong> {patients.length} total commandes
+              <strong>Résumé :</strong> {patients.length} commandes au total
             </div>
 
             <Table>
               <TableHeader className="bg-gray-50 print:bg-white">
                 <TableRow>
-                  <TableHead>Full Name</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Blood Type</TableHead>
+                  <TableHead>Nom Complet</TableHead>
+                  <TableHead>Priorité</TableHead>
+                  <TableHead>Groupe Sanguin</TableHead>
                   <TableHead>Phénotype</TableHead>
                   <TableHead className="text-center">F</TableHead>
                   <TableHead className="text-center">C</TableHead>
@@ -94,7 +94,7 @@ export default function CalendarHistoryPage() {
                   <TableHead className="text-center">Hb</TableHead>
                   <TableHead className="text-center">Poches</TableHead>
                   <TableHead className="text-center">H.dist</TableHead>
-                  <TableHead className="text-center">H.recu</TableHead>
+                  <TableHead className="text-center">H.reçu</TableHead>
                   <TableHead>Description</TableHead>
                 </TableRow>
               </TableHeader>
@@ -110,7 +110,7 @@ export default function CalendarHistoryPage() {
                             ? "bg-red-100 text-red-800"
                             : "bg-blue-100 text-blue-800"
                         }>
-                          {transfusion.priority}
+                          {transfusion.priority === "urgent" ? "urgente" : "normale"}
                         </Badge>
                       </TableCell>
                       <TableCell>{p.bloodType}</TableCell>

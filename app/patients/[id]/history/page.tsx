@@ -9,32 +9,34 @@ import PrintButton from "./Button"
 
 export default async function HistoryPage({ params }: { params: { id: string } }) {
   const patient = await getPatientById(params.id)
-  if (!patient) return <div>Patient not found</div>
+  
+  if (!patient) return <div>Patient non trouvé</div>
 
   const today = new Date()
-
+  
   // Only include past schedules
   const pastSchedules = patient.schedules?.filter((schedule: any) => {
     return new Date(schedule.date) <= today
   }) ?? []
-  
+
   return (
     <div className="space-y-4 p-4">
-        <div className="flex justify-end mb-4 print:hidden">
-            <PrintButton />
-        </div>
-      <h1 className="text-2xl font-bold">transfusion History</h1>
+      <div className="flex justify-end mb-4 print:hidden">
+        <PrintButton />
+      </div>
 
+      <h1 className="text-2xl font-bold">Historique des Transfusions</h1>
+      
       {pastSchedules.length === 0 ? (
-        <p>No past schedules.</p>
+        <p>Aucun programme antérieur.</p>
       ) : (
         <div className="rounded-lg border border-gray-200 overflow-hidden">
           <Table>
             <TableHeader className="bg-gray-50">
               <TableRow>
                 <TableHead>Date</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Blood Type</TableHead>
+                <TableHead>Priorité</TableHead>
+                <TableHead>Groupe Sanguin</TableHead>
                 <TableHead>Phénotype</TableHead>
                 <TableHead>F</TableHead>
                 <TableHead>C</TableHead>
@@ -42,7 +44,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                 <TableHead>Hb</TableHead>
                 <TableHead>Poches</TableHead>
                 <TableHead>H.dist</TableHead>
-                <TableHead>H.recu</TableHead>
+                <TableHead>H.reçu</TableHead>
                 <TableHead>Description</TableHead>
               </TableRow>
             </TableHeader>
@@ -58,7 +60,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                           : "bg-blue-100 text-blue-800"
                       }
                     >
-                      {schedule.priority}
+                      {schedule.priority === "urgent" ? "urgente" : "normale"}
                     </Badge>
                   </TableCell>
                   <TableCell>{schedule.bloodType}</TableCell>
@@ -83,6 +85,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
           </Table>
         </div>
       )}
+
       {/* Print-specific styles */}
       <PrintStyles />
     </div>
