@@ -17,18 +17,20 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
   const { t } = useLanguage()
   const [transfusions] = useState(initialTransfusions)
 
-  // Group transfusions by status
+  // Grouper les transfusions par statut
   const pendingTransfusions = transfusions.filter((t) => t.status !== "completed")
   const completedTransfusions = transfusions.filter((t) => t.status === "completed")
+  
   const handlePrint = () => {
     window.print()
   }
+  
   if (transfusions.length === 0) {
     return (
       <div className="text-center py-12">
         <Clock className="mx-auto h-16 w-16 text-gray-300" />
-        <h3 className="mt-4 text-lg font-semibold text-gray-900">{t("noTransfusionsScheduled")}</h3>
-        <p className="mt-2 text-gray-600">{t("noTransfusionsForTomorrow")}</p>
+        <h3 className="mt-4 text-lg font-semibold text-gray-900">Aucune transfusion programmée</h3>
+        <p className="mt-2 text-gray-600">Il n'y a pas de transfusions sanguines programmées pour demain.</p>
       </div>
     )
   }
@@ -38,35 +40,38 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
       <div className="flex justify-end mb-4 print:hidden">
         <Button variant="outline" onClick={handlePrint}>
           <Printer className="mr-2 h-4 w-4" />
-          Print
+          Imprimer
         </Button>
       </div>
       <div className="hidden print:block print-header alg">
-        <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-        <h1>CHEF SERVICE PR. BROUK HACENE</h1>
+        <h1>CHU ANNABA SERVICE D'HÉMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
+        <h1>CHEF DE SERVICE PR. BROUK HACENE</h1>
       </div>
       <div className="hidden print:block print-header">
-        <h1>Daily Transfusion Report</h1>
-        <p>Blood Transfusion Schedule - </p><h3> {new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { 
-          weekday: 'long',
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}</h3>
+        <h1>Rapport quotidien des transfusions</h1>
+        <p>Programme des transfusions sanguines - </p>
+        <h3>
+          {" "}
+          {new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('fr-FR', { 
+            weekday: 'long',
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}
+        </h3>
       </div>
       
       <div className="rounded-lg border border-gray-200 overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>
-              
-              <TableHead className="font-semibold text-gray-900">{t("patient")}</TableHead>
-              <TableHead className="font-semibold text-gray-900">{t("bloodType")}</TableHead>
-              <TableHead className="font-semibold text-gray-900">phénotype</TableHead>
+              <TableHead className="font-semibold text-gray-900">Patient</TableHead>
+              <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
+              <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
               <TableHead className="font-semibold text-gray-900">F</TableHead>
               <TableHead className="font-semibold text-gray-900">C</TableHead>
               <TableHead className="font-semibold text-gray-900">L</TableHead>
-              <TableHead className="font-semibold text-gray-900">{t("contact")}</TableHead>
+              <TableHead className="font-semibold text-gray-900">Contact</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -74,9 +79,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
               const initials = `${transfusion.patient.firstName[0]}${transfusion.patient.lastName[0]}`
 
               return (
-                
                 <TableRow key={transfusion._id} className="hover:bg-gray-50">
-                  
                   <TableCell>
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-8 w-8">
@@ -98,45 +101,43 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                     </Badge>
                   </TableCell>
                   <TableCell>
-                        <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
-                          {transfusion.patient.ph}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {transfusion.patient.hasF ? (
-                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {transfusion.patient.hasC ? (
-                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {transfusion.patient.hasL ? (
-                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                        )}
-                      </TableCell>
-                  
+                    <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
+                      {transfusion.patient.ph}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {transfusion.patient.hasF ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {transfusion.patient.hasC ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {transfusion.patient.hasL ? (
+                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                        <span className="text-white text-xs">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center text-xs text-gray-500">
                       <Phone className="h-3 w-3 mr-1" />
                       {transfusion.patient.phone}
                     </div>
                   </TableCell>
-                  
                 </TableRow>
               )
             })}
@@ -144,7 +145,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
         </Table>
       </div>
 
-      {/* Print-specific styles */}
+      {/* Styles spécifiques à l'impression */}
       <style jsx global>{`
         @media print {
           * {
@@ -164,7 +165,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             line-height: 1.2 !important;
           }
 
-          /* Force full width usage */
+          /* Forcer l'utilisation de toute la largeur */
           body * {
             visibility: hidden;
           }
@@ -188,13 +189,13 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             padding: 0 !important;
           }
 
-          /* Hide non-essential elements */
+          /* Masquer les éléments non essentiels */
           .print\\:hidden {
             display: none !important;
             visibility: hidden !important;
           }
           
-          /* Show print-specific elements */
+          /* Afficher les éléments spécifiques à l'impression */
           .hidden.print\\:block {
             display: block !important;
             visibility: visible !important;
@@ -205,7 +206,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             visibility: visible !important;
           }
 
-          /* Print header styling */
+          /* Style de l'en-tête d'impression */
           .print-header {
             display: block !important;
             visibility: visible !important;
@@ -231,7 +232,7 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
           .alg h1{
             color: black;
           }
-          /* Table styling */
+          /* Style des tableaux */
           .rounded-lg {
             border-radius: 0 !important;
             width: 100% !important;
@@ -246,16 +247,14 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             margin: 0 !important;
           }
 
-          /* Column widths - adjust these based on your content */
-          
+          /* Largeurs des colonnes - à ajuster selon votre contenu */
           table th:nth-child(1), table td:nth-child(1) { width: 25% !important; } /* Patient */
-          table th:nth-child(2), table td:nth-child(2) { width: 8% !important; } /* Blood Type */
+          table th:nth-child(2), table td:nth-child(2) { width: 8% !important; } /* Groupe sanguin */
           table th:nth-child(3), table td:nth-child(3) { width: 10% !important; } /* Phénotype */
           table th:nth-child(4), table td:nth-child(4) { width: 5% !important; } /* F */
           table th:nth-child(5), table td:nth-child(5) { width: 5% !important; } /* C */
           table th:nth-child(6), table td:nth-child(6) { width: 5% !important; } /* L */
-          table th:nth-child(7), table td:nth-child(7) { width: 25% !important; } /* contact */
-          
+          table th:nth-child(7), table td:nth-child(7) { width: 25% !important; } /* Contact */
 
           thead {
             display: table-header-group !important;
@@ -287,13 +286,12 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             background-color: #f9fafb !important;
           }
 
-          /* Center specific columns */
-          td:nth-child(6), td:nth-child(7), td:nth-child(8), 
-          td:nth-child(10), td:nth-child(11) {
+          /* Centrer des colonnes spécifiques */
+          td:nth-child(4), td:nth-child(5), td:nth-child(6) {
             text-align: center !important;
           }
 
-          /* Section divider */
+          /* Séparateur de section */
           .flex.items-center.my-6 {
             margin: 12pt 0 8pt 0 !important;
             width: 100% !important;
@@ -305,12 +303,12 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             color: #374151 !important;
           }
 
-          /* Hide icons */
+          /* Masquer les icônes */
           .lucide, svg {
             display: none !important;
           }
 
-          /* Badge styling */
+          /* Style des badges */
           .bg-red-100, .border-red-200, .text-red-700, .text-red-800 {
             background-color: #fef2f2 !important;
             color: #dc2626 !important;
@@ -344,21 +342,21 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             font-weight: normal !important;
           }
 
-          /* Avatar styling */
+          /* Style des avatars */
           .h-8.w-8 {
             width: 16pt !important;
             height: 16pt !important;
             font-size: 6pt !important;
           }
 
-          /* Summary section */
+          /* Section de résumé */
           .flex.items-center.justify-between.text-sm {
             margin-top: 10pt !important;
             font-size: 7pt !important;
             color: #6b7280 !important;
           }
 
-          /* Print summary */
+          /* Résumé d'impression */
           .print-summary {
             display: block !important;
             visibility: visible !important;
@@ -370,17 +368,17 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
             width: 100% !important;
           }
 
-          /* Force break pages appropriately */
+          /* Forcer les sauts de page appropriés */
           .rounded-lg.border.border-gray-200:first-of-type {
             page-break-after: avoid;
           }
 
-          /* Ensure proper page breaks */
+          /* Assurer les sauts de page appropriés */
           tr {
             page-break-inside: avoid;
           }
 
-          /* Remove any containers that might constrain width */
+          /* Supprimer les conteneurs qui pourraient contraindre la largeur */
           .container, .max-w-7xl, .mx-auto {
             max-width: none !important;
             width: 100% !important;

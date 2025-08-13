@@ -81,16 +81,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       setTransfusions((prev) => prev.map((t) => (t._id === transfusionId ? { ...t, status: "completed" } : t)))
 
       toast({
-        title: t("completed"),
-        description: "Transfusion marked as completed successfully.",
+        title: "Terminé",
+        description: "Transfusion marquée comme terminée avec succès.",
       })
 
       router.refresh()
     } catch (error) {
       console.error("Error updating transfusion status:", error)
       toast({
-        title: t("error"),
-        description: "Failed to mark transfusion as completed.",
+        title: "Erreur",
+        description: "Échec de marquage de la transfusion comme terminée.",
         variant: "destructive",
       })
     } finally {
@@ -112,16 +112,16 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       setTransfusions((prev) => prev.map((t) => (t._id === transfusionId ? { ...t, status: "notcompleted" } : t)))
 
       toast({
-        title: t("completed"),
-        description: "Undone completed successfully.",
+        title: "Annulé",
+        description: "Marquage terminé annulé avec succès.",
       })
 
       router.refresh()
     } catch (error) {
       console.error("Error updating transfusion status:", error)
       toast({
-        title: t("error"),
-        description: "Failed to undone.",
+        title: "Erreur",
+        description: "Échec de l'annulation.",
         variant: "destructive",
       })
     } finally {
@@ -135,7 +135,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const handleDelete = async (transfusionId: string) => {
-    const confirm = window.confirm("Are you sure you want to remove this transfusion?")
+    const confirm = window.confirm("Êtes-vous sûr de vouloir supprimer cette transfusion ?")
     if (!confirm) return
 
     setDeletingId(transfusionId)
@@ -143,15 +143,15 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       await deleteTransfusionById(transfusionId)
       setTransfusions((prev) => prev.filter((t) => t._id !== transfusionId))
       toast({
-        title: t("deleted"),
-        description: "Transfusion removed successfully.",
+        title: "Supprimé",
+        description: "Transfusion supprimée avec succès.",
       })
       router.refresh()
     } catch (err) {
       console.error("Failed to delete transfusion:", err)
       toast({
-        title: t("error"),
-        description: "Failed to remove the transfusion.",
+        title: "Erreur",
+        description: "Échec de la suppression de la transfusion.",
         variant: "destructive",
       })
     } finally {
@@ -167,11 +167,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
     return (
       <div className="text-center py-12">
         <Clock className="mx-auto h-16 w-16 text-gray-300" />
-        <h3 className="mt-4 text-lg font-semibold text-gray-900">No transfusions scheduled</h3>
-        <p className="mt-2 text-gray-600">There are no blood transfusions scheduled for today.</p>
+        <h3 className="mt-4 text-lg font-semibold text-gray-900">Aucune transfusion programmée</h3>
+        <p className="mt-2 text-gray-600">Il n'y a pas de transfusions sanguines programmées pour aujourd'hui.</p>
         <Button className="mt-4 bg-red-600 hover:bg-red-700">
           <Plus className="mr-2 h-4 w-4" />
-          Schedule Transfusion
+          Programmer une transfusion
         </Button>
       </div>
     )
@@ -184,7 +184,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Search by patient name..."
+            placeholder="Rechercher par nom du patient..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -192,26 +192,26 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </div>
         <Button variant="outline" onClick={handlePrint}>
           <Printer className="mr-2 h-4 w-4" />
-          Print
+          Imprimer
         </Button>
       </div>
 
       {searchQuery.trim() && (
         <div className="text-sm text-gray-600 mb-4 print:hidden">
-          Showing {filteredTransfusions.length} of {transfusions.length} transfusions matching "{searchQuery}"
+          Affichage de {filteredTransfusions.length} sur {transfusions.length} transfusions correspondant à "{searchQuery}"
         </div>
       )}
 
       <div className="hidden print:block print-header alg">
-        <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
-        <h1>CHEF SERVICE PR. BROUK HACENE</h1>
+        <h1>CHU ANNABA SERVICE D'HÉMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
+        <h1>CHEF DE SERVICE PR. BROUK HACENE</h1>
       </div>
       <div className="hidden print:block print-header">
-        <h1>Daily Transfusion Report</h1>
-        <p>Blood Transfusion Schedule - </p>
+        <h1>Rapport quotidien des transfusions</h1>
+        <p>Programme des transfusions sanguines - </p>
         <h3>
           {" "}
-          {new Date().toLocaleDateString("en-US", {
+          {new Date().toLocaleDateString("fr-FR", {
             weekday: "long",
             year: "numeric",
             month: "long",
@@ -220,25 +220,25 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </h3>
       </div>
       <div className="hidden print:block print-header">
-        <strong>Summary:</strong> {filteredTransfusions.length} total commandes
-        {completedTransfusions.length > 0 && <span> ({completedTransfusions.length} commandes distribués)</span>}
+        <strong>Résumé :</strong> {filteredTransfusions.length} commandes au total
+        {completedTransfusions.length > 0 && <span> ({completedTransfusions.length} commandes distribuées)</span>}
       </div>
 
-      {/* Pending Transfusions */}
+      {/* Transfusions en attente */}
       <div className="rounded-lg border border-gray-200 overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>
               <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
-              <TableHead className="font-semibold text-gray-900">H.recu</TableHead>
+              <TableHead className="font-semibold text-gray-900">H.reçu</TableHead>
               <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-              <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
+              <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
               <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
               <TableHead className="font-semibold text-gray-900">F</TableHead>
               <TableHead className="font-semibold text-gray-900">C</TableHead>
               <TableHead className="font-semibold text-gray-900">L</TableHead>
-              <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-              <TableHead className="font-semibold text-gray-900">poches</TableHead>
+              <TableHead className="font-semibold text-gray-900">Priorité</TableHead>
+              <TableHead className="font-semibold text-gray-900">Poches</TableHead>
               <TableHead
                 className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none print:cursor-default print:hover:bg-gray-50"
                 onClick={handleHbSort}
@@ -255,7 +255,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               </TableHead>
               <TableHead className="font-semibold text-gray-900">Don</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
-              <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
+              <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -341,7 +341,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       }
                     >
                       {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                      {transfusion.priority}
+                      {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
                     </Badge>
                   </TableCell>
                   <TableCell className="font-semibold">{transfusion.patient.poches}</TableCell>
@@ -357,7 +357,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           disabled={isCompleting}
                         >
                           <CheckCircle className="h-3 w-3 mr-1" />
-                          {isCompleting ? "Loading..." : "Mark as Done"}
+                          {isCompleting ? "Chargement..." : "Marquer terminé"}
                         </Button>
                       )}
                     </div>
@@ -370,14 +370,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           disabled={isCompleting}
                         >
                           <CheckCircle className="h-3 w-3 mr-1" />
-                          {isCompleting ? "Loading..." : "Undone"}
+                          {isCompleting ? "Chargement..." : "Annuler"}
                         </Button>
                       )}
                     </div>
                     <div></div>
                     <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
                       <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
-                        <Edit className="h-4 w-4 text-blue-600" /> Edit
+                        <Edit className="h-4 w-4 text-blue-600" /> Modifier
                       </Button>
                     </Link>
                     <Button
@@ -387,7 +387,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       className="h-8 w-20"
                       disabled={deletingId === transfusion._id}
                     >
-                      {deletingId === transfusion._id ? "..." : "Delete"}
+                      {deletingId === transfusion._id ? "..." : "Supprimer"}
                     </Button>
                   </TableCell>
                   <TableCell className="hidden print:table-cell">
@@ -396,7 +396,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         transfusion.status === "completed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }
                     >
-                      {transfusion.status === "completed" ? "Present" : "Absent"}
+                      {transfusion.status === "completed" ? "Présent" : "Absent"}
                     </Badge>
                   </TableCell>
                 </TableRow>
@@ -406,12 +406,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </Table>
       </div>
 
-      {/* Completed Transfusions */}
+      {/* Transfusions terminées */}
       {completedTransfusions.length >= 0 && (
         <>
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-4 text-gray-500 font-medium">Urgent Transfusions</span>
+            <span className="px-4 text-gray-500 font-medium">Transfusions urgentes</span>
             <div className="flex-grow h-px bg-gray-300"></div>
           </div>
 
@@ -420,15 +420,15 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHeader className="bg-gray-50">
                 <TableRow>
                   <TableHead className="font-semibold text-gray-900">H.dist</TableHead>
-                  <TableHead className="font-semibold text-gray-900">H.recu</TableHead>
+                  <TableHead className="font-semibold text-gray-900">H.reçu</TableHead>
                   <TableHead className="font-semibold text-gray-900">Patient</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Blood Type</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Groupe sanguin</TableHead>
                   <TableHead className="font-semibold text-gray-900">Phénotype</TableHead>
                   <TableHead className="font-semibold text-gray-900">F</TableHead>
                   <TableHead className="font-semibold text-gray-900">C</TableHead>
                   <TableHead className="font-semibold text-gray-900">L</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Priority</TableHead>
-                  <TableHead className="font-semibold text-gray-900">poches</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Priorité</TableHead>
+                  <TableHead className="font-semibold text-gray-900">Poches</TableHead>
                   <TableHead
                     className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none print:cursor-default print:hover:bg-gray-50"
                     onClick={handleHbSort}
@@ -444,7 +444,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     </div>
                   </TableHead>
                   <TableHead className="font-semibold text-gray-900">Don</TableHead>
-                  <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
+                  <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
                   <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -531,7 +531,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           }
                         >
                           {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                          {transfusion.priority}
+                          {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
                         </Badge>
                       </TableCell>
                       <TableCell className="font-semibold">{transfusion.patient.poches}</TableCell>
@@ -539,7 +539,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       <TableCell>{transfusion.patient.don}</TableCell>
 
                       <TableCell className="hidden print:table-cell">
-                        <Badge className="bg-green-100 text-green-800">Present</Badge>
+                        <Badge className="bg-green-100 text-green-800">Présent</Badge>
                       </TableCell>
                       <TableCell className="print:hidden flex items-center space-x-2">
                         <div className="flex items-center space-x-2">
@@ -551,7 +551,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               disabled={isCompleting}
                             >
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              {isCompleting ? "Loading..." : "Undone"}
+                              {isCompleting ? "Chargement..." : "Annuler"}
                             </Button>
                           )}
                         </div>
@@ -565,14 +565,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               disabled={isCompleting}
                             >
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              {isCompleting ? "Loading..." : "Mark as Done"}
+                              {isCompleting ? "Chargement..." : "Marquer terminé"}
                             </Button>
                           )}
                         </div>
                         <div></div>
                         <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
                           <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
-                            <Edit className="h-4 w-4 text-blue-600" /> Edit
+                            <Edit className="h-4 w-4 text-blue-600" /> Modifier
                           </Button>
                         </Link>
                         <Button
@@ -582,7 +582,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           className="h-8 w-20"
                           disabled={deletingId === transfusion._id}
                         >
-                          {deletingId === transfusion._id ? "..." : "Delete"}
+                          {deletingId === transfusion._id ? "..." : "Supprimer"}
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -596,10 +596,10 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
       <div className="flex items-center justify-between text-sm text-gray-600">
         <p>
-          Showing {filteredTransfusions.length} transfusions{" "}
-          {searchQuery.trim() ? `matching "${searchQuery}"` : "scheduled for today"}
+          Affichage de {filteredTransfusions.length} transfusions{" "}
+          {searchQuery.trim() ? `correspondant à "${searchQuery}"` : "programmées pour aujourd'hui"}
           {completedTransfusions.length > 0 &&
-            ` (${completedTransfusions.length} completed, ${pendingTransfusions.length} pending)`}
+            ` (${completedTransfusions.length} terminées, ${pendingTransfusions.length} en attente)`}
         </p>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
@@ -608,20 +608,20 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-blue-100 rounded-full"></div>
-            <span>Regular</span>
+            <span>Normal</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-100 rounded-full"></div>
-            <span>Completed</span>
+            <span>Terminé</span>
           </div>
         </div>
       </div>
       <div className="hidden print:block print-summary">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <strong>Summary:</strong> {filteredTransfusions.length} total transfusions
+            <strong>Résumé :</strong> {filteredTransfusions.length} transfusions au total
             {completedTransfusions.length > 0 &&
-              ` (${completedTransfusions.length} completed, ${pendingTransfusions.length} pending)`}
+              ` (${completedTransfusions.length} terminées, ${pendingTransfusions.length} en attente)`}
           </div>
           <div style={{ display: "flex", gap: "15pt" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
@@ -630,17 +630,17 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
               <div style={{ width: "8pt", height: "8pt", backgroundColor: "#dbeafe", borderRadius: "50%" }}></div>
-              <span>Regular</span>
+              <span>Normal</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
               <div style={{ width: "8pt", height: "8pt", backgroundColor: "#dcfce7", borderRadius: "50%" }}></div>
-              <span>Completed</span>
+              <span>Terminé</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Print-specific styles */}
+      {/* Styles spécifiques à l'impression */}
       <style jsx global>{`
         @media print {
           * {
@@ -660,7 +660,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             line-height: 1.2 !important;
           }
 
-          /* Force full width usage */
+          /* Forcer l'utilisation de toute la largeur */
           body * {
             visibility: hidden;
           }
@@ -684,13 +684,13 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             padding: 0 !important;
           }
 
-          /* Hide non-essential elements */
+          /* Masquer les éléments non essentiels */
           .print\\:hidden {
             display: none !important;
             visibility: hidden !important;
           }
           
-          /* Show print-specific elements */
+          /* Afficher les éléments spécifiques à l'impression */
           .hidden.print\\:block {
             display: block !important;
             visibility: visible !important;
@@ -701,7 +701,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             visibility: visible !important;
           }
 
-          /* Print header styling */
+          /* Style de l'en-tête d'impression */
           .print-header {
             display: block !important;
             visibility: visible !important;
@@ -727,7 +727,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
           .alg h1{
             color: black;
           }
-          /* Table styling */
+          /* Style des tableaux */
           .rounded-lg {
             border-radius: 0 !important;
             width: 100% !important;
@@ -742,20 +742,20 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             margin: 0 !important;
           }
 
-          /* Column widths - adjust these based on your content */
+          /* Largeurs des colonnes - à ajuster selon votre contenu */
           table th:nth-child(1), table td:nth-child(1) { width: 6% !important; } /* H.dist */
-          table th:nth-child(2), table td:nth-child(2) { width: 6% !important; } /* H.recu */
+          table th:nth-child(2), table td:nth-child(2) { width: 6% !important; } /* H.reçu */
           table th:nth-child(3), table td:nth-child(3) { width: 18% !important; } /* Patient */
-          table th:nth-child(4), table td:nth-child(4) { width: 8% !important; } /* Blood Type */
+          table th:nth-child(4), table td:nth-child(4) { width: 8% !important; } /* Groupe sanguin */
           table th:nth-child(5), table td:nth-child(5) { width: 10% !important; } /* Phénotype */
           table th:nth-child(6), table td:nth-child(6) { width: 3% !important; } /* F */
           table th:nth-child(7), table td:nth-child(7) { width: 3% !important; } /* C */
           table th:nth-child(8), table td:nth-child(8) { width: 4% !important; } /* L */
-          table th:nth-child(9), table td:nth-child(9) { width: 8% !important; } /* Priority */
-          table th:nth-child(10), table td:nth-child(10) { width: 6% !important; } /* poches */
+          table th:nth-child(9), table td:nth-child(9) { width: 8% !important; } /* Priorité */
+          table th:nth-child(10), table td:nth-child(10) { width: 6% !important; } /* Poches */
           table th:nth-child(11), table td:nth-child(11) { width: 6% !important; } /* Hb */
-          table th:nth-child(12), table td:nth-child(12) { width: 8% !important; } /* Status */
-          table th:nth-child(13), table td:nth-child(13) { width: 8% !important; } /* Actions/Attendance */
+          table th:nth-child(12), table td:nth-child(12) { width: 8% !important; } /* Statut */
+          table th:nth-child(13), table td:nth-child(13) { width: 8% !important; } /* Actions/Présence */
           table th:nth-child(14), table td:nth-child(14) { width: 6% !important; } /* Actions */
 
           thead {
@@ -788,13 +788,13 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             background-color: #f9fafb !important;
           }
 
-          /* Center specific columns */
+          /* Centrer des colonnes spécifiques */
           td:nth-child(6), td:nth-child(7), td:nth-child(8), 
           td:nth-child(10), td:nth-child(11) {
             text-align: center !important;
           }
 
-          /* Section divider */
+          /* Séparateur de section */
           .flex.items-center.my-6 {
             margin: 12pt 0 8pt 0 !important;
             width: 100% !important;
@@ -806,12 +806,12 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             color: #374151 !important;
           }
 
-          /* Hide icons */
+          /* Masquer les icônes */
           .lucide, svg {
             display: none !important;
           }
 
-          /* Badge styling */
+          /* Style des badges */
           .bg-red-100, .border-red-200, .text-red-700, .text-red-800 {
             background-color: #fef2f2 !important;
             color: #dc2626 !important;
@@ -845,21 +845,21 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             font-weight: normal !important;
           }
 
-          /* Avatar styling */
+          /* Style des avatars */
           .h-8.w-8 {
             width: 16pt !important;
             height: 16pt !important;
             font-size: 6pt !important;
           }
 
-          /* Summary section */
+          /* Section de résumé */
           .flex.items-center.justify-between.text-sm {
             margin-top: 10pt !important;
             font-size: 7pt !important;
             color: #6b7280 !important;
           }
 
-          /* Print summary */
+          /* Résumé d'impression */
           .print-summary {
             display: block !important;
             visibility: visible !important;
@@ -871,17 +871,17 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
             width: 100% !important;
           }
 
-          /* Force break pages appropriately */
+          /* Forcer les sauts de page appropriés */
           .rounded-lg.border.border-gray-200:first-of-type {
             page-break-after: avoid;
           }
 
-          /* Ensure proper page breaks */
+          /* Assurer les sauts de page appropriés */
           tr {
             page-break-inside: avoid;
           }
 
-          /* Remove any containers that might constrain width */
+          /* Supprimer les conteneurs qui pourraient contraindre la largeur */
           .container, .max-w-7xl, .mx-auto {
             max-width: none !important;
             width: 100% !important;
