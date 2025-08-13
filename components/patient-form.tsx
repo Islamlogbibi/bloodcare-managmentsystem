@@ -372,7 +372,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                   <SelectItem value="CCEek-">CC Ee KEL (-)</SelectItem>
                   <SelectItem value="ccEek+">cc Ee KEL (+)</SelectItem>
                   <SelectItem value="ccEek-">cc Ee KEL (-)</SelectItem>
-                </SelectContent>
+                </SelectContent>                                              
               </Select>
             </div>
             <div className="space-y-2">

@@ -23,37 +23,45 @@ import { z } from "zod"
 const patientSchema = z.object({
   firstName: z
     .string()
-    .min(2, "First name must be at least 2 characters")
-    .max(50, "First name must be less than 50 characters"),
+    .min(2, "Le prénom doit contenir au moins 2 caractères")
+    .max(50, "Le prénom doit contenir moins de 50 caractères"),
   lastName: z
     .string()
-    .min(2, "Last name must be at least 2 characters")
-    .max(50, "Last name must be less than 50 characters"),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
-  gender: z.enum(["male", "female", "other"], { required_error: "Please select a gender" }),
+    .min(2, "Le nom doit contenir au moins 2 caractères")
+    .max(50, "Le nom doit contenir moins de 50 caractères"),
+  dateOfBirth: z.string().min(1, "La date de naissance est requise"),
+  gender: z.enum(["male", "female", "other"], { required_error: "Veuillez sélectionner un sexe" }),
   bloodType: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
-    required_error: "Please select a blood type",
+    required_error: "Veuillez sélectionner un groupe sanguin",
   }),
   phone: z
     .string()
-    .regex(/^\+?[\d\s\-$$$$]+$/, "Please enter a valid phone number")
-    .min(10, "Phone number must be at least 10 digits"),
-  email: z.string().email("Please enter a valid email address").optional().or(z.literal("")),
-  address: z.string().max(200, "Address must be less than 200 characters").optional(),
-  emergencyContact: z.string().max(100, "Emergency contact name must be less than 100 characters").optional(),
+    .regex(/^\+?[\d\s\-()]+$/, "Veuillez entrer un numéro de téléphone valide")
+    .min(10, "Le numéro de téléphone doit contenir au moins 10 chiffres"),
+  email: z.string().email("Veuillez entrer une adresse e-mail valide").optional().or(z.literal("")),
+  address: z.string().max(200, "L'adresse doit contenir moins de 200 caractères").optional(),
+  emergencyContact: z.string().max(100, "Le nom du contact d'urgence doit contenir moins de 100 caractères").optional(),
   emergencyPhone: z
     .string()
-    .regex(/^\+?[\d\s\-$$$$]*$/, "Please enter a valid phone number")
+    .regex(/^\+?[\d\s\-()]*$/, "Veuillez entrer un numéro de téléphone valide")
     .optional()
     .or(z.literal("")),
-  weight: z.number().min(30, "Weight must be at least 30 kg").max(300, "Weight must be less than 300 kg").optional(),
-  height: z.number().min(100, "Height must be at least 100 cm").max(250, "Height must be less than 250 cm").optional(),
+  weight: z
+    .number()
+    .min(30, "Le poids doit être d'au moins 30 kg")
+    .max(300, "Le poids doit être inférieur à 300 kg")
+    .optional(),
+  height: z
+    .number()
+    .min(100, "La taille doit être d'au moins 100 cm")
+    .max(250, "La taille doit être inférieure à 250 cm")
+    .optional(),
   hemoglobinLevel: z
     .number()
-    .min(5, "Hemoglobin level must be at least 5 g/dL")
-    .max(20, "Hemoglobin level must be less than 20 g/dL")
+    .min(5, "Le taux d'hémoglobine doit être d'au moins 5 g/dL")
+    .max(20, "Le taux d'hémoglobine doit être inférieur à 20 g/dL")
     .optional(),
-  medicalHistory: z.string().max(1000, "Medical history must be less than 1000 characters").optional(),
+  medicalHistory: z.string().max(1000, "L'historique médical doit contenir moins de 1000 caractères").optional(),
 })
 
 interface PatientFormProps {
@@ -130,8 +138,8 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
         })
         setErrors(fieldErrors)
         toast({
-          title: "Validation Error",
-          description: "Please correct the errors in the form.",
+          title: "Erreur de validation",
+          description: "Veuillez corriger les erreurs dans le formulaire.",
           variant: "destructive",
         })
         return
@@ -140,22 +148,22 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
       if (isEditing && patient) {
         await updatePatient(patient._id, patientData)
         toast({
-          title: "Patient Updated",
-          description: "Patient information has been successfully updated.",
+          title: "Patient mis à jour",
+          description: "Les informations du patient ont été mises à jour avec succès.",
         })
       } else {
         await createPatient(patientData)
         toast({
-          title: "Patient Registered",
-          description: "New patient has been successfully registered.",
+          title: "Patient enregistré",
+          description: "Le nouveau patient a été enregistré avec succès.",
         })
       }
 
       router.push("/patients")
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Erreur",
+        description: "Une erreur s'est produite. Veuillez réessayer.",
         variant: "destructive",
       })
     } finally {
@@ -180,7 +188,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
       <Label htmlFor={name} className="text-sm font-medium text-gray-700 flex items-center">
         {label}{" "}
         {required && (
-          <span className="text-red-500 ml-1" aria-label="required">
+          <span className="text-red-500 ml-1" aria-label="requis">
             *
           </span>
         )}
@@ -198,18 +206,17 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
 
   return (
     <form action={onSubmit} className="space-y-8 animate-fade-in">
-      {/* Personal Information */}
       <Card className="border-gray-200 card-hover">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <User className="mr-2 h-5 w-5 text-red-600" />
-            Personal Information
+            Informations personnelles
           </CardTitle>
-          <CardDescription>Basic patient details and identification</CardDescription>
+          <CardDescription>Détails personnels et identification du patient</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="First Name" name="firstName" required>
+            <FormField label="Prénom" name="firstName" required>
               <Input
                 id="firstName"
                 name="firstName"
@@ -223,7 +230,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 aria-describedby={errors.firstName ? "firstName-error" : undefined}
               />
             </FormField>
-            <FormField label="Last Name" name="lastName" required>
+            <FormField label="Nom de famille" name="lastName" required>
               <Input
                 id="lastName"
                 name="lastName"
@@ -240,7 +247,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Date of Birth" name="dateOfBirth" required>
+            <FormField label="Date de naissance" name="dateOfBirth" required>
               <Input
                 id="dateOfBirth"
                 name="dateOfBirth"
@@ -255,7 +262,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 aria-describedby={errors.dateOfBirth ? "dateOfBirth-error" : undefined}
               />
             </FormField>
-            <FormField label="Gender" name="gender" required>
+            <FormField label="Sexe" name="gender" required>
               <Select
                 name="gender"
                 defaultValue={patient?.gender}
@@ -267,12 +274,12 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                     errors.gender && "border-red-500",
                   )}
                 >
-                  <SelectValue placeholder="Select gender" />
+                  <SelectValue placeholder="Sélectionner le sexe" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="male">Masculin</SelectItem>
+                  <SelectItem value="female">Féminin</SelectItem>
+                  <SelectItem value="other">Autre</SelectItem>
                 </SelectContent>
               </Select>
             </FormField>
@@ -280,18 +287,22 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
         </CardContent>
       </Card>
 
-      {/* Contact Information */}
       <Card className="border-gray-200 card-hover">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Phone className="mr-2 h-5 w-5 text-blue-600" />
-            Contact Information
+            Informations de contact
           </CardTitle>
-          <CardDescription>Phone, email, and address details</CardDescription>
+          <CardDescription>Téléphone, e-mail et détails d'adresse</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Phone Number" name="phone" required description="Include country code if international">
+            <FormField
+              label="Numéro de téléphone"
+              name="phone"
+              required
+              description="Inclure l'indicatif pays si international"
+            >
               <Input
                 id="phone"
                 name="phone"
@@ -306,7 +317,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 aria-describedby={errors.phone ? "phone-error" : undefined}
               />
             </FormField>
-            <FormField label="Email Address" name="email" description="Optional - for appointment reminders">
+            <FormField label="Adresse e-mail" name="email" description="Optionnel - pour les rappels de rendez-vous">
               <Input
                 id="email"
                 name="email"
@@ -322,7 +333,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
             </FormField>
           </div>
 
-          <FormField label="Address" name="address">
+          <FormField label="Adresse" name="address">
             <Textarea
               id="address"
               name="address"
@@ -338,7 +349,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
           </FormField>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Emergency Contact Name" name="emergencyContact">
+            <FormField label="Nom du contact d'urgence" name="emergencyContact">
               <Input
                 id="emergencyContact"
                 name="emergencyContact"
@@ -351,7 +362,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 aria-describedby={errors.emergencyContact ? "emergencyContact-error" : undefined}
               />
             </FormField>
-            <FormField label="Emergency Contact Phone" name="emergencyPhone">
+            <FormField label="Téléphone du contact d'urgence" name="emergencyPhone">
               <Input
                 id="emergencyPhone"
                 name="emergencyPhone"
@@ -369,18 +380,17 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
         </CardContent>
       </Card>
 
-      {/* Medical Information */}
       <Card className="border-gray-200 card-hover">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Heart className="mr-2 h-5 w-5 text-red-600" />
-            Medical Information
+            Informations médicales
           </CardTitle>
-          <CardDescription>Blood type and medical details</CardDescription>
+          <CardDescription>Groupe sanguin et détails médicaux</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FormField label="Blood Type" name="bloodType" required>
+            <FormField label="Groupe sanguin" name="bloodType" required>
               <Select
                 name="bloodType"
                 defaultValue={patient?.bloodType}
@@ -392,21 +402,21 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                     errors.bloodType && "border-red-500",
                   )}
                 >
-                  <SelectValue placeholder="Select blood type" />
+                  <SelectValue placeholder="Sélectionner le groupe sanguin" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="A+">A+ Positive</SelectItem>
-                  <SelectItem value="A-">A- Negative</SelectItem>
-                  <SelectItem value="B+">B+ Positive</SelectItem>
-                  <SelectItem value="B-">B- Negative</SelectItem>
-                  <SelectItem value="AB+">AB+ Positive</SelectItem>
-                  <SelectItem value="AB-">AB- Negative</SelectItem>
-                  <SelectItem value="O+">O+ Positive</SelectItem>
-                  <SelectItem value="O-">O- Negative</SelectItem>
+                  <SelectItem value="A+">A+ Positif</SelectItem>
+                  <SelectItem value="A-">A- Négatif</SelectItem>
+                  <SelectItem value="B+">B+ Positif</SelectItem>
+                  <SelectItem value="B-">B- Négatif</SelectItem>
+                  <SelectItem value="AB+">AB+ Positif</SelectItem>
+                  <SelectItem value="AB-">AB- Négatif</SelectItem>
+                  <SelectItem value="O+">O+ Positif</SelectItem>
+                  <SelectItem value="O-">O- Négatif</SelectItem>
                 </SelectContent>
               </Select>
             </FormField>
-            <FormField label="Weight (kg)" name="weight" description="Patient's current weight">
+            <FormField label="Poids (kg)" name="weight" description="Poids actuel du patient">
               <Input
                 id="weight"
                 name="weight"
@@ -425,7 +435,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 aria-describedby={errors.weight ? "weight-error" : undefined}
               />
             </FormField>
-            <FormField label="Height (cm)" name="height" description="Patient's height">
+            <FormField label="Taille (cm)" name="height" description="Taille du patient">
               <Input
                 id="height"
                 name="height"
@@ -446,7 +456,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
             </FormField>
           </div>
 
-          <FormField label="Hemoglobin Level (g/dL)" name="hemoglobinLevel" description="Current hemoglobin level">
+          <FormField label="Taux d'hémoglobine (g/dL)" name="hemoglobinLevel" description="Taux d'hémoglobine actuel">
             <Input
               id="hemoglobinLevel"
               name="hemoglobinLevel"
@@ -467,7 +477,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
           </FormField>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Admission Date" name="admissionDate">
+            <FormField label="Date d'admission" name="admissionDate">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -477,11 +487,13 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                       !admissionDate && "text-muted-foreground",
                     )}
                     aria-label={
-                      admissionDate ? `Admission date: ${format(admissionDate, "PPP")}` : "Select admission date"
+                      admissionDate
+                        ? `Date d'admission: ${format(admissionDate, "PPP")}`
+                        : "Sélectionner la date d'admission"
                     }
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {admissionDate ? format(admissionDate, "PPP") : "Select admission date"}
+                    {admissionDate ? format(admissionDate, "PPP") : "Sélectionner la date d'admission"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -489,7 +501,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                 </PopoverContent>
               </Popover>
             </FormField>
-            <FormField label="Last Donation Date" name="lastDonationDate">
+            <FormField label="Date du dernier don" name="lastDonationDate">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -500,12 +512,12 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
                     )}
                     aria-label={
                       lastDonationDate
-                        ? `Last donation date: ${format(lastDonationDate, "PPP")}`
-                        : "Select last donation date"
+                        ? `Date du dernier don: ${format(lastDonationDate, "PPP")}`
+                        : "Sélectionner la date du dernier don"
                     }
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {lastDonationDate ? format(lastDonationDate, "PPP") : "Select last donation date"}
+                    {lastDonationDate ? format(lastDonationDate, "PPP") : "Sélectionner la date du dernier don"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -516,16 +528,16 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
           </div>
 
           <FormField
-            label="Medical History & Notes"
+            label="Historique médical et notes"
             name="medicalHistory"
-            description="Enter any relevant medical history, allergies, medications, or special notes"
+            description="Saisir tout historique médical pertinent, allergies, médicaments ou notes spéciales"
           >
             <Textarea
               id="medicalHistory"
               name="medicalHistory"
               defaultValue={patient?.medicalHistory}
               rows={4}
-              placeholder="Enter any relevant medical history, allergies, medications, or special notes..."
+              placeholder="Saisir tout historique médical pertinent, allergies, médicaments ou notes spéciales..."
               className={cn(
                 "border-gray-300 focus:border-red-500 focus:ring-red-500 focus-ring",
                 errors.medicalHistory && "border-red-500",
@@ -545,7 +557,7 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
           className="border-gray-300 focus-ring"
           disabled={isLoading}
         >
-          Cancel
+          Annuler
         </Button>
         <Button
           type="submit"
@@ -556,17 +568,17 @@ export function EnhancedPatientForm({ patient, isEditing = false }: PatientFormP
           {isLoading ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              Saving...
+              Enregistrement...
             </>
           ) : (
             <>
               <Save className="mr-2 h-4 w-4" />
-              {isEditing ? "Update Patient" : "Register Patient"}
+              {isEditing ? "Mettre à jour le patient" : "Enregistrer le patient"}
             </>
           )}
         </Button>
         <div id="submit-button-description" className="sr-only">
-          {isEditing ? "Update the patient's information" : "Register a new patient in the system"}
+          {isEditing ? "Mettre à jour les informations du patient" : "Enregistrer un nouveau patient dans le système"}
         </div>
       </div>
     </form>

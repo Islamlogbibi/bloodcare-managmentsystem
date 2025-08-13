@@ -3,13 +3,14 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Clock, Phone, CheckCircle, AlertTriangle, Plus, Printer } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Clock, Phone, CheckCircle, AlertTriangle, Plus, Printer, Search, ChevronUp, ChevronDown } from "lucide-react"
 import { Edit } from "lucide-react"
 import { deleteTransfusionById } from "@/app/lib/actions"
 import Link from "next/link"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useLanguage } from "@/contexts/language-context"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { toast } from "@/hooks/use-toast"
 import { updateTransfusionStatus } from "@/app/lib/actions"
 import { useRouter } from "next/navigation"
@@ -18,18 +19,58 @@ interface TodayTransfusionListProps {
   transfusions: any[]
 }
 
-
 export function TodayTransfusionList({ transfusions: initialTransfusions }: TodayTransfusionListProps) {
   const { t } = useLanguage()
   const router = useRouter()
   const [transfusions, setTransfusions] = useState(initialTransfusions)
   const [completingIds, setCompletingIds] = useState<Set<string>>(new Set())
+  const [searchQuery, setSearchQuery] = useState("")
+  const [hbSortOrder, setHbSortOrder] = useState<"asc" | "desc" | null>(null)
 
-  // Group transfusions by status
-  const pendingTransfusions = transfusions.filter((t) => t.status !== "completed")
-  const completedTransfusions = transfusions.filter((t) => t.status === "completed")
-  const urgentorders = transfusions.filter((t) => t.priority === "urgent")
-  const regularorders = transfusions.filter((t) => t.priority === "regular")
+  const filteredTransfusions = useMemo(() => {
+    let filtered = transfusions
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim()
+      filtered = filtered.filter((transfusion) => {
+        const fullName = `${transfusion.patient.firstName} ${transfusion.patient.lastName}`.toLowerCase()
+        return fullName.includes(query)
+      })
+    }
+
+    if (hbSortOrder) {
+      filtered = [...filtered].sort((a, b) => {
+        const hbA = Number.parseFloat(a.patient.hb) || 0
+        const hbB = Number.parseFloat(b.patient.hb) || 0
+
+        if (hbSortOrder === "asc") {
+          return hbA - hbB
+        } else {
+          return hbB - hbA
+        }
+      })
+    }
+
+    return filtered
+  }, [transfusions, searchQuery, hbSortOrder])
+
+  const handleHbSort = () => {
+    if (hbSortOrder === null) {
+      setHbSortOrder("asc")
+    } else if (hbSortOrder === "asc") {
+      setHbSortOrder("desc")
+    } else {
+      setHbSortOrder(null)
+    }
+  }
+
+  // Group filtered transfusions by status
+  const pendingTransfusions = filteredTransfusions.filter((t) => t.status !== "completed")
+  const completedTransfusions = filteredTransfusions.filter((t) => t.status === "completed")
+  const urgentorders = filteredTransfusions.filter((t) => t.priority === "urgent")
+  const regularorders = filteredTransfusions.filter((t) => t.priority === "regular")
+
   const handleMarkAsCompleted = async (transfusionId: string) => {
     setCompletingIds((prev) => new Set(prev).add(transfusionId))
 
@@ -96,11 +137,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
   const handleDelete = async (transfusionId: string) => {
     const confirm = window.confirm("Are you sure you want to remove this transfusion?")
     if (!confirm) return
-  
+
     setDeletingId(transfusionId)
     try {
       await deleteTransfusionById(transfusionId)
-      setTransfusions(prev => prev.filter(t => t._id !== transfusionId))
+      setTransfusions((prev) => prev.filter((t) => t._id !== transfusionId))
       toast({
         title: t("deleted"),
         description: "Transfusion removed successfully.",
@@ -117,7 +158,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
       setDeletingId(null)
     }
   }
-  
+
   const handlePrint = () => {
     window.print()
   }
@@ -138,32 +179,50 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end mb-4 print:hidden">
+      <div className="flex justify-between items-center mb-4 print:hidden">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            type="text"
+            placeholder="Search by patient name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
         <Button variant="outline" onClick={handlePrint}>
           <Printer className="mr-2 h-4 w-4" />
           Print
         </Button>
       </div>
+
+      {searchQuery.trim() && (
+        <div className="text-sm text-gray-600 mb-4 print:hidden">
+          Showing {filteredTransfusions.length} of {transfusions.length} transfusions matching "{searchQuery}"
+        </div>
+      )}
+
       <div className="hidden print:block print-header alg">
         <h1>CHU ANNABA SERVICE D'HEMOBIOLOGIE ET TRANSFUSION SANGUINE</h1>
         <h1>CHEF SERVICE PR. BROUK HACENE</h1>
       </div>
       <div className="hidden print:block print-header">
         <h1>Daily Transfusion Report</h1>
-        <p>Blood Transfusion Schedule - </p><h3> {new Date().toLocaleDateString('en-US', { 
-          weekday: 'long',
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}</h3>
+        <p>Blood Transfusion Schedule - </p>
+        <h3>
+          {" "}
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </h3>
       </div>
       <div className="hidden print:block print-header">
-        <strong>Summary:</strong> {transfusions.length} total commandes
-        {completedTransfusions.length > 0 && (
-          <span> ({completedTransfusions.length} commandes distribués)</span>
-        )}
+        <strong>Summary:</strong> {filteredTransfusions.length} total commandes
+        {completedTransfusions.length > 0 && <span> ({completedTransfusions.length} commandes distribués)</span>}
       </div>
-
 
       {/* Pending Transfusions */}
       <div className="rounded-lg border border-gray-200 overflow-hidden">
@@ -180,17 +239,27 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
               <TableHead className="font-semibold text-gray-900">L</TableHead>
               <TableHead className="font-semibold text-gray-900">Priority</TableHead>
               <TableHead className="font-semibold text-gray-900">poches</TableHead>
-              <TableHead className="font-semibold text-gray-900">Hb</TableHead>
+              <TableHead
+                className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none print:cursor-default print:hover:bg-gray-50"
+                onClick={handleHbSort}
+              >
+                <div className="flex items-center gap-1">
+                  Hb
+                  <div className="flex flex-col print:hidden">
+                    <ChevronUp className={`h-3 w-3 ${hbSortOrder === "asc" ? "text-blue-600" : "text-gray-400"}`} />
+                    <ChevronDown
+                      className={`h-3 w-3 -mt-1 ${hbSortOrder === "desc" ? "text-blue-600" : "text-gray-400"}`}
+                    />
+                  </div>
+                </div>
+              </TableHead>
               <TableHead className="font-semibold text-gray-900">Don</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            
-
-            
-          {regularorders.map((transfusion) => {
+            {regularorders.map((transfusion) => {
               const initials = `${transfusion.patient.firstName[0]}${transfusion.patient.lastName[0]}`
               const isCompleting = completingIds.has(transfusion._id)
 
@@ -199,18 +268,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <Clock className="h-4 w-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">
-                        {transfusion.patient.Hdist}
-                      </span>
+                      <span className="font-medium text-gray-900">{transfusion.patient.Hdist}</span>
                     </div>
                   </TableCell>
 
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <Clock className="h-4 w-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">
-                        {transfusion.patient.Hrecu}
-                      </span>
+                      <span className="font-medium text-gray-900">{transfusion.patient.Hrecu}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -231,6 +296,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       </div>
                     </div>
                   </TableCell>
+
                   <TableCell>
                     <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
                       {transfusion.patient.bloodType}
@@ -278,21 +344,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       {transfusion.priority}
                     </Badge>
                   </TableCell>
-                  <TableCell className="font-semibold">
-                        
-                      {transfusion.patient.poches}
-                
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                        
-                      {transfusion.patient.hb}
-                
-                  </TableCell>
-                  <TableCell>
-                    
-                      {transfusion.patient.don}
-                    
-                  </TableCell>
+                  <TableCell className="font-semibold">{transfusion.patient.poches}</TableCell>
+                  <TableCell className="font-semibold">{transfusion.patient.hb}</TableCell>
+                  <TableCell>{transfusion.patient.don}</TableCell>
                   <TableCell className="print:hidden flex items-center space-x-2">
                     <div className="flex items-center space-x-2">
                       {transfusion.status !== "completed" && (
@@ -306,7 +360,6 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           {isCompleting ? "Loading..." : "Mark as Done"}
                         </Button>
                       )}
-                      
                     </div>
                     <div className="flex items-center space-x-2">
                       {transfusion.status === "completed" && (
@@ -319,10 +372,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           <CheckCircle className="h-3 w-3 mr-1" />
                           {isCompleting ? "Loading..." : "Undone"}
                         </Button>
-                        
                       )}
-
-                      
                     </div>
                     <div></div>
                     <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
@@ -339,20 +389,15 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     >
                       {deletingId === transfusion._id ? "..." : "Delete"}
                     </Button>
-
-
                   </TableCell>
                   <TableCell className="hidden print:table-cell">
-                  <Badge
-                    className={
-                      transfusion.status === "completed"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
-                    }
-                  >
-                    {transfusion.status === "completed" ? "Present" : "Absent"}
-                  </Badge>
-
+                    <Badge
+                      className={
+                        transfusion.status === "completed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      }
+                    >
+                      {transfusion.status === "completed" ? "Present" : "Absent"}
+                    </Badge>
                   </TableCell>
                 </TableRow>
               )
@@ -384,15 +429,27 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                   <TableHead className="font-semibold text-gray-900">L</TableHead>
                   <TableHead className="font-semibold text-gray-900">Priority</TableHead>
                   <TableHead className="font-semibold text-gray-900">poches</TableHead>
-                  <TableHead className="font-semibold text-gray-900">Hb</TableHead>
+                  <TableHead
+                    className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none print:cursor-default print:hover:bg-gray-50"
+                    onClick={handleHbSort}
+                  >
+                    <div className="flex items-center gap-1">
+                      Hb
+                      <div className="flex flex-col print:hidden">
+                        <ChevronUp className={`h-3 w-3 ${hbSortOrder === "asc" ? "text-blue-600" : "text-gray-400"}`} />
+                        <ChevronDown
+                          className={`h-3 w-3 -mt-1 ${hbSortOrder === "desc" ? "text-blue-600" : "text-gray-400"}`}
+                        />
+                      </div>
+                    </div>
+                  </TableHead>
                   <TableHead className="font-semibold text-gray-900">Don</TableHead>
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Attendance</TableHead>
                   <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
-
                 </TableRow>
               </TableHeader>
               <TableBody>
-              {urgentorders.map((transfusion) => {
+                {urgentorders.map((transfusion) => {
                   const initials = `${transfusion.patient.firstName[0]}${transfusion.patient.lastName[0]}`
                   const isCompleting = completingIds.has(transfusion._id)
                   return (
@@ -400,18 +457,14 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       <TableCell>
                         <div className="flex items-center space-x-2">
                           <Clock className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium text-gray-900">
-                            {transfusion.patient.Hdist}
-                          </span>
+                          <span className="font-medium text-gray-900">{transfusion.patient.Hdist}</span>
                         </div>
                       </TableCell>
 
                       <TableCell>
                         <div className="flex items-center space-x-2">
                           <Clock className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium text-gray-900">
-                            {transfusion.patient.Hrecu}
-                          </span>
+                          <span className="font-medium text-gray-900">{transfusion.patient.Hrecu}</span>
                         </div>
                       </TableCell>
 
@@ -433,6 +486,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           </div>
                         </div>
                       </TableCell>
+
                       <TableCell>
                         <Badge variant="outline" className="font-semibold border-red-200 text-red-700">
                           {transfusion.patient.bloodType}
@@ -480,20 +534,10 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           {transfusion.priority}
                         </Badge>
                       </TableCell>
-                      <TableCell className="font-semibold">
-                        
-                          {transfusion.patient.poches}
-                    
-                      </TableCell>
-                      <TableCell className="font-semibold">
-                        
-                          {transfusion.patient.hb}
-                    
-                      </TableCell>
-                      <TableCell>
-                        {transfusion.patient.don}
-                      </TableCell>
-                      
+                      <TableCell className="font-semibold">{transfusion.patient.poches}</TableCell>
+                      <TableCell className="font-semibold">{transfusion.patient.hb}</TableCell>
+                      <TableCell>{transfusion.patient.don}</TableCell>
+
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">Present</Badge>
                       </TableCell>
@@ -509,12 +553,9 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               <CheckCircle className="h-3 w-3 mr-1" />
                               {isCompleting ? "Loading..." : "Undone"}
                             </Button>
-                            
                           )}
-
-                          
                         </div>
-                        
+
                         <div className="flex items-center space-x-2">
                           {transfusion.status !== "completed" && (
                             <Button
@@ -527,7 +568,6 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                               {isCompleting ? "Loading..." : "Mark as Done"}
                             </Button>
                           )}
-                          
                         </div>
                         <div></div>
                         <Link href={`/transfusions/today/${transfusion.patient._id}/edit`}>
@@ -544,8 +584,6 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         >
                           {deletingId === transfusion._id ? "..." : "Delete"}
                         </Button>
-
-
                       </TableCell>
                     </TableRow>
                   )
@@ -558,7 +596,8 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
       <div className="flex items-center justify-between text-sm text-gray-600">
         <p>
-          Showing {transfusions.length} transfusions scheduled for today
+          Showing {filteredTransfusions.length} transfusions{" "}
+          {searchQuery.trim() ? `matching "${searchQuery}"` : "scheduled for today"}
           {completedTransfusions.length > 0 &&
             ` (${completedTransfusions.length} completed, ${pendingTransfusions.length} pending)`}
         </p>
@@ -578,30 +617,28 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
         </div>
       </div>
       <div className="hidden print:block print-summary">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <strong>Summary:</strong> {transfusions.length} total transfusions 
-            {completedTransfusions.length > 0 && 
-              ` (${completedTransfusions.length} completed, ${pendingTransfusions.length} pending)`
-            }
+            <strong>Summary:</strong> {filteredTransfusions.length} total transfusions
+            {completedTransfusions.length > 0 &&
+              ` (${completedTransfusions.length} completed, ${pendingTransfusions.length} pending)`}
           </div>
-          <div style={{ display: 'flex', gap: '15pt' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3pt' }}>
-              <div style={{ width: '8pt', height: '8pt', backgroundColor: '#fecaca', borderRadius: '50%' }}></div>
+          <div style={{ display: "flex", gap: "15pt" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
+              <div style={{ width: "8pt", height: "8pt", backgroundColor: "#fecaca", borderRadius: "50%" }}></div>
               <span>Urgent</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3pt' }}>
-              <div style={{ width: '8pt', height: '8pt', backgroundColor: '#dbeafe', borderRadius: '50%' }}></div>
+            <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
+              <div style={{ width: "8pt", height: "8pt", backgroundColor: "#dbeafe", borderRadius: "50%" }}></div>
               <span>Regular</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3pt' }}>
-              <div style={{ width: '8pt', height: '8pt', backgroundColor: '#dcfce7', borderRadius: '50%' }}></div>
+            <div style={{ display: "flex", alignItems: "center", gap: "3pt" }}>
+              <div style={{ width: "8pt", height: "8pt", backgroundColor: "#dcfce7", borderRadius: "50%" }}></div>
               <span>Completed</span>
             </div>
           </div>
         </div>
       </div>
-
 
       {/* Print-specific styles */}
       <style jsx global>{`
