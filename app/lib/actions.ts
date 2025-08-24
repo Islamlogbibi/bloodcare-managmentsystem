@@ -284,27 +284,6 @@ export async function scheduleTransfusion(transfusionData: any) {
     if (!patient) {
       throw new Error("Patient not found")
     }
-    await db.collection("patients").updateOne(
-      { _id: new ObjectId(patientId) },
-      {
-        $push: {
-          schedules: {
-            date: new Date(),
-            priority: patient.priority || "regular",
-            bloodType: patient.bloodType,
-            ph: patient.ph,
-            hb: patient.hb,
-            poches: patient.poches,
-            hasF: patient.hasF,
-            hasC: patient.hasC,
-            hasL: patient.hasL,
-            don: patient.don,
-            Hdist: patient.Hdist,
-            Hrecu: patient.Hrecu,
-          },
-        },
-      }
-    )
     // Store in dailyHistory collection
     const dailyHistoryCollection = db.collection("daily_history")
 
