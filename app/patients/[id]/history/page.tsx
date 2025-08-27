@@ -2,6 +2,9 @@ import { format } from "date-fns"
 import { getPatientById } from "@/app/lib/actions"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Edit } from "lucide-react"
+import Link from "next/link"
 import PrintStyles from "./style"
 import PrintButton from "./Button"
 
@@ -40,10 +43,11 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                 <TableHead>C</TableHead>
                 <TableHead>L</TableHead>
                 <TableHead>Hb</TableHead>
+                <TableHead>Hb après</TableHead>
                 <TableHead>Poches</TableHead>
                 <TableHead>H.dist</TableHead>
                 <TableHead>H.reçu</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead>actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -73,10 +77,18 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                     {schedule.hasL ? "✓" : ""}
                   </TableCell>
                   <TableCell>{schedule.hb}</TableCell>
+                  <TableCell>{schedule.hbf || "-"}</TableCell>
                   <TableCell>{schedule.poches}</TableCell>
                   <TableCell>{schedule.Hdist}</TableCell>
                   <TableCell>{schedule.Hrecu}</TableCell>
-                  <TableCell>{schedule.description || "-"}</TableCell>
+                  <TableCell>
+                    <Link href={`/patients/${patient._id}/history/${new Date(schedule.date).toISOString().split("T")[0]}/edit`}>
+                      <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
+                        <Edit className="h-4 w-4 text-blue-600" /> Modifier
+                      </Button>
+                    </Link>
+
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

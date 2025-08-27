@@ -329,6 +329,34 @@ export async function scheduleTransfusion(transfusionData: any) {
     throw new Error("Failed to schedule transfusion")
   }
 }
+export async function updatehbf({ patientId, date, hbf }: { patientId: string; date: string; hbf: float }) {
+  const db = await connectToDatabase();
+
+  const objectId = typeof patientId === "string" ? new ObjectId(patientId) : patientId;
+
+  // Convert YYYY-MM-DD to date range for comparison
+  const targetDate = new Date(date);
+
+  const result = await db.collection("patients").updateOne(
+    {
+      _id: objectId,
+      "schedules.date": {
+        $gte: new Date(targetDate.setHours(0, 0, 0, 0)),
+        $lt: new Date(targetDate.setHours(23, 59, 59, 999)),
+      },
+    },
+    {
+      $set: { "schedules.$.hbf": hbf },
+    }
+  );
+
+  if (result.modifiedCount === 0) {
+    throw new Error("No matching schedule found for that date");
+  }
+
+  return result;
+}
+
 
 export async function updatehistory(transfusionData: any) {
   const db = await connectToDatabase()
