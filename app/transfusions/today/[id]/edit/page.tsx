@@ -18,13 +18,13 @@ export default async function EditPatientPage({ params }: EditPatientPageProps) 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Edit Patient</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Modifier le patient</h2>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Patient Information</CardTitle>
-          <CardDescription>Update the patient's details and blood donation information</CardDescription>
+          <CardTitle>Informations destinées aux patients</CardTitle>
+          <CardDescription>Mettre à jour les coordonnées du patient et les informations sur le don de sang</CardDescription>
         </CardHeader>
         <CardContent>
           <PatientForm patient={patient} isEditing={true} />

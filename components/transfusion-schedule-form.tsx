@@ -45,15 +45,15 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
 
       await scheduleTransfusion(transfusionData)
       toast({
-        title: "Transfusion Scheduled",
-        description: "The transfusion has been successfully scheduled.",
+        title: "Transfusion Planifiée",
+        description: "La transfusion a été planifiée avec succès.",
       })
 
       router.push("/transfusions/today")
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Erreur",
+        description: "Une erreur s'est produite. Veuillez réessayer.",
         variant: "destructive",
       })
     } finally {
@@ -69,14 +69,14 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           <Input value={`${patient.firstName} ${patient.lastName}`} disabled />
         </div>
         <div className="space-y-2">
-          <Label>Blood Type</Label>
+          <Label>Groupe Sanguin</Label>
           <Input value={patient.bloodType} disabled />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Scheduled Date *</Label>
+          <Label>Date Prévue *</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -84,7 +84,7 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
                 className={cn("w-full justify-start text-left font-normal", !scheduledDate && "text-muted-foreground")}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {scheduledDate ? format(scheduledDate, "PPP") : "Select date"}
+                {scheduledDate ? format(scheduledDate, "PPP") : "Sélectionner une date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -99,26 +99,26 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           </Popover>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="scheduledTime">Scheduled Time *</Label>
+          <Label htmlFor="scheduledTime">Heure Prévue *</Label>
           <Input id="scheduledTime" name="scheduledTime" type="time" required />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="priority">Priority *</Label>
+          <Label htmlFor="priority">Priorité *</Label>
           <Select name="priority" defaultValue="regular">
             <SelectTrigger>
-              <SelectValue placeholder="Select priority" />
+              <SelectValue placeholder="Sélectionner la priorité" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="regular">Regular</SelectItem>
-              <SelectItem value="urgent">Urgent</SelectItem>
+              <SelectItem value="regular">Normale</SelectItem>
+              <SelectItem value="urgent">Urgente</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="bloodUnits">Blood Units *</Label>
+          <Label htmlFor="bloodUnits">Unités de Sang *</Label>
           <Input id="bloodUnits" name="bloodUnits" type="number" min="1" max="10" defaultValue="1" required />
         </div>
       </div>
@@ -129,17 +129,17 @@ export function TransfusionScheduleForm({ patient }: TransfusionScheduleFormProp
           id="notes"
           name="notes"
           rows={4}
-          placeholder="Enter any special instructions or notes for the transfusion..."
+          placeholder="Entrez toute instruction spéciale ou note concernant la transfusion..."
         />
       </div>
 
       <div className="flex justify-end space-x-4">
         <Button type="button" variant="outline" onClick={() => router.back()}>
-          Cancel
+          Annuler
         </Button>
         <Button type="submit" disabled={isLoading || !scheduledDate} className="bg-red-600 hover:bg-red-700">
           <Save className="mr-2 h-4 w-4" />
-          {isLoading ? "Scheduling..." : "Schedule Transfusion"}
+          {isLoading ? "Planification..." : "Planifier la Transfusion"}
         </Button>
       </div>
     </form>

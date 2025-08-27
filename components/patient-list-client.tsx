@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Edit, Calendar } from "lucide-react"
 import Link from "next/link"
 import { format, differenceInDays, addDays } from "date-fns"
+import { fr } from "date-fns/locale"
 import { DeletePatientButton } from "@/components/delete-patient-button"
 import { QuickScheduleDialog } from "@/components/quick-schedule-dialog"
 import { useLanguage } from "@/contexts/language-context"
@@ -85,9 +86,13 @@ export function PatientListClient({ patients }: PatientListClientProps) {
                       <div className="w-4 h-4 border border-gray-300 rounded-sm mx-auto"></div>
                     )}
                   </TableCell>
-                  <TableCell>{lastDonationDate ? format(lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
-                  <TableCell>{nextTransfusionDate ? format(nextTransfusionDate, "MMM dd, yyyy") : "N/A"}</TableCell>
-                  <TableCell>{daysElapsed !== null ? `-${daysElapsed}j` : "N/A"}</TableCell>
+                  <TableCell>
+                    {lastDonationDate ? format(lastDonationDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
+                  </TableCell>
+                  <TableCell>
+                    {nextTransfusionDate ? format(nextTransfusionDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
+                  </TableCell>
+                  <TableCell>{daysElapsed !== null ? `-${daysElapsed}j` : "N/D"}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <QuickScheduleDialog patient={patient}>
@@ -120,13 +125,13 @@ export function PatientListClient({ patients }: PatientListClientProps) {
       </div>
 
       <div className="flex items-center justify-between text-sm text-gray-600">
-        <p>Showing {patients.length} patients</p>
+        <p>Affichage de {patients.length} patients</p>
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" disabled>
-            Previous
+            Précédent
           </Button>
           <Button variant="outline" size="sm">
-            Next
+            Suivant
           </Button>
         </div>
       </div>

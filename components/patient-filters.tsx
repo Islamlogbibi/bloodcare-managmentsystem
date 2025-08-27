@@ -19,33 +19,33 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
   const searchParams = useSearchParams()
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "")
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "All Patients")
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "Tous les Patients")
   const [selectedBloodType, setSelectedBloodType] = useState(searchParams.get("bloodType") || "")
   const [selectedPh, setSelectedPh] = useState(searchParams.get("ph") || "")
   const [activeFilters, setActiveFilters] = useState<string[]>([])
 
   const categories = [
     {
-      value: "All Patients",
-      label: "All Patients",
+      value: "Tous les Patients",
+      label: "Tous les Patients",
       activeClass: "bg-gray-900 text-white hover:bg-gray-800",
       inactiveClass: "border border-gray-300 text-gray-700 hover:bg-gray-50",
     },
     {
       value: "HyperRegime",
-      label: "HyperRegime",
+      label: "HyperRégime",
       activeClass: "bg-blue-600 text-white hover:bg-blue-700",
       inactiveClass: "border border-blue-500 text-blue-700 hover:bg-blue-50",
     },
     {
       value: "PolyTransfuses",
-      label: "PolyTransfuses",
+      label: "PolyTransfusés",
       activeClass: "bg-green-600 text-white hover:bg-green-700",
       inactiveClass: "border border-green-500 text-green-700 hover:bg-green-50",
     },
     {
       value: "Echanges",
-      label: "Echanges",
+      label: "Échanges",
       activeClass: "bg-purple-600 text-white hover:bg-purple-700",
       inactiveClass: "border border-purple-500 text-purple-700 hover:bg-purple-50",
     },
@@ -57,7 +57,7 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
     },
     {
       value: "Echanges Occasionnels",
-      label: "Echanges Occasionnels",
+      label: "Échanges Occasionnels",
       activeClass: "bg-pink-600 text-white hover:bg-pink-700",
       inactiveClass: "border border-pink-500 text-pink-700 hover:bg-pink-50",
     },
@@ -65,8 +65,8 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
 
   useEffect(() => {
     const filters = []
-    if (selectedBloodType && selectedBloodType !== "all") filters.push(`Blood Type: ${selectedBloodType}`)
-    if (selectedPh && selectedPh !== "all") filters.push(`Ph: ${selectedPh}`)
+    if (selectedBloodType && selectedBloodType !== "all") filters.push(`Groupe Sanguin: ${selectedBloodType}`)
+    if (selectedPh && selectedPh !== "all") filters.push(`Phénotype: ${selectedPh}`)
     setActiveFilters(filters)
   }, [selectedBloodType, selectedPh])
 
@@ -106,7 +106,7 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
 
   const clearAllFilters = () => {
     setSearchTerm("")
-    setSelectedCategory("All Patients")
+    setSelectedCategory("Tous les Patients")
     setSelectedBloodType("")
     setSelectedPh("")
     setActiveFilters([])
@@ -114,10 +114,10 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
   }
 
   const removeFilter = (filter: string) => {
-    if (filter.startsWith("Blood Type:")) {
+    if (filter.startsWith("Groupe Sanguin:")) {
       setSelectedBloodType("")
       updateURL({ bloodType: "" })
-    } else if (filter.startsWith("Ph:")) {
+    } else if (filter.startsWith("Phénotype:")) {
       setSelectedPh("")
       updateURL({ ph: "" })
     }
@@ -129,7 +129,7 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         <Input
-          placeholder="Search patients..."
+          placeholder="Rechercher des patients..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           className="pl-10 h-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md"
@@ -138,7 +138,7 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
 
       {/* Category Filter Tags */}
       <div className="space-y-3">
-        <Label className="text-sm font-medium text-gray-700">Patient Categories</Label>
+        <Label className="text-sm font-medium text-gray-700">Catégories de Patients</Label>
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => {
             const isSelected = selectedCategory === category.value
@@ -162,69 +162,67 @@ export function PatientFilters({ onFiltersChange }: PatientFiltersProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="bloodType" className="text-sm font-medium text-gray-700">
-            Blood Type
+            Groupe Sanguin
           </Label>
           <Select value={selectedBloodType} onValueChange={handleBloodTypeChange}>
             <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-              <SelectValue placeholder="All blood types" />
+              <SelectValue placeholder="Tous les groupes sanguins" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All blood types</SelectItem>
-              <SelectItem value="A+">A+ Positive</SelectItem>
-              <SelectItem value="A-">A- Negative</SelectItem>
-              <SelectItem value="B+">B+ Positive</SelectItem>
-              <SelectItem value="B-">B- Negative</SelectItem>
-              <SelectItem value="AB+">AB+ Positive</SelectItem>
-              <SelectItem value="AB-">AB- Negative</SelectItem>
-              <SelectItem value="O+">O+ Positive</SelectItem>
-              <SelectItem value="O-">O- Negative</SelectItem>
+              <SelectItem value="all">Tous les groupes sanguins</SelectItem>
+              <SelectItem value="A+">A+ Positif</SelectItem>
+              <SelectItem value="A-">A- Négatif</SelectItem>
+              <SelectItem value="B+">B+ Positif</SelectItem>
+              <SelectItem value="B-">B- Négatif</SelectItem>
+              <SelectItem value="AB+">AB+ Positif</SelectItem>
+              <SelectItem value="AB-">AB- Négatif</SelectItem>
+              <SelectItem value="O+">O+ Positif</SelectItem>
+              <SelectItem value="O-">O- Négatif</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="ph" className="text-sm font-medium text-gray-700">
-            phénotype
+            Phénotype
           </Label>
           <Select value={selectedPh} onValueChange={handlePhChange} name="ph">
-                <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Select Phénotype" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">all</SelectItem>
-                  <SelectItem value="cceek+">cc ee KEL (+)</SelectItem>
-                  <SelectItem value="cceek-">cc ee KEL (-)</SelectItem>
-                  <SelectItem value="CcEEk+">Cc EE KEL (+)</SelectItem>
-                  <SelectItem value="CcEEk-">Cc EE KEL (-)</SelectItem>
-                  <SelectItem value="Cceek+">Cc ee KEL (+)</SelectItem>
-                  <SelectItem value="Cceek-">Cc ee KEL (-)</SelectItem>
-                  <SelectItem value="CcEek+">Cc Ee KEL (+)</SelectItem>
-                  <SelectItem value="CcEek-">Cc Ee KEL (-)</SelectItem>
-                  <SelectItem value="CCEEk+">CC EE KEL (+)</SelectItem>
-                  <SelectItem value="CCEEk-">CC EE KEL (-)</SelectItem>
-                  <SelectItem value="CCeek+">CC ee KEL (+)</SelectItem>
-                  <SelectItem value="CCeek-">CC ee KEL (-)</SelectItem>
-                  <SelectItem value="ccEEk+">cc EE KEL (+)</SelectItem>
-                  <SelectItem value="ccEEk-">cc EE KEL (-)</SelectItem>
-                  <SelectItem value="CCEek+">CC Ee KEL (+)</SelectItem>
-                  <SelectItem value="CCEek-">CC Ee KEL (-)</SelectItem>
-                  <SelectItem value="ccEek+">cc Ee KEL (+)</SelectItem>
-                  <SelectItem value="ccEek-">cc Ee KEL (-)</SelectItem>
-                </SelectContent>
-              </Select>
+            <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
+              <SelectValue placeholder="Sélectionner le Phénotype" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous</SelectItem>
+              <SelectItem value="cceek+">cc ee KEL (+)</SelectItem>
+              <SelectItem value="cceek-">cc ee KEL (-)</SelectItem>
+              <SelectItem value="CcEEk+">Cc EE KEL (+)</SelectItem>
+              <SelectItem value="CcEEk-">Cc EE KEL (-)</SelectItem>
+              <SelectItem value="Cceek+">Cc ee KEL (+)</SelectItem>
+              <SelectItem value="Cceek-">Cc ee KEL (-)</SelectItem>
+              <SelectItem value="CcEek+">Cc Ee KEL (+)</SelectItem>
+              <SelectItem value="CcEek-">Cc Ee KEL (-)</SelectItem>
+              <SelectItem value="CCEEk+">CC EE KEL (+)</SelectItem>
+              <SelectItem value="CCEEk-">CC EE KEL (-)</SelectItem>
+              <SelectItem value="CCeek+">CC ee KEL (+)</SelectItem>
+              <SelectItem value="CCeek-">CC ee KEL (-)</SelectItem>
+              <SelectItem value="ccEEk+">cc EE KEL (+)</SelectItem>
+              <SelectItem value="ccEEk-">cc EE KEL (-)</SelectItem>
+              <SelectItem value="CCEek+">CC Ee KEL (+)</SelectItem>
+              <SelectItem value="CCEek-">CC Ee KEL (-)</SelectItem>
+              <SelectItem value="ccEek+">cc Ee KEL (+)</SelectItem>
+              <SelectItem value="ccEek-">cc Ee KEL (-)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-
-        
       </div>
 
       {/* Active Filters */}
       {activeFilters.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-medium text-gray-700">Active Filters</Label>
+            <Label className="text-sm font-medium text-gray-700">Filtres Actifs</Label>
             <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-red-600 hover:text-red-700">
               <X className="mr-1 h-3 w-3" />
-              Clear All
+              Effacer Tout
             </Button>
           </div>
           <div className="flex flex-wrap gap-2">

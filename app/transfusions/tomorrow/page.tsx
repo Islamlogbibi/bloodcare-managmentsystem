@@ -27,7 +27,7 @@ export default async function TomorrowTransfusionsPage() {
       <div className="flex-1 space-y-6 p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Tomorrow's Transfusions</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Les transfusions de demain</h1>
             <p className="text-gray-600 mt-1">{algeriaTime}</p>
           </div>
         </div>
@@ -36,9 +36,9 @@ export default async function TomorrowTransfusionsPage() {
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center text-gray-900">
               <Calendar className="mr-2 h-5 w-5 text-green-600" />
-              Tomorrow's Schedule
+              Programme de demain
             </CardTitle>
-            <CardDescription>Patients scheduled for blood transfusions tomorrow</CardDescription>
+            <CardDescription>Patients devant recevoir des transfusions sanguines demain</CardDescription>
           </CardHeader>
           <CardContent>
             <Suspense

@@ -25,21 +25,21 @@ export default async function ScheduleTransfusionPage({ params }: ScheduleTransf
           <Link href="/patients">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Patients
+              Retour aux patients
             </Button>
           </Link>
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">Schedule Transfusion</h1>
             <p className="text-gray-600 mt-1">
-              Schedule blood transfusion for {patient.firstName} {patient.lastName}
+            Planifier une transfusion sanguine pour {patient.firstName} {patient.lastName}
             </p>
           </div>
         </div>
 
         <Card className="max-w-2xl border-0 shadow-md">
           <CardHeader>
-            <CardTitle className="text-xl text-gray-900">Transfusion Details</CardTitle>
-            <CardDescription>Enter the transfusion scheduling information</CardDescription>
+            <CardTitle className="text-xl text-gray-900">Détails de la transfusion</CardTitle>
+            <CardDescription>Saisissez les informations de planification de la transfusion</CardDescription>
           </CardHeader>
           <CardContent>
             <TransfusionScheduleForm patient={patient} />

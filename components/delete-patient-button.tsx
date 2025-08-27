@@ -31,34 +31,30 @@ export function DeletePatientButton({ patientId, onDelete }: DeletePatientButton
   const handleDelete = async () => {
     try {
       setIsDeleting(true)
-      console.log("Attempting to delete patient with ID:", patientId)
+      console.log("Tentative de suppression du patient avec ID:", patientId)
 
       const result = await deletePatient(patientId)
 
       if (result.success) {
         toast({
-          title: "Patient Deleted",
-          description: "The patient has been successfully deleted.",
+          title: "Patient supprimé",
+          description: "Le patient a été supprimé avec succès.",
         })
 
-        // Call the onDelete callback if provided
         if (onDelete) {
           onDelete()
         }
 
-        // Refresh the page to update the patient list
         router.refresh()
-
-        // Close the dialog
         setOpen(false)
       } else {
-        throw new Error("Deletion failed")
+        throw new Error("Échec de la suppression")
       }
     } catch (error) {
-      console.error("Error deleting patient:", error)
+      console.error("Erreur lors de la suppression du patient:", error)
       toast({
-        title: "Error",
-        description: "Failed to delete patient. Please try again.",
+        title: "Erreur",
+        description: "Impossible de supprimer le patient. Veuillez réessayer.",
         variant: "destructive",
       })
     } finally {
@@ -71,20 +67,20 @@ export function DeletePatientButton({ patientId, onDelete }: DeletePatientButton
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50">
           <Trash2 className="h-4 w-4" />
-          <span className="sr-only">Delete patient</span>
+          <span className="sr-only">Supprimer le patient</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Êtes-vous absolument sûr ?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the patient record and all associated data.
+            Cette action est irréversible. Elle supprimera définitivement le dossier du patient et toutes les données associées.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>Annuler</AlertDialogCancel>
           <AlertDialogAction onClick={handleDelete} disabled={isDeleting} className="bg-red-600 hover:bg-red-700">
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? "Suppression..." : "Supprimer"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

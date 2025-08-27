@@ -34,9 +34,8 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
 
   const handleSchedule = async (priority: "regular" | "urgent") => {
     setIsScheduling(true)
-    
-    
-    console.log("Scheduling transfusion for:", patient.lastDonationDate)
+
+    console.log("Planification de transfusion pour:", patient.lastDonationDate)
 
     try {
       const today = new Date()
@@ -49,30 +48,29 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
         scheduledTime,
         priority,
         bloodUnits: 2,
-        notes: `Quick scheduled as ${priority} case for ${patient.firstName} ${patient.lastName}`,
+        notes: `Planifié rapidement comme cas ${priority} pour ${patient.firstName} ${patient.lastName}`,
       })
 
-      const scheduledTimeText = priority === "urgent" ? "today at 2:00 PM" : "tomorrow at 9:00 AM"
-      
+      const scheduledTimeText = priority === "urgent" ? "aujourd'hui à 14h00" : "demain à 09h00"
+
       toast({
         title: t("scheduleTransfusion"),
-        description: `${patient.firstName} ${patient.lastName} scheduled for ${scheduledTimeText}`,
+        description: `${patient.firstName} ${patient.lastName} planifié pour ${scheduledTimeText}`,
       })
 
       setIsOpen(false)
       router.refresh()
     } catch (error) {
-      console.error("Scheduling error:", error)
+      console.error("Erreur de planification:", error)
       toast({
         title: t("error"),
-        description: "Failed to schedule transfusion. Please try again.",
+        description: "Échec de la planification de la transfusion. Veuillez réessayer.",
         variant: "destructive",
       })
     } finally {
       setIsScheduling(false)
     }
   }
-  
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -84,7 +82,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
             {t("scheduleTransfusion")}
           </DialogTitle>
           <DialogDescription>
-            Schedule a blood transfusion for {patient.firstName} {patient.lastName}
+            Planifier une transfusion sanguine pour {patient.firstName} {patient.lastName}
           </DialogDescription>
         </DialogHeader>
 
@@ -97,7 +95,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-medium">Blood Type:</span>
+              <span className="font-medium">Groupe Sanguin:</span>
               <Badge variant="outline" className="border-red-200 text-red-700">
                 {patient.bloodType}
               </Badge>
@@ -105,26 +103,25 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">Select Priority:</h4>
-            <Schedule patient={patient} >
+            <h4 className="font-medium text-gray-900">Sélectionner la Priorité:</h4>
+            <Schedule patient={patient}>
               <Button
                 variant="outline"
-                className="w-full justify-start h-auto p-4 border-blue-200 hover:bg-blue-50"
-                
+                className="w-full justify-start h-auto p-4 border-blue-200 hover:bg-blue-50 bg-transparent"
                 disabled={isScheduling}
               >
                 <div className="flex items-center gap-3">
                   <Clock className="h-5 w-5 text-blue-600" />
                   <div className="text-left">
                     <div className="font-medium">{t("regular")}</div>
-                    <div className="text-sm text-gray-500">Tomorrow</div>
+                    <div className="text-sm text-gray-500">Demain</div>
                   </div>
                 </div>
               </Button>
             </Schedule>
             <Button
               variant="outline"
-              className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50"
+              className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50 bg-transparent"
               onClick={() => handleSchedule("urgent")}
               disabled={isScheduling}
             >
@@ -132,7 +129,7 @@ export function QuickScheduleDialog({ patient, children }: QuickScheduleDialogPr
                 <AlertTriangle className="h-5 w-5 text-red-600" />
                 <div className="text-left">
                   <div className="font-medium">{t("urgent")}</div>
-                  <div className="text-sm text-gray-500">Today</div>
+                  <div className="text-sm text-gray-500">Aujourd'hui</div>
                 </div>
               </div>
             </Button>

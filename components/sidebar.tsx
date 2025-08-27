@@ -1,55 +1,35 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Home, Users, Calendar, Clock, Settings, Activity, Heart, BarChart3, Menu, X } from "lucide-react"
-import { useState, useEffect } from "react"
-import { useLanguage } from "@/contexts/language-context"
-
-
-
-
+import { Home, Users, Clock, Calendar, BarChart3, Settings, X, Menu, Heart, Activity } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function Sidebar() {
-  const { t } = useLanguage()
   const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const navigation = [
-    { name: t("Dashboard"), href: "/", icon: Home, description: "Overview and statistics" },
-    { name: t("Patients"), href: "/patients", icon: Users, description: "Manage patient records" },
-    { name: t("Today's Schedule"), href: "/transfusions/today", icon: Clock, description: "Today's appointments" },
+    { name: "Tableau de Bord", href: "/", icon: Home, description: "Vue d'ensemble et statistiques" },
+    { name: "Patients", href: "/patients", icon: Users, description: "Gérer les dossiers patients" },
     {
-      name: t("Tomorrow's Schedule"),
+      name: "Planning d'Aujourd'hui",
+      href: "/transfusions/today",
+      icon: Clock,
+      description: "Rendez-vous d'aujourd'hui",
+    },
+    {
+      name: "Planning de Demain",
       href: "/transfusions/tomorrow",
       icon: Calendar,
-      description: "Tomorrow's appointments",
+      description: "Rendez-vous de demain",
     },
-    { name: t("History"), href: "/history", icon: BarChart3, description: "View history" },
-    { name: t("Settings"), href: "/settings", icon: Settings, description: "Application settings" },
+    { name: "Historique", href: "/history", icon: BarChart3, description: "Voir l'historique" },
+    { name: "Paramètres", href: "/settings", icon: Settings, description: "Paramètres de l'application" },
   ]
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setIsMobileOpen(false)
-  }, [pathname])
-
-  // Handle escape key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsMobileOpen(false)
-      }
-    }
-
-    if (isMobileOpen) {
-      document.addEventListener("keydown", handleEscape)
-      return () => document.removeEventListener("keydown", handleEscape)
-    }
-  }, [isMobileOpen])
 
   return (
     <>
@@ -59,7 +39,7 @@ export function Sidebar() {
         size="icon"
         className="fixed top-4 left-4 z-50 md:hidden no-print"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-label={isMobileOpen ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation"}
         aria-expanded={isMobileOpen}
         aria-controls="sidebar-navigation"
       >
@@ -85,7 +65,7 @@ export function Sidebar() {
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
         role="navigation"
-        aria-label="Main navigation"
+        aria-label="Navigation principale"
       >
         {/* Header */}
         <div
@@ -101,7 +81,7 @@ export function Sidebar() {
             {!isCollapsed && (
               <div className="animate-fade-in">
                 <h1 className="text-lg font-bold text-white">BloodCare</h1>
-                <p className="text-xs text-red-100">Management System</p>
+                <p className="text-xs text-red-100">Système de Gestion</p>
               </div>
             )}
           </div>
@@ -113,7 +93,7 @@ export function Sidebar() {
             variant="ghost"
             size="sm"
             onClick={() => setIsCollapsed(!isCollapsed)}
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={isCollapsed ? "Développer la barre latérale" : "Réduire la barre latérale"}
             className="h-8 w-8 p-0 hover:bg-gray-100"
           >
             <Menu className="h-4 w-4" />
@@ -167,8 +147,8 @@ export function Sidebar() {
               <Activity className="h-4 w-4 text-green-600 animate-pulse" aria-hidden="true" />
               {!isCollapsed && (
                 <div className="animate-fade-in">
-                  <span className="text-sm font-medium text-blue-900">System Status</span>
-                  <p className="text-xs text-blue-700 mt-1">All systems operational</p>
+                  <span className="text-sm font-medium text-blue-900">État du Système</span>
+                  <p className="text-xs text-blue-700 mt-1">Tous les systèmes opérationnels</p>
                 </div>
               )}
             </div>

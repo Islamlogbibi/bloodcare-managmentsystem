@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { CalendarIcon, Save, User, Phone, Heart } from "lucide-react"
 import { format } from "date-fns"
+import { fr } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import { createPatient, updatePatient } from "@/app/lib/actions"
 import { useRouter } from "next/navigation"
@@ -40,8 +41,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     const ph = formData.get("ph") as string
     if (!gender) {
       toast({
-        title: "Validation Error",
-        description: "Please select a gender.",
+        title: "Erreur de Validation",
+        description: "Veuillez sélectionner un sexe.",
         variant: "destructive",
       })
       setIsLoading(false)
@@ -49,8 +50,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     }
     if (!patientCategory) {
       toast({
-        title: "Validation Error",
-        description: "Please select a category.",
+        title: "Erreur de Validation",
+        description: "Veuillez sélectionner une catégorie.",
         variant: "destructive",
       })
       setIsLoading(false)
@@ -58,8 +59,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     }
     if (!bloodType) {
       toast({
-        title: "Validation Error",
-        description: "Please select a bloodtype.",
+        title: "Erreur de Validation",
+        description: "Veuillez sélectionner un groupe sanguin.",
         variant: "destructive",
       })
       setIsLoading(false)
@@ -67,8 +68,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     }
     if (!ph) {
       toast({
-        title: "Validation Error",
-        description: "Please select a phénotype.",
+        title: "Erreur de Validation",
+        description: "Veuillez sélectionner un phénotype.",
         variant: "destructive",
       })
       setIsLoading(false)
@@ -96,68 +97,28 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         hasF: formData.get("hasF") === "on",
         hasC: formData.get("hasC") === "on",
         hasL: formData.get("hasL") === "on",
-        patientCategory: (formData.get("patientCategory") as string),
+        patientCategory: formData.get("patientCategory") as string,
       }
 
       if (isEditing && patient) {
         await updatePatient(patient._id, patientData)
         toast({
-          title: "Patient Updated",
-          description: "Patient information has been successfully updated.",
+          title: "Patient Mis à Jour",
+          description: "Les informations du patient ont été mises à jour avec succès.",
         })
       } else {
         await createPatient(patientData)
         toast({
-          title: "Patient Registered",
-          description: "New patient has been successfully registered.",
+          title: "Patient Enregistré",
+          description: "Le nouveau patient a été enregistré avec succès.",
         })
-      }
-      const gender = formData.get("gender") as string
-      const patientCategory = formData.get("patientCategory") as string
-      const bloodType = formData.get("bloodType") as string
-      const ph = formData.get("ph") as string
-      if (!gender) {
-        toast({
-          title: "Validation Error",
-          description: "Please select a gender.",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-      if (!patientCategory) {
-        toast({
-          title: "Validation Error",
-          description: "Please select a category.",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-      if (!bloodType) {
-        toast({
-          title: "Validation Error",
-          description: "Please select a bloodtype.",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-      if (!ph) {
-        toast({
-          title: "Validation Error",
-          description: "Please select a phénotype.",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
       }
 
       router.push("/patients")
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Erreur",
+        description: "Une erreur s'est produite. Veuillez réessayer.",
         variant: "destructive",
       })
     } finally {
@@ -172,15 +133,15 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <User className="mr-2 h-5 w-5 text-red-600" />
-            Personal Information
+            Informations Personnelles
           </CardTitle>
-          <CardDescription>Basic patient details and identification</CardDescription>
+          <CardDescription>Détails personnels et identification du patient</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
-                First Name *
+                Prénom *
               </Label>
               <Input
                 id="firstName"
@@ -192,7 +153,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
-                Last Name *
+                Nom de Famille *
               </Label>
               <Input
                 id="lastName"
@@ -207,7 +168,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="dateOfBirth" className="text-sm font-medium text-gray-700">
-                Date of Birth 
+                Date de Naissance
               </Label>
               <Input
                 id="dateOfBirth"
@@ -219,16 +180,15 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="gender" className="text-sm font-medium text-gray-700">
-                Gender *
+                Sexe *
               </Label>
               <Select name="gender" defaultValue={patient?.gender}>
                 <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Select gender" />
+                  <SelectValue placeholder="Sélectionner le sexe" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  
+                  <SelectItem value="male">Masculin</SelectItem>
+                  <SelectItem value="female">Féminin</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -241,15 +201,15 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Phone className="mr-2 h-5 w-5 text-blue-600" />
-            Contact Information
+            Informations de Contact
           </CardTitle>
-          <CardDescription>Phone, email, and address details</CardDescription>
+          <CardDescription>Téléphone, email et détails d'adresse</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
-                Phone Number 
+                Numéro de Téléphone
               </Label>
               <Input
                 id="phone"
@@ -261,7 +221,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Email Address
+                Adresse Email
               </Label>
               <Input
                 id="email"
@@ -275,7 +235,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="address" className="text-sm font-medium text-gray-700">
-              Address
+              Adresse
             </Label>
             <Textarea
               id="address"
@@ -289,7 +249,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="emergencyContact" className="text-sm font-medium text-gray-700">
-                Emergency Contact Name
+                Nom du Contact d'Urgence
               </Label>
               <Input
                 id="emergencyContact"
@@ -300,7 +260,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="emergencyPhone" className="text-sm font-medium text-gray-700">
-                Emergency Contact Phone
+                Téléphone du Contact d'Urgence
               </Label>
               <Input
                 id="emergencyPhone"
@@ -319,29 +279,29 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-gray-900">
             <Heart className="mr-2 h-5 w-5 text-red-600" />
-            Medical Information
+            Informations Médicales
           </CardTitle>
-          <CardDescription>Blood type and medical details</CardDescription>
+          <CardDescription>Groupe sanguin et détails médicaux</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="bloodType" className="text-sm font-medium text-gray-700">
-                Blood Type *
+                Groupe Sanguin *
               </Label>
               <Select name="bloodType" defaultValue={patient?.bloodType}>
                 <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Select blood type" />
+                  <SelectValue placeholder="Sélectionner le groupe sanguin" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="A+">A+ Positive</SelectItem>
-                  <SelectItem value="A-">A- Negative</SelectItem>
-                  <SelectItem value="B+">B+ Positive</SelectItem>
-                  <SelectItem value="B-">B- Negative</SelectItem>
-                  <SelectItem value="AB+">AB+ Positive</SelectItem>
-                  <SelectItem value="AB-">AB- Negative</SelectItem>
-                  <SelectItem value="O+">O+ Positive</SelectItem>
-                  <SelectItem value="O-">O- Negative</SelectItem>
+                  <SelectItem value="A+">A+ Positif</SelectItem>
+                  <SelectItem value="A-">A- Négatif</SelectItem>
+                  <SelectItem value="B+">B+ Positif</SelectItem>
+                  <SelectItem value="B-">B- Négatif</SelectItem>
+                  <SelectItem value="AB+">AB+ Positif</SelectItem>
+                  <SelectItem value="AB-">AB- Négatif</SelectItem>
+                  <SelectItem value="O+">O+ Positif</SelectItem>
+                  <SelectItem value="O-">O- Négatif</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -351,33 +311,33 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
               </Label>
               <Select name="ph" defaultValue={patient?.ph}>
                 <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                  <SelectValue placeholder="Select Phénotype" />
+                  <SelectValue placeholder="Sélectionner le Phénotype" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cc ee KEL (+)">cc ee KEL (+)</SelectItem>
-                  <SelectItem value="cc ee KEL (-)">cc ee KEL (-)</SelectItem>
-                  <SelectItem value="Cc EE KEL (+)">Cc EE KEL (+)</SelectItem>
-                  <SelectItem value="Cc EE KEL (-)">Cc EE KEL (-)</SelectItem>
-                  <SelectItem value="Cc ee KEL (+)">Cc ee KEL (+)</SelectItem>
-                  <SelectItem value="Cc ee KEL (-)">Cc ee KEL (-)</SelectItem>
-                  <SelectItem value="Cc Ee KEL (+)">Cc Ee KEL (+)</SelectItem>
-                  <SelectItem value="Cc Ee KEL (-)">Cc Ee KEL (-)</SelectItem>
-                  <SelectItem value="CC EE KEL (+)">CC EE KEL (+)</SelectItem>
-                  <SelectItem value="CC EE KEL (-)">CC EE KEL (-)</SelectItem>
-                  <SelectItem value="CC ee KEL (+)">CC ee KEL (+)</SelectItem>
-                  <SelectItem value="CC ee KEL (-)">CC ee KEL (-)</SelectItem>
-                  <SelectItem value="cc EE KEL (+)">cc EE KEL (+)</SelectItem>
-                  <SelectItem value="cc EE KEL (-)">cc EE KEL (-)</SelectItem>
-                  <SelectItem value="CC Ee KEL (+)">CC Ee KEL (+)</SelectItem>
-                  <SelectItem value="CC Ee KEL (-)">CC Ee KEL (-)</SelectItem>
-                  <SelectItem value="cc Ee KEL (+)">cc Ee KEL (+)</SelectItem>
-                  <SelectItem value="cc Ee KEL (-)">cc Ee KEL (-)</SelectItem>
+                  <SelectItem value="cceek+">cc ee KEL (+)</SelectItem>
+                  <SelectItem value="cceek-">cc ee KEL (-)</SelectItem>
+                  <SelectItem value="CcEEk+">Cc EE KEL (+)</SelectItem>
+                  <SelectItem value="CcEEk-">Cc EE KEL (-)</SelectItem>
+                  <SelectItem value="Cceek+">Cc ee KEL (+)</SelectItem>
+                  <SelectItem value="Cceek-">Cc ee KEL (-)</SelectItem>
+                  <SelectItem value="CcEek+">Cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="CcEek-">Cc Ee KEL (-)</SelectItem>
+                  <SelectItem value="CCEEk+">CC EE KEL (+)</SelectItem>
+                  <SelectItem value="CCEEk-">CC EE KEL (-)</SelectItem>
+                  <SelectItem value="CCeek+">CC ee KEL (+)</SelectItem>
+                  <SelectItem value="CCeek-">CC ee KEL (-)</SelectItem>
+                  <SelectItem value="ccEEk+">cc EE KEL (+)</SelectItem>
+                  <SelectItem value="ccEEk-">cc EE KEL (-)</SelectItem>
+                  <SelectItem value="CCEek+">CC Ee KEL (+)</SelectItem>
+                  <SelectItem value="CCEek-">CC Ee KEL (-)</SelectItem>
+                  <SelectItem value="ccEek+">cc Ee KEL (+)</SelectItem>
+                  <SelectItem value="ccEek-">cc Ee KEL (-)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="weight" className="text-sm font-medium text-gray-700">
-                Weight (kg)
+                Poids (kg)
               </Label>
               <Input
                 id="weight"
@@ -390,7 +350,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="height" className="text-sm font-medium text-gray-700">
-                Height (cm)
+                Taille (cm)
               </Label>
               <Input
                 id="height"
@@ -405,7 +365,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="hemoglobinLevel" className="text-sm font-medium text-gray-700">
-              Hemoglobin Level (g/dL)
+              Taux d'Hémoglobine (g/dL)
             </Label>
             <Input
               id="hemoglobinLevel"
@@ -419,7 +379,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Admission Date</Label>
+              <Label className="text-sm font-medium text-gray-700">Date d'Admission</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -430,7 +390,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {admissionDate ? format(admissionDate, "PPP") : "Select admission date"}
+                    {admissionDate ? format(admissionDate, "PPP", { locale: fr }) : "Sélectionner la date d'admission"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -439,7 +399,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
               </Popover>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">Last Donation Date</Label>
+              <Label className="text-sm font-medium text-gray-700">Dernière Date de Don</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -450,7 +410,9 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {lastDonationDate ? format(lastDonationDate, "PPP") : "Select last donation date"}
+                    {lastDonationDate
+                      ? format(lastDonationDate, "PPP", { locale: fr })
+                      : "Sélectionner la dernière date de don"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -462,7 +424,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
           {/* New F, C, L checkboxes */}
           <div className="space-y-4">
-            <Label className="text-sm font-medium text-gray-700">Patient Attributes</Label>
+            <Label className="text-sm font-medium text-gray-700">Attributs du Patient</Label>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox id="hasF" name="hasF" defaultChecked={patient?.hasF} />
@@ -488,49 +450,42 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
           {/* Patient Category */}
           <div className="space-y-2">
             <Label htmlFor="patientCategory" className="text-sm font-medium text-gray-700">
-              Patient Category *
+              Catégorie de Patient *
             </Label>
             {/* Hidden input for native form validation */}
-            <input
-              type="text"
+            <input type="text" name="patientCategory" value={patient?.patientCategory || ""} required readOnly hidden />
+            <Select
               name="patientCategory"
-              value={patient?.patientCategory || ""}
-              required
-              readOnly
-              hidden
-            />
-            <Select 
-            name="patientCategory" 
-            defaultValue={patient?.patientCategory || "All Patients"}
-            onValueChange={(value) => {
-              // Update the hidden input when select changes
-              const hiddenInput = document.querySelector<HTMLInputElement>('input[name="patientCategory"]')
-              if (hiddenInput) hiddenInput.value = value
-            }}
+              defaultValue={patient?.patientCategory || "Tous les Patients"}
+              onValueChange={(value) => {
+                // Update the hidden input when select changes
+                const hiddenInput = document.querySelector<HTMLInputElement>('input[name="patientCategory"]')
+                if (hiddenInput) hiddenInput.value = value
+              }}
             >
               <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-red-500">
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Sélectionner la catégorie" />
               </SelectTrigger>
-              <SelectContent >
-                <SelectItem value="HyperRegime">HyperRegime</SelectItem>
-                <SelectItem value="PolyTransfuses">PolyTransfuses</SelectItem>
-                <SelectItem value="Echanges">Echanges</SelectItem>
+              <SelectContent>
+                <SelectItem value="HyperRegime">HyperRégime</SelectItem>
+                <SelectItem value="PolyTransfuses">PolyTransfusés</SelectItem>
+                <SelectItem value="Echanges">Échanges</SelectItem>
                 <SelectItem value="PDV">PDV</SelectItem>
-                <SelectItem value="Echanges Occasionnels">Echanges Occasionnels</SelectItem>
+                <SelectItem value="Echanges Occasionnels">Échanges Occasionnels</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="medicalHistory" className="text-sm font-medium text-gray-700">
-              Medical History & Notes
+              Antécédents Médicaux et Notes
             </Label>
             <Textarea
               id="medicalHistory"
               name="medicalHistory"
               defaultValue={patient?.medicalHistory}
               rows={4}
-              placeholder="Enter any relevant medical history, allergies, medications, or special notes..."
+              placeholder="Saisir les antécédents médicaux pertinents, allergies, médicaments ou notes spéciales..."
               className="border-gray-300 focus:border-red-500 focus:ring-red-500"
             />
           </div>
@@ -539,11 +494,11 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
 
       <div className="flex justify-end space-x-4 pt-6">
         <Button type="button" variant="outline" onClick={() => router.back()} className="border-gray-300">
-          Cancel
+          Annuler
         </Button>
         <Button type="submit" disabled={isLoading} className="bg-red-600 hover:bg-red-700">
           <Save className="mr-2 h-4 w-4" />
-          {isLoading ? "Saving..." : isEditing ? "Update Patient" : "Register Patient"}
+          {isLoading ? "Enregistrement..." : isEditing ? "Mettre à Jour le Patient" : "Enregistrer le Patient"}
         </Button>
       </div>
     </form>

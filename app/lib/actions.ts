@@ -245,18 +245,11 @@ export async function addToDailyHistory(transfusion: any, patient: any) {
     throw new Error("Failed to add to daily history")
   }
 }
-export async function getTransfusionHistoryForPatient(id: string) {
-  const db = await connectToDatabase()
-  const transfusions = db.collection("transfusions")
-  return await transfusions.find({ patientId: new ObjectId(id) }).sort({ scheduledTime: -1 }).toArray()
-}
 
 export async function scheduleTransfusion(transfusionData: any) {
   try {
     const db = await connectToDatabase()
     const transfusionsCollection = db.collection("transfusions")
-    const patientsCollection = db.collection("patients")
-
     // Ensure patientId is an ObjectId
     const patientId =
       typeof transfusionData.patientId === "string"
@@ -274,7 +267,7 @@ export async function scheduleTransfusion(transfusionData: any) {
       scheduledDate,
       scheduledTime,
       priority: transfusionData.priority,
-      bloodUnits: transfusionData.bloodUnits || 2,
+      bloodUnits: transfusionData.bloodUnits || 0,
       notes: transfusionData.notes || "",
       transfusionId: `TRN${Date.now().toString().slice(-6)}`,
       status: "scheduled",
@@ -291,28 +284,6 @@ export async function scheduleTransfusion(transfusionData: any) {
     if (!patient) {
       throw new Error("Patient not found")
     }
-    await db.collection("patients").updateOne(
-      { _id: new ObjectId(patientId) },
-      {
-        
-        $push: {
-          schedules: {
-            date: new Date(),
-            priority: patient.priority || "regular",
-            bloodType: patient.bloodType,
-            ph: patient.ph,
-            hb: patient.hb,
-            poches: patient.poches,
-            hasF: patient.hasF,
-            hasC: patient.hasC,
-            hasL: patient.hasL,
-            don: patient.don,
-            Hdist: patient.Hdist,
-            Hrecu: patient.Hrecu,
-          },
-        },
-      }
-    )
     // Store in dailyHistory collection
     const dailyHistoryCollection = db.collection("daily_history")
 
@@ -358,7 +329,70 @@ export async function scheduleTransfusion(transfusionData: any) {
     throw new Error("Failed to schedule transfusion")
   }
 }
+export async function updatehbf({ patientId, date, hbf }: { patientId: string; date: string; hbf: float }) {
+  const db = await connectToDatabase();
 
+  const objectId = typeof patientId === "string" ? new ObjectId(patientId) : patientId;
+
+  // Convert YYYY-MM-DD to date range for comparison
+  const targetDate = new Date(date);
+
+  const result = await db.collection("patients").updateOne(
+    {
+      _id: objectId,
+      "schedules.date": {
+        $gte: new Date(targetDate.setHours(0, 0, 0, 0)),
+        $lt: new Date(targetDate.setHours(23, 59, 59, 999)),
+      },
+    },
+    {
+      $set: { "schedules.$.hbf": hbf },
+    }
+  );
+
+  if (result.modifiedCount === 0) {
+    throw new Error("No matching schedule found for that date");
+  }
+
+  return result;
+}
+
+
+export async function updatehistory(transfusionData: any) {
+  const db = await connectToDatabase()
+  // Ensure patientId is an ObjectId
+  const patientId =
+    typeof transfusionData.patientId === "string"
+      ? new ObjectId(transfusionData.patientId)
+      : transfusionData.patientId
+  const patient = await db.collection("patients").findOne({ _id: new ObjectId(patientId) })
+
+  if (!patient) {
+    throw new Error("Patient not found")
+  }
+  await db.collection("patients").updateOne(
+    { _id: new ObjectId(patientId) },
+    {
+      
+      $push: {
+        schedules: {
+          date: new Date(),
+          priority: patient.priority || "regular",
+          bloodType: patient.bloodType,
+          ph: patient.ph,
+          hb: patient.hb,
+          poches: patient.poches,
+          hasF: patient.hasF,
+          hasC: patient.hasC,
+          hasL: patient.hasL,
+          don: patient.don,
+          Hdist: patient.Hdist,
+          Hrecu: patient.Hrecu,
+        },
+      },
+    }
+  )
+}
 export async function updateTransfusionStatus(transfusionId: string, status: string) {
   try {
     if (!ObjectId.isValid(transfusionId)) {
