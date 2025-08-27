@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Clock, Edit, Calendar, ArrowUpDown } from "lucide-react"
 import Link from "next/link"
-import { format, differenceInDays, addDays } from "date-fns"
+import { format, differenceInDays } from "date-fns"
+import { fr } from "date-fns/locale"
 import { DeletePatientButton } from "@/components/delete-patient-button"
 import { QuickScheduleDialog } from "@/components/quick-schedule-dialog"
 import { useState, useEffect } from "react"
@@ -64,7 +65,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
       setPatients(data)
     } catch (err) {
       console.error("Error fetching patients:", err)
-      setError(err instanceof Error ? err.message : "Failed to load patients")
+      setError(err instanceof Error ? err.message : "Échec du chargement des patients")
     } finally {
       setLoading(false)
     }
@@ -129,8 +130,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
     if (daysElapsed === null) return "bg-gray-100 text-gray-500"
 
     const absDays = Math.abs(daysElapsed)
-    if (type === "HyperRegime"){
-
+    if (type === "HyperRegime") {
       if (absDays >= 15) return "bg-red-500 text-white font-medium"
       if (absDays > 11) return "bg-orange-400 text-white font-medium"
       return "bg-green-500 text-white font-medium"
@@ -140,7 +140,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
       if (absDays > 17) return "bg-orange-400 text-white font-medium"
       return "bg-green-500 text-white font-medium"
     }
-    if (type === "Echanges"){
+    if (type === "Echanges") {
       if (absDays >= 30) return "bg-red-500 text-white font-medium"
       if (absDays > 26) return "bg-orange-400 text-white font-medium"
       return "bg-green-500 text-white font-medium"
@@ -174,10 +174,12 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Error loading patients</h3>
-        <p className="text-gray-600 mb-4">There was an error loading the patient data. Please try again.</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Erreur lors du chargement des patients</h3>
+        <p className="text-gray-600 mb-4">
+          Une erreur s'est produite lors du chargement des données des patients. Veuillez réessayer.
+        </p>
         <Button onClick={fetchPatients} className="bg-red-600 hover:bg-red-700">
-          Retry
+          Réessayer
         </Button>
       </div>
     )
@@ -196,10 +198,10 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No patients found</h3>
-        <p className="text-gray-600 mb-4">Try adjusting your search criteria or filters.</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucun patient trouvé</h3>
+        <p className="text-gray-600 mb-4">Essayez d'ajuster vos critères de recherche ou vos filtres.</p>
         <Link href="/patients/new">
-          <Button className="bg-red-600 hover:bg-red-700">Add New Patient</Button>
+          <Button className="bg-red-600 hover:bg-red-700">Ajouter un Nouveau Patient</Button>
         </Link>
       </div>
     )
@@ -218,7 +220,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
               <TableHead className="font-semibold text-gray-900 text-center">C</TableHead>
               <TableHead className="font-semibold text-gray-900 text-center">L</TableHead>
               <TableHead className="font-semibold text-gray-900">DERNIÈRE T</TableHead>
-              
+
               <TableHead
                 className="font-semibold text-gray-900 cursor-pointer"
                 onClick={() => requestSort("daysElapsed")}
@@ -233,9 +235,7 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
           </TableHeader>
           <TableBody>
             {sortedPatients.map((patient) => {
-              
               const lastDonationDate = patient.lastDonationDate ? new Date(patient.lastDonationDate) : null
-              
 
               // Calculate days elapsed
               const daysElapsed = lastDonationDate ? differenceInDays(new Date(), lastDonationDate) : null
@@ -245,7 +245,6 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
 
               return (
                 <TableRow key={patient._id} className="hover:bg-gray-50">
-                  
                   <TableCell className="font-medium text-gray-900">
                     {patient.fullName || `${patient.firstName} ${patient.lastName}`}
                   </TableCell>
@@ -283,18 +282,20 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
                       <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
                     )}
                   </TableCell>
-                  <TableCell>{patient.lastDonationDate ? format(patient.lastDonationDate, "MMM dd, yyyy") : "N/A"}</TableCell>
-                  
+                  <TableCell>
+                    {patient.lastDonationDate ? format(patient.lastDonationDate, "dd MMM yyyy", { locale: fr }) : "N/D"}
+                  </TableCell>
+
                   <TableCell>
                     <div className={`px-2 py-1 rounded text-center ${daysElapsedColorClass}`}>
-                      {daysElapsed !== null ? `${Math.abs(daysElapsed)}j` : "N/A"}
+                      {daysElapsed !== null ? `${Math.abs(daysElapsed)}j` : "N/D"}
                     </div>
                   </TableCell>
                   <TableCell className="print:hidden">
                     <div className="flex items-center space-x-2">
                       <Link href={`/patients/${patient._id}/view`}>
                         <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
-                          View
+                          Voir
                         </Button>
                       </Link>
                       <Link href={`/patients/${patient._id}/edit`}>
@@ -323,13 +324,13 @@ export function PatientList({ searchParams = {} }: PatientListProps) {
       </div>
 
       <div className="flex items-center justify-between text-sm text-gray-600">
-        <p>Showing {patients.length} patients</p>
+        <p>Affichage de {patients.length} patients</p>
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" disabled>
-            Previous
+            Précédent
           </Button>
           <Button variant="outline" size="sm">
-            Next
+            Suivant
           </Button>
         </div>
       </div>

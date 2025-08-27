@@ -8,8 +8,8 @@ import { StatsCard } from "@/components/stats-card"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Blood donation management dashboard with patient statistics and quick actions",
+  title: "Tableau de bord",
+  description: "Tableau de bord de gestion des transfusions sanguines avec statistiques des patients et actions rapides",
 }
 
 async function DashboardStats() {
@@ -18,35 +18,33 @@ async function DashboardStats() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 animate-fade-in">
       <StatsCard
-        title="Total Patients"
+        title="Nombre total de patients"
         value={stats.totalPatients}
         icon={Users}
-        description="Active patients in system"
-        trend="+12% from last month"
+        description="Patients actifs dans le système"
       />
       <StatsCard
-        title="Today's Transfusions"
+        title="Transfusions d'aujourd'hui"
         value={stats.todayTransfusions}
         icon={Clock}
-        description="Scheduled for today"
-        trend={stats.urgentCases + " urgent cases"}
-        
+        description="Prévu pour aujourd'hui"
+        trend={stats.urgentCases + " cas urgents"}
         variant="warning"
       />
       <StatsCard
-        title="Tomorrow's Schedule"
+        title="Programme de demain"
         value={stats.tomorrowTransfusions}
         icon={Calendar}
-        description="Appointments scheduled"
-        trend="All confirmed"
+        description="Rendez-vous programmés"
+        trend="Tous confirmés"
         variant="success"
       />
       <StatsCard
-        title="Urgent Cases"
+        title="Cas urgents"
         value={stats.urgentCases}
         icon={AlertTriangle}
-        description="Require immediate attention"
-        trend="2 critical"
+        description="Nécessitent une attention immédiate"
+        trend="2 critiques"
         variant="destructive"
       />
     </div>
@@ -59,18 +57,18 @@ export default function Dashboard() {
       <div className="flex-1 space-y-6 p-4 md:p-6">
         <header className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
           <div className="animate-slide-up">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">Blood Donation Management</h1>
-            <p className="text-gray-600 mt-1">Comprehensive patient care and transfusion scheduling</p>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">Gestion des dons de sang</h1>
+            <p className="text-gray-600 mt-1">Prise en charge complète des patients et planification des transfusions</p>
           </div>
           <div className="flex items-center space-x-3">
             <Link href="/patients/new">
               <Button
                 size="lg"
                 className="bg-red-600 hover:bg-red-700 focus-ring transition-all duration-200 hover:shadow-lg"
-                aria-label="Add new patient to the system"
+                aria-label="Ajouter un nouveau patient au système"
               >
                 <Plus className="mr-2 h-5 w-5" />
-                Add Patient
+                Ajouter un patient
               </Button>
             </Link>
           </div>
@@ -101,29 +99,29 @@ export default function Dashboard() {
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-gray-900">
                 <Users className="mr-3 h-5 w-5 text-red-600" />
-                Patient Management
+                Gestion des patients
               </CardTitle>
-              <CardDescription>Manage patient records and medical information</CardDescription>
+              <CardDescription>Gérer les dossiers et informations médicales des patients</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <Link href="/patients" className="block">
                 <Button
                   variant="outline"
                   className="w-full justify-start h-12 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200"
-                  aria-label="View all patients in the system"
+                  aria-label="Voir tous les patients du système"
                 >
                   <Users className="mr-3 h-4 w-4" />
-                  View All Patients
+                  Voir tous les patients
                 </Button>
               </Link>
               <Link href="/patients/new" className="block">
                 <Button
                   variant="outline"
                   className="w-full justify-start h-12 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200"
-                  aria-label="Register a new patient"
+                  aria-label="Enregistrer un nouveau patient"
                 >
                   <Plus className="mr-3 h-4 w-4" />
-                  Register New Patient
+                  Enregistrer un patient
                 </Button>
               </Link>
             </CardContent>
@@ -133,29 +131,29 @@ export default function Dashboard() {
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-gray-900">
                 <Calendar className="mr-3 h-5 w-5 text-blue-600" />
-                Transfusion Schedule
+                Planning des transfusions
               </CardTitle>
-              <CardDescription>Manage blood transfusion appointments</CardDescription>
+              <CardDescription>Gérer les rendez-vous de transfusion sanguine</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <Link href="/transfusions/today" className="block">
                 <Button
                   variant="outline"
                   className="w-full justify-start h-12 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200"
-                  aria-label="View today's transfusion schedule"
+                  aria-label="Voir le planning des transfusions d'aujourd'hui"
                 >
                   <Clock className="mr-3 h-4 w-4" />
-                  Today's Schedule
+                  Planning d'aujourd'hui
                 </Button>
               </Link>
               <Link href="/transfusions/tomorrow" className="block">
                 <Button
                   variant="outline"
                   className="w-full justify-start h-12 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200"
-                  aria-label="View tomorrow's transfusion schedule"
+                  aria-label="Voir le planning des transfusions de demain"
                 >
                   <Calendar className="mr-3 h-4 w-4" />
-                  Tomorrow's Schedule
+                  Planning de demain
                 </Button>
               </Link>
             </CardContent>
@@ -165,19 +163,19 @@ export default function Dashboard() {
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-gray-900">
                 <BarChart3 className="mr-3 h-5 w-5 text-green-600" />
-                Analytics
+                Analyses
               </CardTitle>
-              <CardDescription>View performance metrics and trends</CardDescription>
+              <CardDescription>Voir les performances et les tendances</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <Link href="/analytics" className="block">
                 <Button
                   variant="outline"
                   className="w-full justify-start h-12 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200"
-                  aria-label="View analytics dashboard"
+                  aria-label="Voir le tableau de bord des analyses"
                 >
                   <Activity className="mr-3 h-4 w-4" />
-                  Analytics Dashboard
+                  Tableau d'analyses
                 </Button>
               </Link>
             </CardContent>
@@ -187,87 +185,46 @@ export default function Dashboard() {
         <div className="grid gap-6 md:grid-cols-2 animate-slide-up">
           <Card className="border-0 shadow-md card-hover">
             <CardHeader>
-              <CardTitle className="text-gray-900">Recent Activity</CardTitle>
-              <CardDescription>Latest patient registrations and transfusions</CardDescription>
+              <CardTitle className="text-gray-900">Actions rapides</CardTitle>
+              <CardDescription>Fonctions fréquemment utilisées</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4" role="feed" aria-label="Recent activity feed">
-                <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg transition-colors duration-200 hover:bg-green-100">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">New patient registered</p>
-                    <p className="text-xs text-gray-600">Sarah Johnson - A+ Blood Type</p>
-                  </div>
-                  <time className="text-xs text-gray-500" dateTime="2024-01-15T10:30:00">
-                    2 min ago
-                  </time>
-                </div>
-                <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg transition-colors duration-200 hover:bg-blue-100">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">Transfusion completed</p>
-                    <p className="text-xs text-gray-600">John Doe - 2 units transfused</p>
-                  </div>
-                  <time className="text-xs text-gray-500" dateTime="2024-01-15T10:15:00">
-                    15 min ago
-                  </time>
-                </div>
-                <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg transition-colors duration-200 hover:bg-yellow-100">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">Urgent case scheduled</p>
-                    <p className="text-xs text-gray-600">Michael Brown - Emergency transfusion</p>
-                  </div>
-                  <time className="text-xs text-gray-500" dateTime="2024-01-15T09:30:00">
-                    1 hour ago
-                  </time>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-md card-hover">
-            <CardHeader>
-              <CardTitle className="text-gray-900">Quick Actions</CardTitle>
-              <CardDescription>Frequently used functions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-3" role="group" aria-label="Quick action buttons">
+              <div className="grid grid-cols-2 gap-3" role="group" aria-label="Boutons d'actions rapides">
                 <Link href="/patients/new">
                   <Button
                     variant="outline"
                     className="w-full h-16 flex-col space-y-1 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200 hover:shadow-md"
-                    aria-label="Add new patient"
+                    aria-label="Ajouter un patient"
                   >
                     <Plus className="h-5 w-5" />
-                    <span className="text-xs">Add Patient</span>
+                    <span className="text-xs">Ajouter patient</span>
                   </Button>
                 </Link>
                 <Link href="/transfusions/schedule">
                   <Button
                     variant="outline"
                     className="w-full h-16 flex-col space-y-1 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200 hover:shadow-md"
-                    aria-label="Schedule transfusion"
+                    aria-label="Programmer une transfusion"
                   >
                     <Calendar className="h-5 w-5" />
-                    <span className="text-xs">Schedule</span>
+                    <span className="text-xs">Programmer</span>
                   </Button>
                 </Link>
                 <Link href="/analytics">
                   <Button
                     variant="outline"
                     className="w-full h-16 flex-col space-y-1 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200 hover:shadow-md"
-                    aria-label="View analytics"
+                    aria-label="Voir les analyses"
                   >
                     <BarChart3 className="h-5 w-5" />
-                    <span className="text-xs">Analytics</span>
+                    <span className="text-xs">Analyses</span>
                   </Button>
                 </Link>
                 <Link href="/patients">
                   <Button
                     variant="outline"
                     className="w-full h-16 flex-col space-y-1 border-gray-200 hover:bg-gray-50 focus-ring transition-all duration-200 hover:shadow-md"
-                    aria-label="View all patients"
+                    aria-label="Voir tous les patients"
                   >
                     <Users className="h-5 w-5" />
                     <span className="text-xs">Patients</span>

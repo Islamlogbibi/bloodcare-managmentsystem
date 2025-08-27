@@ -11,7 +11,7 @@ export default function PrintButton() {
   return (
     <Button variant="outline" onClick={handlePrint}>
       <Printer className="mr-2 h-4 w-4" />
-      Print
+      Imprimer
     </Button>
   )
 }

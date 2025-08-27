@@ -107,48 +107,23 @@ export function SettingsForm() {
     department: "hematology",
   })
 
-  const [notifications, setNotifications] = useState({
-    urgentCaseAlerts: true,
-    dailyReports: false,
-    systemMaintenance: true,
-  })
+ 
 
-  const [systemSettings, setSystemSettings] = useState({
-    timezone: "est",
-    language: "en",
-    dateFormat: "mdy",
-    autoSave: true,
-  })
+ 
 
   // Current language text based on system settings
-  const [currentLang, setCurrentLang] = useState(languages.en)
+  const [currentLang, setCurrentLang] = useState(languages.fr)
 
   useEffect(() => {
     // Load saved settings from localStorage if available
     const savedProfileData = localStorage.getItem("profileData")
-    const savedNotifications = localStorage.getItem("notificationSettings")
-    const savedSystemSettings = localStorage.getItem("systemSettings")
+    
 
     if (savedProfileData) {
       setProfileData(JSON.parse(savedProfileData))
     }
 
-    if (savedNotifications) {
-      setNotifications(JSON.parse(savedNotifications))
-    }
-
-    if (savedSystemSettings) {
-      const parsedSettings = JSON.parse(savedSystemSettings)
-      setSystemSettings(parsedSettings)
-
-      // Set the current language based on saved settings
-      if (parsedSettings.language && languages[parsedSettings.language as keyof typeof languages]) {
-        setCurrentLang(languages[parsedSettings.language as keyof typeof languages])
-
-        // Apply language to document
-        document.documentElement.lang = parsedSettings.language
-      }
-    }
+    
   }, [])
 
   const handleProfileSave = async () => {
@@ -178,44 +153,9 @@ export function SettingsForm() {
     }
   }
 
-  const handleNotificationChange = (key: string, value: boolean) => {
-    const updatedNotifications = { ...notifications, [key]: value }
-    setNotifications(updatedNotifications)
+  
 
-    // Save to localStorage
-    localStorage.setItem("notificationSettings", JSON.stringify(updatedNotifications))
-
-    toast({
-      title: "Notification Settings Updated",
-      description: `${key.replace(/([A-Z])/g, " $1").toLowerCase()} ${value ? "enabled" : "disabled"}.`,
-    })
-  }
-
-  const handleSystemSettingChange = (key: string, value: string | boolean) => {
-    const updatedSettings = { ...systemSettings, [key]: value }
-    setSystemSettings(updatedSettings)
-
-    // Save to localStorage
-    localStorage.setItem("systemSettings", JSON.stringify(updatedSettings))
-
-    // If language is changed, update the current language
-    if (key === "language" && typeof value === "string") {
-      setCurrentLang(languages[value as keyof typeof languages])
-      document.documentElement.lang = value
-
-      // Trigger a custom event for site-wide language change
-      window.dispatchEvent(
-        new CustomEvent("languageChanged", {
-          detail: { language: value },
-        }),
-      )
-    }
-
-    toast({
-      title: "System Settings Updated",
-      description: `${key.replace(/([A-Z])/g, " $1").toLowerCase()} updated successfully.`,
-    })
-  }
+  
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -279,125 +219,6 @@ export function SettingsForm() {
         </CardContent>
       </Card>
 
-      {/* Notification Settings */}
-      <Card className="border-0 shadow-md">
-        <CardHeader>
-          <CardTitle className="flex items-center text-gray-900">
-            <Bell className="mr-2 h-5 w-5 text-yellow-600" />
-            {currentLang.notificationSettings}
-          </CardTitle>
-          <CardDescription>{currentLang.configureNotifications}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <br></br>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>{currentLang.urgentCaseAlerts}</Label>
-              <p className="text-sm text-gray-500">{currentLang.getNotifiedEmergency}</p>
-            </div>
-            <Switch
-              checked={notifications.urgentCaseAlerts}
-              onCheckedChange={(checked) => handleNotificationChange("urgentCaseAlerts", checked)}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>{currentLang.dailyReports}</Label>
-              <p className="text-sm text-gray-500">{currentLang.receiveDailySummary}</p>
-            </div>
-            <Switch
-              checked={notifications.dailyReports}
-              onCheckedChange={(checked) => handleNotificationChange("dailyReports", checked)}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>{currentLang.systemMaintenance}</Label>
-              <p className="text-sm text-gray-500">{currentLang.notificationsAboutSystem}</p>
-            </div>
-            <Switch
-              checked={notifications.systemMaintenance}
-              onCheckedChange={(checked) => handleNotificationChange("systemMaintenance", checked)}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* System Settings - Full Width */}
-      <Card className="border-0 shadow-md md:col-span-2">
-        <CardHeader>
-          <CardTitle className="flex items-center text-gray-900">
-            <Database className="mr-2 h-5 w-5 text-purple-600" />
-            {currentLang.systemSettings}
-          </CardTitle>
-          <CardDescription>{currentLang.configureSystem}</CardDescription>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="timezone">{currentLang.timezone}</Label>
-              <Select
-                value={systemSettings.timezone}
-                onValueChange={(value) => handleSystemSettingChange("timezone", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="est">Eastern Standard Time</SelectItem>
-                  <SelectItem value="cst">Central Standard Time</SelectItem>
-                  <SelectItem value="mst">Mountain Standard Time</SelectItem>
-                  <SelectItem value="pst">Pacific Standard Time</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="language">{currentLang.language}</Label>
-              <Select
-                value={systemSettings.language}
-                onValueChange={(value) => handleSystemSettingChange("language", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
-                  <SelectItem value="fr">Français</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="dateFormat">{currentLang.dateFormat}</Label>
-              <Select
-                value={systemSettings.dateFormat}
-                onValueChange={(value) => handleSystemSettingChange("dateFormat", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="mdy">MM/DD/YYYY</SelectItem>
-                  <SelectItem value="dmy">DD/MM/YYYY</SelectItem>
-                  <SelectItem value="ymd">YYYY-MM-DD</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label>{currentLang.autoSave}</Label>
-                <p className="text-sm text-gray-500">{currentLang.automaticallySave}</p>
-              </div>
-              <Switch
-                checked={systemSettings.autoSave}
-                onCheckedChange={(checked) => handleSystemSettingChange("autoSave", checked)}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

@@ -60,14 +60,14 @@ export function PatientPageActions({ searchParams }: PatientPageActionsProps) {
       document.body.removeChild(a)
 
       toast({
-        title: t("exportSuccess") || "Export Successful",
-        description: t("patientsExportedSuccessfully") || "Patients exported successfully",
+        title: t("exportSuccess") || "Exportation Réussie",
+        description: t("patientsExportedSuccessfully") || "Patients exportés avec succès",
       })
     } catch (error) {
       console.error("Export error:", error)
       toast({
-        title: t("exportError") || "Export Error",
-        description: t("failedToExportPatients") || "Failed to export patients",
+        title: t("exportError") || "Erreur d'Exportation",
+        description: t("failedToExportPatients") || "Échec de l'exportation des patients",
         variant: "destructive",
       })
     }
@@ -75,13 +75,13 @@ export function PatientPageActions({ searchParams }: PatientPageActionsProps) {
 
   return (
     <>
-      <Button variant="outline" className="border-gray-300" onClick={handleExport}>
+      <Button variant="outline" className="border-gray-300 bg-transparent" onClick={handleExport}>
         <Download className="mr-2 h-4 w-4" />
-        {t("export") || "Export"}
+        {t("export") || "Exporter"}
       </Button>
-      <Button variant="outline" className="border-gray-300" onClick={handlePrint}>
+      <Button variant="outline" className="border-gray-300 bg-transparent" onClick={handlePrint}>
         <Printer className="mr-2 h-4 w-4" />
-        {t("printList") || "Print List"}
+        {t("printList") || "Imprimer la Liste"}
       </Button>
     </>
   )

@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Clock, AlertTriangle } from "lucide-react"
+import { Calendar } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { toast } from "@/hooks/use-toast"
 import { scheduleTransfusion } from "@/app/lib/actions"
@@ -38,7 +38,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
       const today = new Date()
       const scheduledDate = priority === "today" ? today : new Date(today.getTime() + 24 * 60 * 60 * 1000)
       const scheduledTime = priority === "today" ? "14:00" : "09:00"
-        priority = "regular"
+      priority = "regular"
       await scheduleTransfusion({
         patientId: patient._id,
         scheduledDate: scheduledDate.toISOString(),
@@ -48,11 +48,11 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
         notes: `Quick scheduled as ${priority} case for ${patient.firstName} ${patient.lastName}`,
       })
 
-      const scheduledTimeText = "tomorrow at 9:00 AM"
+      const scheduledTimeText = "demain à 9h00"
 
       toast({
         title: t("scheduleTransfusion"),
-        description: `${patient.firstName} ${patient.lastName} scheduled for ${scheduledTimeText}`,
+        description: `${patient.firstName} ${patient.lastName} programmé pour ${scheduledTimeText}`,
       })
 
       setIsOpen(false)
@@ -61,7 +61,7 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
       console.error("Scheduling error:", error)
       toast({
         title: t("error"),
-        description: "Failed to schedule transfusion. Please try again.",
+        description: "Échec de la programmation de la transfusion. Veuillez réessayer.",
         variant: "destructive",
       })
     } finally {
@@ -79,20 +79,20 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
             {t("scheduleTransfusion")}
           </DialogTitle>
           <DialogDescription>
-            Schedule a blood transfusion for {patient.firstName} {patient.lastName}
+            Planifier une transfusion sanguine pour {patient.firstName} {patient.lastName}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-medium">Patient:</span>
+              <span className="font-medium">Patient :</span>
               <span>
                 {patient.firstName} {patient.lastName}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-medium">Blood Type:</span>
+              <span className="font-medium">Groupe Sanguin :</span>
               <Badge variant="outline" className="border-red-200 text-red-700">
                 {patient.bloodType}
               </Badge>
@@ -100,34 +100,32 @@ export function Schedule({ patient, children }: QuickScheduleDialogProps) {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">Select Priority:</h4>
+            <h4 className="font-medium text-gray-900">Sélectionner la Priorité :</h4>
 
             <Button
               variant="outline"
-              className="w-full justify-start h-auto p-4 border-blue-200 hover:bg-blue-50"
+              className="w-full justify-start h-auto p-4 border-blue-200 hover:bg-blue-50 bg-transparent"
               onClick={() => handleSchedule("regular")}
               disabled={isScheduling}
             >
               <div className="flex items-center gap-3">
-                
                 <div className="text-left">
                   <div className="font-medium">{t("tomorrow")}</div>
-                  <div className="text-sm text-gray-500">Tomorrow</div>
+                  <div className="text-sm text-gray-500">Demain</div>
                 </div>
               </div>
             </Button>
 
             <Button
               variant="outline"
-              className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50"
+              className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50 bg-transparent"
               onClick={() => handleSchedule("today")}
               disabled={isScheduling}
             >
               <div className="flex items-center gap-3">
-                
                 <div className="text-left">
                   <div className="font-medium">{t("today")}</div>
-                  <div className="text-sm text-gray-500">Today</div>
+                  <div className="text-sm text-gray-500">Aujourd'hui</div>
                 </div>
               </div>
             </Button>

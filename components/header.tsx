@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Bell, Search, Settings, User } from "lucide-react"
+import { Search, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -17,8 +17,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function Header() {
   const [profileData, setProfileData] = useState({
-    fullName: "Dr. Sarah Wilson",
-    email: "sarah.wilson@hospital.com",
+    fullName: "Pr. brouk hassen",
+    email: "brouk.hassen@univ-annaba.com",
     department: "hematology",
   })
 
@@ -61,53 +61,20 @@ export function Header() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search..."
+              placeholder="Rechercher..."
               className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
             />
           </div>
         </form>
-        <Button variant="outline" size="icon" className="h-8 w-8 md:hidden">
+        <Button variant="outline" size="icon" className="h-8 w-8 md:hidden bg-transparent">
           <Search className="h-4 w-4" />
-          <span className="sr-only">Search</span>
+          <span className="sr-only">Rechercher</span>
         </Button>
       </div>
       <div className="flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full">
-              <Bell className="h-4 w-4" />
-              <span className="sr-only">Notifications</span>
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-medium text-white">
-                3
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <div className="flex flex-col gap-1">
-                <span className="text-sm font-medium">Urgent transfusion scheduled</span>
-                <span className="text-xs text-gray-500">5 minutes ago</span>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex flex-col gap-1">
-                <span className="text-sm font-medium">New patient registered</span>
-                <span className="text-xs text-gray-500">2 hours ago</span>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex flex-col gap-1">
-                <span className="text-sm font-medium">System maintenance scheduled</span>
-                <span className="text-xs text-gray-500">1 day ago</span>
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="rounded-full pl-1 pr-3">
+            <Button variant="outline" size="sm" className="rounded-full pl-1 pr-3 bg-transparent">
               <Avatar className="h-6 w-6 mr-2">
                 <AvatarFallback className="bg-red-100 text-red-800 text-xs">
                   {getInitials(profileData.fullName)}
@@ -117,16 +84,14 @@ export function Header() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link href="/settings" className="flex items-center">
                 <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+                <span>Paramètres</span>
               </Link>
             </DropdownMenuItem>
-            
-            
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

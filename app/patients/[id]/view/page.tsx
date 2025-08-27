@@ -29,27 +29,27 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
             <Link href="/patients">
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Patients
+                Retour aux Patients
               </Button>
             </Link>
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-gray-900">
                 {patient.firstName} {patient.lastName}
               </h1>
-              <p className="text-gray-600 mt-1">Patient ID: {patient._id.slice(-6).toUpperCase()}</p>
+              <p className="text-gray-600 mt-1">ID Patient : {patient._id.slice(-6).toUpperCase()}</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <Link href={`/transfusions/schedule/${patient._id}`}>
               <Button variant="outline" className="border-gray-300">
                 <Calendar className="mr-2 h-4 w-4" />
-                Schedule Transfusion
+                Planifier une Transfusion
               </Button>
             </Link>
             <Link href={`/patients/${patient._id}/edit`}>
               <Button className="bg-red-600 hover:bg-red-700">
                 <Edit className="mr-2 h-4 w-4" />
-                Edit Patient
+                Modifier le Patient
               </Button>
             </Link>
           </div>
@@ -61,35 +61,35 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
             <CardHeader>
               <CardTitle className="flex items-center text-gray-900">
                 <User className="mr-2 h-5 w-5 text-blue-600" />
-                Personal Information
+                Informations Personnelles
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">First Name</p>
+                  <p className="text-sm font-medium text-gray-500">Prénom</p>
                   <p className="text-gray-900">{patient.firstName}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Last Name</p>
+                  <p className="text-sm font-medium text-gray-500">Nom</p>
                   <p className="text-gray-900">{patient.lastName}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Date of Birth</p>
+                  <p className="text-sm font-medium text-gray-500">Date de Naissance</p>
                   <p className="text-gray-900">
-                    {patient.dateOfBirth ? format(new Date(patient.dateOfBirth), "MMM dd, yyyy") : "N/A"}
+                    {patient.dateOfBirth ? format(new Date(patient.dateOfBirth), "dd MMM yyyy") : "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Age</p>
-                  <p className="text-gray-900">{age} years</p>
+                  <p className="text-sm font-medium text-gray-500">Âge</p>
+                  <p className="text-gray-900">{age} ans</p>
                 </div>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Gender</p>
-                <p className="text-gray-900 capitalize">{patient.gender}</p>
+                <p className="text-sm font-medium text-gray-500">Sexe</p>
+                <p className="text-gray-900 capitalize">{patient.gender === "male" ? "Masculin" : patient.gender === "female" ? "Féminin" : patient.gender}</p>
               </div>
             </CardContent>
           </Card>
@@ -99,12 +99,12 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
             <CardHeader>
               <CardTitle className="flex items-center text-gray-900">
                 <Phone className="mr-2 h-5 w-5 text-green-600" />
-                Contact Information
+                Informations de Contact
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-500">Phone Number</p>
+                <p className="text-sm font-medium text-gray-500">Numéro de Téléphone</p>
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4 text-gray-400" />
                   <p className="text-gray-900">{patient.phone}</p>
@@ -120,12 +120,12 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
                 </div>
               )}
               <div>
-                <p className="text-sm font-medium text-gray-500">Address</p>
-                <p className="text-gray-900">{patient.address || "Not provided"}</p>
+                <p className="text-sm font-medium text-gray-500">Adresse</p>
+                <p className="text-gray-900">{patient.address || "Non fournie"}</p>
               </div>
               {patient.emergencyContact && (
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Emergency Contact</p>
+                  <p className="text-sm font-medium text-gray-500">Contact d'Urgence</p>
                   <p className="text-gray-900">{patient.emergencyContact}</p>
                   <p className="text-sm text-gray-600">{patient.emergencyPhone}</p>
                 </div>
@@ -138,13 +138,13 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
             <CardHeader>
               <CardTitle className="flex items-center text-gray-900">
                 <Heart className="mr-2 h-5 w-5 text-red-600" />
-                Medical Information
+                Informations Médicales
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                <p className="text-sm font-medium text-gray-500">Blood Type</p>
+                <p className="text-sm font-medium text-gray-500">Groupe Sanguin</p>
                 <Badge className="bg-red-100 text-red-800 font-semibold">{patient.bloodType}</Badge>
                 </div>
                 <div>
@@ -155,21 +155,21 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
               
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Weight</p>
+                  <p className="text-sm font-medium text-gray-500">Poids</p>
                   <p className="text-gray-900">{patient.weight ? `${patient.weight} kg` : "N/A"}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Height</p>
+                  <p className="text-sm font-medium text-gray-500">Taille</p>
                   <p className="text-gray-900">{patient.height ? `${patient.height} cm` : "N/A"}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Hemoglobin</p>
+                  <p className="text-sm font-medium text-gray-500">Hémoglobine</p>
                   <p className="text-gray-900">{patient.hemoglobinLevel ? `${patient.hemoglobinLevel} g/dL` : "N/A"}</p>
                 </div>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Medical History</p>
-                <p className="text-gray-900 text-sm">{patient.medicalHistory || "No medical history recorded"}</p>
+                <p className="text-sm font-medium text-gray-500">Antécédents Médicaux</p>
+                <p className="text-gray-900 text-sm">{patient.medicalHistory || "Aucun antécédent médical enregistré"}</p>
               </div>
             </CardContent>
           </Card>
@@ -179,28 +179,28 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
             <CardHeader>
               <CardTitle className="flex items-center text-gray-900">
                 <Clock className="mr-2 h-5 w-5 text-purple-600" />
-                Donation History
+                Historique des Dons
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-500">Admission Date</p>
+                <p className="text-sm font-medium text-gray-500">Date d'Admission</p>
                 <p className="text-gray-900">
-                  {patient.admissionDate ? format(new Date(patient.admissionDate), "MMM dd, yyyy") : "N/A"}
+                  {patient.admissionDate ? format(new Date(patient.admissionDate), "dd MMM yyyy") : "N/A"}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Last Donation</p>
+                <p className="text-sm font-medium text-gray-500">Dernier Don</p>
                 <p className="text-gray-900">
                   {patient.lastDonationDate
-                    ? format(new Date(patient.lastDonationDate), "MMM dd, yyyy")
-                    : "Never donated"}
+                    ? format(new Date(patient.lastDonationDate), "dd MMM yyyy")
+                    : "Jamais donné"}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Status</p>
+                <p className="text-sm font-medium text-gray-500">Statut</p>
                 <Badge variant="outline" className="border-green-200 text-green-700">
-                  Active Patient
+                  Patient Actif
                 </Badge>
               </div>
             </CardContent>
