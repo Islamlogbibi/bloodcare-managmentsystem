@@ -56,13 +56,16 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         (patient.poches === null || patient.poches === 0 || patient.poches === undefined) &&
         parsedPoches && parsedPoches > 0
       ) {
-        patientData.lastDonationDate = new Date();
+        
       }
 
       if (isEditing && patient) {
-        
+        if (patient.poches !== 0){
+          patientData.lastDonationDate = new Date();
+        }
         await updatePatient(patient._id, patientData)
         await updatehistory(data)
+        
         toast({
           title: "Patient mis à jour",
           description: "Les informations du patient ont été mises à jour avec succès.",
