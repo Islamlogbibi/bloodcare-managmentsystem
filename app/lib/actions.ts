@@ -161,7 +161,7 @@ export async function updatePatient(id: string, patientData: any) {
         },
       },
     )
-
+    
     revalidatePath("/patients")
     return { success: true, result }
   } catch (error) {

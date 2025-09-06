@@ -43,7 +43,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                 <TableHead>C</TableHead>
                 <TableHead>L</TableHead>
                 <TableHead>Hb</TableHead>
-                <TableHead>Hb après</TableHead>
+                <TableHead>Hb PT</TableHead>
                 <TableHead>Poches</TableHead>
                 <TableHead>H.dist</TableHead>
                 <TableHead>H.reçu</TableHead>

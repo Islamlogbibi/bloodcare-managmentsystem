@@ -40,6 +40,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         poches: parsedPoches,
         hb: hb ? parseFloat(hb) : undefined,
         don,
+        lastDonationDate: patient.lastDonationDate,
       };
       const data: any = {
         patientId: patient?._id,
@@ -60,11 +61,12 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
       }
 
       if (isEditing && patient) {
-        if (patient.poches !== 0){
+        if (patientData.poches == 1 || patientData.poches == 2){
           patientData.lastDonationDate = new Date();
         }
         await updatePatient(patient._id, patientData)
         await updatehistory(data)
+        
         
         toast({
           title: "Patient mis à jour",
@@ -78,6 +80,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         })
       }
 
+      
+
       router.push("/transfusions/today")
     } catch (error) {
       toast({
@@ -88,6 +92,7 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
     } finally {
       setIsLoading(false)
     }
+    
   }
 
   return (

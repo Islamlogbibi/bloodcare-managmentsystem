@@ -24,7 +24,7 @@ export default async function HistoryPageEdit({ params }: EditPageProps) {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <h2 className="text-3xl font-bold tracking-tight">
-        Modifier HbF du {decodedDate}
+        Modifier Hb Post Transfusion du {decodedDate}
       </h2>
 
       <Hbfform
