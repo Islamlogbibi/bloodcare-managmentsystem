@@ -205,8 +205,8 @@ export function SettingsForm() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hematology">Hematology</SelectItem>
-                <SelectItem value="emergency">Emergency</SelectItem>
+                <SelectItem value="hematology">Hemobiology</SelectItem>
+                <SelectItem value="emergency">Ergance</SelectItem>
                 <SelectItem value="surgery">Surgery</SelectItem>
                 <SelectItem value="administration">Administration</SelectItem>
               </SelectContent>
