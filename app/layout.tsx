@@ -1,18 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import ClientLayout from "./client-layout"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Sidebar } from "@/components/sidebar"
-import { Header } from "@/components/header"
-import { Toaster } from "@/components/ui/toaster"
-import { LanguageProvider } from "@/contexts/language-context"
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-})
 
 export const metadata: Metadata = {
   title: {
@@ -65,28 +54,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <LanguageProvider>
-            <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-              <Sidebar />
-              <div className="flex flex-col flex-1 overflow-hidden">
-                <Header />
-                <main className="flex-1 overflow-x-hidden overflow-y-auto" role="main" aria-label="Main content">
-                  {children}
-                </main>
-              </div>
-            </div>
-            <Toaster />
-          </LanguageProvider>
-        </ThemeProvider>
-      </body>
-    </html>
-  )
+  return <ClientLayout>{children}</ClientLayout>
 }
