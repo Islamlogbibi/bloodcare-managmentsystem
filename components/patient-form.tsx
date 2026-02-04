@@ -98,6 +98,8 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
         hasC: formData.get("hasC") === "on",
         hasL: formData.get("hasL") === "on",
         patientCategory: formData.get("patientCategory") as string,
+        pathologie: formData.get("pathologie") as string,
+        alloImmunisationStatus: formData.get("alloImmunisationStatus") as string,
       }
 
       if (isEditing && patient) {
@@ -474,6 +476,35 @@ export function PatientForm({ patient, isEditing = false }: PatientFormProps) {
                 <SelectItem value="Echanges Occasionnels">Échanges Occasionnels</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="pathologie" className="text-sm font-medium text-gray-700">
+                Pathologie
+              </Label>
+              <Textarea
+                id="pathologie"
+                name="pathologie"
+                defaultValue={patient?.pathologie}
+                rows={3}
+                placeholder="Saisir la pathologie du patient..."
+                className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="alloImmunisationStatus" className="text-sm font-medium text-gray-700">
+                Statut d'Allo-immunisation
+              </Label>
+              <Textarea
+                id="alloImmunisationStatus"
+                name="alloImmunisationStatus"
+                defaultValue={patient?.alloImmunisationStatus}
+                rows={3}
+                placeholder="Saisir le statut d'allo-immunisation..."
+                className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

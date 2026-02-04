@@ -41,8 +41,11 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
 
     if (hbSortOrder) {
       filtered = [...filtered].sort((a, b) => {
-        const hbA = Number.parseFloat(a.patient.hb) || 0
-        const hbB = Number.parseFloat(b.patient.hb) || 0
+        // Fallback: use transfusion hb if available, else patient hb
+        const hbAVal = a.hb || a.patient.hb
+        const hbBVal = b.hb || b.patient.hb
+        const hbA = Number.parseFloat(hbAVal) || 0
+        const hbB = Number.parseFloat(hbBVal) || 0
 
         if (hbSortOrder === "asc") {
           return hbA - hbB
@@ -307,46 +310,60 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                       {transfusion.patient.ph}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center">
-                    {transfusion.patient.hasF ? (
-                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                        <span className="text-white text-xs">✓</span>
-                      </div>
-                    ) : (
-                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {transfusion.patient.hasC ? (
-                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                        <span className="text-white text-xs">✓</span>
-                      </div>
-                    ) : (
-                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {transfusion.patient.hasL ? (
-                      <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                        <span className="text-white text-xs">✓</span>
-                      </div>
-                    ) : (
-                      <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      className={
-                        transfusion.priority === "urgent" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"
-                      }
-                    >
-                      {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                      {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="font-semibold">{transfusion.patient.poches}</TableCell>
-                  <TableCell className="font-semibold">{transfusion.patient.hb}</TableCell>
-                  <TableCell>{transfusion.patient.don}</TableCell>
+                  {(() => {
+                    // Fallback logic: use transfusion data if available, else use patient data
+                    const hasF = transfusion.hasF !== undefined ? transfusion.hasF : transfusion.patient.hasF
+                    const hasC = transfusion.hasC !== undefined ? transfusion.hasC : transfusion.patient.hasC
+                    const hasL = transfusion.hasL !== undefined ? transfusion.hasL : transfusion.patient.hasL
+                    const poches = transfusion.poches || transfusion.patient.poches
+                    const hb = transfusion.hb || transfusion.patient.hb
+                    const description = transfusion.description || transfusion.patient.don
+                    
+                    return (
+                      <>
+                        <TableCell className="text-center">
+                          {hasF ? (
+                            <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                              <span className="text-white text-xs">✓</span>
+                            </div>
+                          ) : (
+                            <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {hasC ? (
+                            <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                              <span className="text-white text-xs">✓</span>
+                            </div>
+                          ) : (
+                            <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {hasL ? (
+                            <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                              <span className="text-white text-xs">✓</span>
+                            </div>
+                          ) : (
+                            <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              transfusion.priority === "urgent" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"
+                            }
+                          >
+                            {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
+                            {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="font-semibold">{poches}</TableCell>
+                        <TableCell className="font-semibold">{hb}</TableCell>
+                        <TableCell>{description}</TableCell>
+                      </>
+                    )
+                  })()}
                   <TableCell className="print:hidden flex items-center space-x-2">
                     <div className="flex items-center space-x-2">
                       {transfusion.status !== "completed" && (
@@ -497,46 +514,60 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                           {transfusion.patient.ph}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-center">
-                        {transfusion.patient.hasF ? (
-                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {transfusion.patient.hasC ? (
-                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {transfusion.patient.hasL ? (
-                          <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          className={
-                            transfusion.priority === "urgent" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"
-                          }
-                        >
-                          {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
-                          {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="font-semibold">{transfusion.patient.poches}</TableCell>
-                      <TableCell className="font-semibold">{transfusion.patient.hb}</TableCell>
-                      <TableCell>{transfusion.patient.don}</TableCell>
+                      {(() => {
+                        // Fallback logic for second table
+                        const hasF2 = transfusion.hasF !== undefined ? transfusion.hasF : transfusion.patient.hasF
+                        const hasC2 = transfusion.hasC !== undefined ? transfusion.hasC : transfusion.patient.hasC
+                        const hasL2 = transfusion.hasL !== undefined ? transfusion.hasL : transfusion.patient.hasL
+                        const poches2 = transfusion.poches || transfusion.patient.poches
+                        const hb2 = transfusion.hb || transfusion.patient.hb
+                        const description2 = transfusion.description || transfusion.patient.don
+                        
+                        return (
+                          <>
+                            <TableCell className="text-center">
+                              {hasF2 ? (
+                                <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                                  <span className="text-white text-xs">✓</span>
+                                </div>
+                              ) : (
+                                <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {hasC2 ? (
+                                <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                                  <span className="text-white text-xs">✓</span>
+                                </div>
+                              ) : (
+                                <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {hasL2 ? (
+                                <div className="w-4 h-4 bg-purple-500 rounded-sm flex items-center justify-center mx-auto">
+                                  <span className="text-white text-xs">✓</span>
+                                </div>
+                              ) : (
+                                <div className="w-4 h-4 border border-gray-300 rounded-full mx-auto"></div>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                className={
+                                  transfusion.priority === "urgent" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"
+                                }
+                              >
+                                {transfusion.priority === "urgent" && <AlertTriangle className="h-3 w-3 mr-1" />}
+                                {transfusion.priority === "urgent" ? "Urgent" : "Normal"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="font-semibold">{poches2}</TableCell>
+                            <TableCell className="font-semibold">{hb2}</TableCell>
+                            <TableCell>{description2}</TableCell>
+                          </>
+                        )
+                      })()}
 
                       <TableCell className="hidden print:table-cell">
                         <Badge className="bg-green-100 text-green-800">Présent</Badge>
