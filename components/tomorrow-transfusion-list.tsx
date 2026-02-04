@@ -7,6 +7,9 @@ import { Clock, Phone, CheckCircle, AlertTriangle, Plus, Printer } from "lucide-
 import { format } from "date-fns"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useLanguage } from "@/contexts/language-context"
+import { deleteTransfusionById } from "@/app/lib/actions"
+import { useRouter } from "next/navigation"
+import { toast } from "@/components/ui/use-toast"
 import { useState } from "react"
 
 interface TomorrowTransfusionListProps {
@@ -15,12 +18,37 @@ interface TomorrowTransfusionListProps {
 
 export function TomorrowTransfusionList({ transfusions: initialTransfusions }: TomorrowTransfusionListProps) {
   const { t } = useLanguage()
-  const [transfusions] = useState(initialTransfusions)
+  const [transfusions, setTransfusions] = useState(initialTransfusions)
+  const router = useRouter()
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   // Grouper les transfusions par statut
   const pendingTransfusions = transfusions.filter((t) => t.status !== "completed")
   const completedTransfusions = transfusions.filter((t) => t.status === "completed")
-  
+  const handleRemove = async (transfusionId: string) => {
+    const confirm = window.confirm("Êtes-vous sûr de vouloir supprimer cette transfusion ?")
+    if (!confirm) return
+
+    setDeletingId(transfusionId)
+    try {
+      await deleteTransfusionById(transfusionId)
+      setTransfusions((prev) => prev.filter((t) => t._id !== transfusionId))
+      toast({
+        title: "Supprimé",
+        description: "Transfusion supprimée avec succès.",
+      })
+      router.refresh()
+    } catch (err) {
+      console.error("Failed to delete transfusion:", err)
+      toast({
+        title: "Erreur",
+        description: "Échec de la suppression de la transfusion.",
+        variant: "destructive",
+      })
+    } finally {
+      setDeletingId(null)
+    }
+  }
   const handlePrint = () => {
     window.print()
   }
@@ -137,6 +165,15 @@ export function TomorrowTransfusionList({ transfusions: initialTransfusions }: T
                       <Phone className="h-3 w-3 mr-1" />
                       {transfusion.patient.phone}
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleRemove(transfusion._id)}
+                    >
+                      Supprimer
+                    </Button>
                   </TableCell>
                 </TableRow>
               )

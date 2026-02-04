@@ -10,15 +10,16 @@ import PrintButton from "./Button"
 
 export default async function HistoryPage({ params }: { params: { id: string } }) {
   const patient = await getPatientById(params.id)
-  
+
   if (!patient) return <div>Patient non trouvé</div>
 
   const today = new Date()
-  
+
   // Only include past schedules
-  const pastSchedules = patient.schedules?.filter((schedule: any) => {
-    return new Date(schedule.date) <= today
-  }) ?? []
+  const pastSchedules =
+    patient.schedules?.filter((schedule: any) => {
+      return new Date(schedule.date) <= today
+    }) ?? []
 
   return (
     <div className="space-y-4 p-4">
@@ -26,8 +27,33 @@ export default async function HistoryPage({ params }: { params: { id: string } }
         <PrintButton />
       </div>
 
-      <h1 className="text-2xl font-bold">Historique des Transfusions</h1>
+      {/* Patient Info Block */}
+      <div className="print-area">
+        
+      </div>
+      <div className="patient-info print-header border rounded-lg p-4 bg-gray-50">
+        <h1 className="text-2xl font-bold">Service d'Hémobiologie et Transfusion Sanguine </h1>
+        <h2 className="text-xl font-semibold mb-2">
+          Patient :{" "}
+          {patient.firstName && patient.lastName
+            ? `${patient.firstName} ${patient.lastName}`
+            : patient.name || "Nom non disponible"}
+        </h2>
+        <p>
+          <span className="font-semibold">Groupe Sanguin :</span>{" "}
+          {patient.bloodType || "N/A"}
+        </p>
+        <p>
+          <span className="font-semibold">Phénotype :</span>{" "}
+          {patient.ph || "N/A"}
+          
+        </p>
+        
+      </div>
+
       
+      <h1 className="text-2xl font-bold">Historique des Transfusions</h1>
+
       {pastSchedules.length === 0 ? (
         <p>Aucun programme antérieur.</p>
       ) : (
@@ -43,7 +69,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                 <TableHead>C</TableHead>
                 <TableHead>L</TableHead>
                 <TableHead>Hb</TableHead>
-                <TableHead>Hb après</TableHead>
+                <TableHead>Hb PT</TableHead>
                 <TableHead>Poches</TableHead>
                 <TableHead>H.dist</TableHead>
                 <TableHead>H.reçu</TableHead>
@@ -53,7 +79,7 @@ export default async function HistoryPage({ params }: { params: { id: string } }
             <TableBody>
               {pastSchedules.map((schedule: any, index: number) => (
                 <TableRow key={index}>
-                  <TableCell>{format(new Date(schedule.date), 'yyyy-MM-dd HH:mm')}</TableCell>
+                  <TableCell>{format(new Date(schedule.date), "yyyy-MM-dd HH:mm")}</TableCell>
                   <TableCell>
                     <Badge
                       className={
@@ -67,27 +93,28 @@ export default async function HistoryPage({ params }: { params: { id: string } }
                   </TableCell>
                   <TableCell>{schedule.bloodType}</TableCell>
                   <TableCell>{schedule.ph}</TableCell>
-                  <TableCell className="text-center">
-                    {schedule.hasF ? "✓" : ""}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {schedule.hasC ? "✓" : ""}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {schedule.hasL ? "✓" : ""}
-                  </TableCell>
+                  <TableCell className="text-center">{schedule.hasF ? "✓" : ""}</TableCell>
+                  <TableCell className="text-center">{schedule.hasC ? "✓" : ""}</TableCell>
+                  <TableCell className="text-center">{schedule.hasL ? "✓" : ""}</TableCell>
                   <TableCell>{schedule.hb}</TableCell>
                   <TableCell>{schedule.hbf || "-"}</TableCell>
                   <TableCell>{schedule.poches}</TableCell>
                   <TableCell>{schedule.Hdist}</TableCell>
                   <TableCell>{schedule.Hrecu}</TableCell>
                   <TableCell>
-                    <Link href={`/patients/${patient._id}/history/${new Date(schedule.date).toISOString().split("T")[0]}/edit`}>
-                      <Button variant="ghost" size="sm" className="h-8 w-20 p-0 hover:bg-blue-50">
+                    <Link
+                      href={`/patients/${patient._id}/history/${new Date(schedule.date)
+                        .toISOString()
+                        .split("T")[0]}/edit`}
+                    >
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-20 p-0 hover:bg-blue-50"
+                      >
                         <Edit className="h-4 w-4 text-blue-600" /> Modifier
                       </Button>
                     </Link>
-
                   </TableCell>
                 </TableRow>
               ))}

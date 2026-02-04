@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Home, Users, Clock, Calendar, BarChart3, Settings, X, Menu, Heart, Activity } from "lucide-react"
+import { Home, Users, Clock, Calendar, BarChart3, Settings, X, Menu, Heart, Activity, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function Sidebar() {
@@ -28,6 +28,7 @@ export function Sidebar() {
       description: "Rendez-vous de demain",
     },
     { name: "Historique", href: "/history", icon: BarChart3, description: "Voir l'historique" },
+    { name: "Analyse", href: "/analytics", icon: TrendingUp, description: "Analyses et rapports détaillés" },
     { name: "Paramètres", href: "/settings", icon: Settings, description: "Paramètres de l'application" },
   ]
 

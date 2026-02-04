@@ -32,9 +32,9 @@ export function Hbfform({ history, patientId, date, isEditing = false }: any) {
     <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle>HbF du {date}</CardTitle>
+          <CardTitle>Hb Post Transfusion du {date}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent> 
           <Input
             type="number"
             step="0.1"

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react"
 import { TodayTransfusionList } from "@/components/today-transfusion-list"
 import { getTodayTransfusions } from "@/app/lib/actions"
