@@ -101,10 +101,10 @@ const languages = {
 export function SettingsForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [profileData, setProfileData] = useState({
-    fullName: "Dr. brouk hassen",
-    email: "brouk.hassen@hospital.com",
+    fullName: "Pr. brouk hacene",
+    email: "brouk.hacene@hospital.com",
     phone: "0792299343",
-    department: "hematology",
+    department: "hemobiology",
   })
 
  
@@ -205,8 +205,8 @@ export function SettingsForm() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hematology">Hematology</SelectItem>
-                <SelectItem value="emergency">Emergency</SelectItem>
+                <SelectItem value="hematology">Hemobiology</SelectItem>
+                <SelectItem value="emergency">Ergance</SelectItem>
                 <SelectItem value="surgery">Surgery</SelectItem>
                 <SelectItem value="administration">Administration</SelectItem>
               </SelectContent>

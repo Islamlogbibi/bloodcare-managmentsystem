@@ -3,7 +3,9 @@
 export default function PrintStyles(){
     return (
         <style jsx global>{`
+
             @media print {
+              
               body {
                 font-size: 11pt;
                 background: white !important;
@@ -33,16 +35,7 @@ export default function PrintStyles(){
               }
             
               /* Add a print header */
-              .print-area::before {
-                content: "BloodCare - Patient Records Report";
-                display: block;
-                font-size: 16pt;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 20pt;
-                border-bottom: 2pt solid #dc2626;
-                padding-bottom: 10pt;
-              }
+              
             
               /* Table styling */
               table {
