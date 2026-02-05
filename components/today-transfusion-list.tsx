@@ -257,6 +257,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                 </div>
               </TableHead>
               <TableHead className="font-semibold text-gray-900">Don</TableHead>
+              <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Pathologie</TableHead>
               <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
               <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
             </TableRow>
@@ -318,6 +319,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     const poches = transfusion.poches || transfusion.patient.poches
                     const hb = transfusion.hb || transfusion.patient.hb
                     const description = transfusion.description || transfusion.patient.don
+                    const p = transfusion.patient
                     
                     return (
                       <>
@@ -361,6 +363,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         <TableCell className="font-semibold">{poches}</TableCell>
                         <TableCell className="font-semibold">{hb}</TableCell>
                         <TableCell>{description}</TableCell>
+                        <TableCell className="hidden print:table-cell text-sm">{p.pathologie || "-"}</TableCell>
                       </>
                     )
                   })()}
@@ -461,6 +464,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                     </div>
                   </TableHead>
                   <TableHead className="font-semibold text-gray-900">Don</TableHead>
+                  <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Pathologie</TableHead>
                   <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
                   <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
                 </TableRow>
@@ -522,7 +526,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                         const poches2 = transfusion.poches || transfusion.patient.poches
                         const hb2 = transfusion.hb || transfusion.patient.hb
                         const description2 = transfusion.description || transfusion.patient.don
-                        
+                        const p = transfusion.patient
                         return (
                           <>
                             <TableCell className="text-center">
@@ -565,6 +569,7 @@ export function TodayTransfusionList({ transfusions: initialTransfusions }: Toda
                             <TableCell className="font-semibold">{poches2}</TableCell>
                             <TableCell className="font-semibold">{hb2}</TableCell>
                             <TableCell>{description2}</TableCell>
+                            <TableCell className="hidden print:table-cell text-sm">{p.pathologie || "-"}</TableCell>
                           </>
                         )
                       })()}

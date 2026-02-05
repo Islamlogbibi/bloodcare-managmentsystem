@@ -41,7 +41,7 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
           </div>
           <div className="flex items-center space-x-3">
             <Link href={`/transfusions/schedule/${patient._id}`}>
-              <Button variant="outline" className="border-gray-300">
+              <Button variant="outline" className="border-gray-300 bg-transparent">
                 <Calendar className="mr-2 h-4 w-4" />
                 Planifier une Transfusion
               </Button>
@@ -170,6 +170,26 @@ export default async function ViewPatientPage({ params }: ViewPatientPageProps) 
               <div>
                 <p className="text-sm font-medium text-gray-500">Antécédents Médicaux</p>
                 <p className="text-gray-900 text-sm">{patient.medicalHistory || "Aucun antécédent médical enregistré"}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Additional Medical Information - Not printed */}
+          <Card className="border-0 shadow-md print:hidden">
+            <CardHeader>
+              <CardTitle className="flex items-center text-gray-900">
+                <Heart className="mr-2 h-5 w-5 text-orange-600" />
+                Informations Complémentaires
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Pathologie</p>
+                <p className="text-gray-900 text-sm">{patient.pathologie || "Non renseigné"}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Statut d'Allo-immunisation</p>
+                <p className="text-gray-900 text-sm">{patient.alloImmunisationStatus || "Non renseigné"}</p>
               </div>
             </CardContent>
           </Card>

@@ -381,6 +381,7 @@ export default function CalendarHistoryPage() {
                     <TableHead className="font-semibold text-gray-900">Poches</TableHead>
                     <TableHead className="font-semibold text-gray-900">Hb</TableHead>
                     <TableHead className="font-semibold text-gray-900">Don</TableHead>
+                    <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Pathologie</TableHead>
                     <TableHead className="font-semibold text-gray-900 print:hidden">Actions</TableHead>
                     <TableHead className="font-semibold text-gray-900 hidden print:table-cell">Présence</TableHead>
                   </TableRow>
@@ -410,8 +411,16 @@ export default function CalendarHistoryPage() {
                         <TableCell>{hdist || "-"}</TableCell>
                         <TableCell>{hrecu || "-"}</TableCell>
                         <TableCell>{p.firstName} {p.lastName}</TableCell>
-                        <TableCell>{p.bloodType}</TableCell>
-                        <TableCell>{p.ph || "-"}</TableCell>
+                        <TableCell>
+                          <Badge className="bg-red-100 text-red-800 font-semibold">
+                            {p.bloodType}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge className="bg-red-100 text-red-800 font-semibold">
+                            {p.ph || "-"}
+                          </Badge>
+                        </TableCell>
                         <TableCell className="text-center">{hasF ? "✓" : ""}</TableCell>
                         <TableCell className="text-center">{hasC ? "✓" : ""}</TableCell>
                         <TableCell className="text-center">{hasL ? "✓" : ""}</TableCell>
@@ -427,6 +436,7 @@ export default function CalendarHistoryPage() {
                         <TableCell className="text-center">{poches || "-"}</TableCell>
                         <TableCell className="text-center">{hb || "-"}</TableCell>
                         <TableCell>{transfusion.description || "-"}</TableCell>
+                        <TableCell className="hidden print:table-cell text-sm">{p.pathologie || "-"}</TableCell>
                         <TableCell className="print:hidden">
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -463,7 +473,9 @@ export default function CalendarHistoryPage() {
                           </AlertDialog>
                         </TableCell>
                         <TableCell className="hidden print:table-cell">
-                          ___
+                          <Badge className="bg-red-100 text-red-800 font-semibold">
+                            Présent
+                          </Badge>
                         </TableCell>
                       </TableRow>
                     )
