@@ -402,6 +402,7 @@ export default function CalendarHistoryPage() {
                     const hrecu = getValue(transfusion.Hrecu, p.Hrecu)
                     const hb = getValue(transfusion.hb, p.hb)
                     const poches = getValue(transfusion.poches, p.poches)
+                    const don = getValue(transfusion.don, p.don)
                     const hasF = transfusion.hasF !== undefined ? transfusion.hasF : p.hasF
                     const hasC = transfusion.hasC !== undefined ? transfusion.hasC : p.hasC
                     const hasL = transfusion.hasL !== undefined ? transfusion.hasL : p.hasL
@@ -435,7 +436,7 @@ export default function CalendarHistoryPage() {
                         </TableCell>
                         <TableCell className="text-center">{poches || "-"}</TableCell>
                         <TableCell className="text-center">{hb || "-"}</TableCell>
-                        <TableCell>{transfusion.description || "-"}</TableCell>
+                        <TableCell>{don || "-"}</TableCell>
                         <TableCell className="hidden print:table-cell text-sm">{p.pathologie || "-"}</TableCell>
                         <TableCell className="print:hidden">
                           <AlertDialog>
