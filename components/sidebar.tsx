@@ -4,33 +4,126 @@ import Link from "next/link"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Home, Users, Clock, Calendar, BarChart3, Settings, X, Menu, Heart, Activity, TrendingUp } from "lucide-react"
+import {
+  Home,
+  Users,
+  Clock,
+  Calendar,
+  BarChart3,
+  Settings,
+  X,
+  Menu,
+  Heart,
+  Activity,
+  TrendingUp,
+  UserCog,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/hooks/use-auth"
 
 export function Sidebar() {
   const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const { user } = useAuth()
 
   const navigation = [
-    { name: "Tableau de Bord", href: "/", icon: Home, description: "Vue d'ensemble et statistiques" },
-    { name: "Patients", href: "/patients", icon: Users, description: "Gérer les dossiers patients" },
+    {
+      name: "Tableau de Bord",
+      href: "/",
+      icon: Home,
+      description: "Vue d'ensemble et statistiques",
+      permission: null, // Available to all authenticated users
+    },
+    {
+      name: "Patients",
+      href: "/patients",
+      icon: Users,
+      description: "Gérer les dossiers patients",
+      permission: "canManagePatients" as const,
+    },
     {
       name: "Planning d'Aujourd'hui",
       href: "/transfusions/today",
       icon: Clock,
       description: "Rendez-vous d'aujourd'hui",
+      permission: "canScheduleTransfusions" as const,
     },
     {
       name: "Planning de Demain",
       href: "/transfusions/tomorrow",
       icon: Calendar,
       description: "Rendez-vous de demain",
+      permission: "canScheduleTransfusions" as const,
     },
-    { name: "Historique", href: "/history", icon: BarChart3, description: "Voir l'historique" },
-    { name: "Analyse", href: "/analytics", icon: TrendingUp, description: "Analyses et rapports détaillés" },
-    { name: "Paramètres", href: "/settings", icon: Settings, description: "Paramètres de l'application" },
+    {
+      name: "Historique",
+      href: "/history",
+      icon: BarChart3,
+      description: "Voir l'historique",
+      permission: "canViewReports" as const,
+    },
+    {
+      name: "Analyse",
+      href: "/analytics",
+      icon: TrendingUp,
+      description: "Analyses et rapports détaillés",
+      permission: "canViewAnalytics" as const,
+    },
+    {
+      name: "Utilisateurs",
+      href: "/users",
+      icon: UserCog,
+      description: "Gérer les comptes utilisateurs",
+      permission: "canManageUsers" as const,
+    },
+    {
+      name: "Paramètres",
+      href: "/settings",
+      icon: Settings,
+      description: "Paramètres de l'application",
+      permission: null, // Available to all authenticated users
+    },
   ]
+
+  const visibleNavigation = navigation.filter((item) => {
+    if (!item.permission) return true // Always show items without permission requirements
+    if (!user) return false // Hide all restricted items if no user
+
+    // Check if user has the required permission
+    const permissions = {
+      admin: {
+        canViewAnalytics: true,
+        canManageUsers: true,
+        canManagePatients: true,
+        canScheduleTransfusions: true,
+        canViewReports: true,
+        canExportData: true,
+        canManageSettings: true,
+      },
+      doctor: {
+        canViewAnalytics: true,
+        canManageUsers: false,
+        canManagePatients: true,
+        canScheduleTransfusions: true,
+        canViewReports: true,
+        canExportData: true,
+        canManageSettings: false,
+      },
+      assistant: {
+        canViewAnalytics: false,
+        canManageUsers: false,
+        canManagePatients: true,
+        canScheduleTransfusions: true,
+        canViewReports: false,
+        canExportData: false,
+        canManageSettings: false,
+      },
+    }
+
+    const userPermissions = permissions[user.role] || {}
+    return userPermissions[item.permission]
+  })
 
   return (
     <>
@@ -103,7 +196,7 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto" role="menubar">
-          {navigation.map((item) => {
+          {visibleNavigation.map((item) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
 
             return (

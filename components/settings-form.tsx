@@ -5,10 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Save, User, Bell, Database } from "lucide-react"
+import { Save, User } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
+import { useAuth } from "@/hooks/use-auth"
 
 // Available languages
 const languages = {
@@ -99,63 +99,63 @@ const languages = {
 }
 
 export function SettingsForm() {
+  const { user, checkAuth } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [profileData, setProfileData] = useState({
-    fullName: "Pr. brouk hacene",
-    email: "brouk.hacene@hospital.com",
-    phone: "0792299343",
-    department: "hemobiology",
+    fullName: "",
+    email: "",
+    phone: "",
+    department: "",
   })
-
- 
-
- 
 
   // Current language text based on system settings
   const [currentLang, setCurrentLang] = useState(languages.fr)
 
   useEffect(() => {
-    // Load saved settings from localStorage if available
-    const savedProfileData = localStorage.getItem("profileData")
-    
-
-    if (savedProfileData) {
-      setProfileData(JSON.parse(savedProfileData))
+    if (user) {
+      setProfileData({
+        fullName: user.fullName || user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        department: user.department || "",
+      })
     }
-
-    
-  }, [])
+  }, [user])
 
   const handleProfileSave = async () => {
     setIsLoading(true)
     try {
-      // Save to localStorage
-      localStorage.setItem("profileData", JSON.stringify(profileData))
+      const response = await fetch("/api/auth/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: profileData.fullName,
+          phone: profileData.phone,
+          department: profileData.department,
+        }),
+      })
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to update profile")
+      }
 
-      // Trigger a custom event to notify header component
-      window.dispatchEvent(new CustomEvent("profileUpdated", { detail: profileData }))
+      await checkAuth()
 
       toast({
-        title: "Profile Updated",
-        description: "Your profile information has been successfully saved.",
+        title: "Profil mis à jour",
+        description: "Vos informations ont été mises à jour avec succès.",
       })
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to save profile. Please try again.",
+        title: "Erreur",
+        description: error instanceof Error ? error.message : "Impossible de sauvegarder le profil.",
         variant: "destructive",
       })
     } finally {
       setIsLoading(false)
     }
   }
-
-  
-
-  
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -179,12 +179,8 @@ export function SettingsForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">{currentLang.email}</Label>
-            <Input
-              id="email"
-              type="email"
-              value={profileData.email}
-              onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
-            />
+            <Input id="email" type="email" value={profileData.email} disabled className="bg-muted" />
+            <p className="text-xs text-muted-foreground">L'email ne peut pas être modifié</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone">{currentLang.phone}</Label>
@@ -205,10 +201,11 @@ export function SettingsForm() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hematology">Hemobiology</SelectItem>
-                <SelectItem value="emergency">Ergance</SelectItem>
-                <SelectItem value="surgery">Surgery</SelectItem>
+                <SelectItem value="hematology">Hématologie</SelectItem>
+                <SelectItem value="emergency">Urgences</SelectItem>
+                <SelectItem value="surgery">Chirurgie</SelectItem>
                 <SelectItem value="administration">Administration</SelectItem>
+                <SelectItem value="laboratory">Laboratoire</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -218,7 +215,6 @@ export function SettingsForm() {
           </Button>
         </CardContent>
       </Card>
-
     </div>
   )
 }
